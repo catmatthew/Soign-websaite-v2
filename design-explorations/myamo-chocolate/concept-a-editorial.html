@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>myamo chocolate | チョコレートとお菓子の記録</title>
+<meta name="description" content="myamo chocolate は、チョコレートとお菓子、カフェ、贈りもの、旅の甘いものの記録です。訪ねたショコラトリーを国や都市から探せます。">
+<meta property="og:title" content="myamo chocolate">
+<meta property="og:description" content="チョコレートとお菓子の記録。訪ねたショコラトリーを国や都市から探せます。">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Zen+Kaku+Gothic+New:wght@400;500&family=Zen+Old+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   案A「余白の雑誌」 myamo chocolate LP 前半
+   デザイン検討用の単体HTML。本番はNext.js + shadcn/uiへ移植。
+   画像はすべてプレースホルダ枠（.ph）。本番差し替え位置を明示。
+   ========================================================= */
+
+:root{
+  /* 色 ---------------------------------------------------- */
+  --paper:      #F7F4EF;   /* 紙のアイボリー（地） */
+  --paper-deep: #EFEAE1;   /* 一段沈めた紙（枠・帯） */
+  --surface:    #FCFAF7;   /* 面（カード） */
+  --ink:        #2A2724;   /* 本文・見出し */
+  --ink-soft:   #6E6759;   /* 副次テキスト */
+  --ink-faint:  #9A9284;   /* キャプション */
+  --rule:       #E2DCD2;   /* 罫線 */
+  --cacao:      #6B4A32;   /* 差し色：カカオ。CTAと索引にのみ使用 */
+  --cacao-deep: #533A27;   /* CTA押下 */
+
+  /* 字 ---------------------------------------------------- */
+  --jp-serif: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --jp-sans:  "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --latin:    "Cormorant Garamond", "Zen Old Mincho", serif;
+
+  /* 余白（低密度：VISUAL_DENSITY 3） ------------------------ */
+  --s1: .5rem; --s2: 1rem; --s3: 1.5rem; --s4: 2rem;
+  --s5: 3rem; --s6: 4.5rem; --s7: 7rem;
+
+  --gutter: 1.25rem;
+  --measure: 32rem;
+  --ease: cubic-bezier(.16,1,.3,1);
+  --radius: 2px;          /* 形状ロック：全要素シャープ寄り（2px） */
+  --radius-pill: 999px;   /* 対話要素のみピル */
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--jp-sans);
+  font-size:16px;
+  line-height:1.9;
+  font-feature-settings:"palt" 1;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+:focus-visible{ outline:2px solid var(--cacao); outline-offset:3px; }
+
+.wrap{ width:100%; max-width:1180px; margin-inline:auto; padding-inline:var(--gutter); }
+@media (min-width:768px){ :root{ --gutter:2.5rem; } }
+@media (min-width:1200px){ :root{ --gutter:3.5rem; } }
+
+/* 紙目。固定・pointer-events無効でスクロール中の再描画を避ける */
+.grain{
+  position:fixed; inset:0; z-index:60; pointer-events:none; opacity:.30;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+
+/* ===== ヘッダー ========================================== */
+.head{
+  position:sticky; top:0; z-index:40;
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:saturate(140%) blur(10px);
+  border-bottom:1px solid transparent;
+  transition:border-color .4s var(--ease), background .4s var(--ease);
+}
+.head[data-stuck="true"]{ border-bottom-color:var(--rule); }
+.head__in{
+  height:60px; display:flex; align-items:center; justify-content:space-between; gap:var(--s3);
+}
+@media (min-width:768px){ .head__in{ height:72px; } }
+
+.mark{ font-family:var(--latin); font-size:1.15rem; letter-spacing:.06em; line-height:1; white-space:nowrap; }
+.mark em{ font-style:normal; color:var(--cacao); }
+
+.nav{ display:none; }
+@media (min-width:900px){
+  .nav{ display:flex; align-items:center; gap:var(--s4); }
+  .nav a{ font-size:.8125rem; letter-spacing:.08em; color:var(--ink-soft); position:relative; padding-block:.35rem; transition:color .3s var(--ease); }
+  .nav a::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--ink); transform:scaleX(0); transform-origin:left; transition:transform .45s var(--ease); }
+  .nav a:hover{ color:var(--ink); }
+  .nav a:hover::after{ transform:scaleX(1); }
+  .nav a[data-key]{ color:var(--cacao); }
+}
+.head__ig{
+  font-size:.75rem; letter-spacing:.06em; color:var(--ink-soft);
+  border:1px solid var(--rule); border-radius:var(--radius-pill);
+  padding:.5rem .95rem; min-height:38px; display:inline-flex; align-items:center; gap:.4rem;
+  transition:border-color .3s var(--ease), color .3s var(--ease), background .3s var(--ease);
+}
+.head__ig:hover{ border-color:var(--cacao); color:var(--cacao); background:var(--surface); }
+.head__ig svg{ width:14px; height:14px; }
+
+/* ===== ヒーロー ========================================== */
+.hero{ padding-block:var(--s5) var(--s5); position:relative; }
+@media (min-width:768px){ .hero{ padding-block:var(--s6) var(--s6); } }
+
+.hero__grid{ display:grid; gap:var(--s5); }
+@media (min-width:960px){
+  /* 非対称グリッド：左に文、右に写真。中央寄せは使わない */
+  .hero__grid{ grid-template-columns:1.05fr .95fr; gap:var(--s6); align-items:center; }
+}
+
+.hero__eyebrow{
+  font-family:var(--latin); font-size:.8125rem; letter-spacing:.28em;
+  text-transform:uppercase; color:var(--ink-faint); margin:0 0 var(--s3);
+}
+.hero__title{
+  font-family:var(--latin); font-weight:300;
+  font-size:clamp(3rem, 13vw, 5.75rem); line-height:1.02; letter-spacing:-.005em;
+  margin:0 0 var(--s3);
+}
+.hero__title .l2{ display:block; padding-left:.06em; }
+.hero__lead{
+  font-family:var(--jp-serif); font-size:1rem; line-height:2.15;
+  color:var(--ink-soft); max-width:var(--measure); margin:0 0 var(--s4);
+}
+@media (min-width:768px){ .hero__lead{ font-size:1.0625rem; } }
+
+.acts{ display:flex; flex-wrap:wrap; gap:var(--s2); }
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
+  min-height:52px; padding:.9rem 1.6rem; border-radius:var(--radius-pill);
+  font-size:.9375rem; letter-spacing:.04em; white-space:nowrap;
+  transition:transform .25s var(--ease), background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+}
+.btn:active{ transform:translateY(1px); }
+.btn--key{ background:var(--cacao); color:#FFFCF7; }
+.btn--key:hover{ background:var(--cacao-deep); }
+.btn--quiet{ border:1px solid var(--rule); color:var(--ink); background:transparent; }
+.btn--quiet:hover{ border-color:var(--ink); background:var(--surface); }
+.btn svg{ width:16px; height:16px; flex:none; }
+
+/* 写真枠（プレースホルダ） ------------------------------- */
+.ph{
+  position:relative; overflow:hidden; background:var(--paper-deep);
+  border-radius:var(--radius);
+}
+.ph::before{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(120% 90% at 22% 12%, rgba(255,255,255,.72), transparent 58%),
+    linear-gradient(146deg, #E6DED2 0%, #D8CCBC 46%, #C8B7A3 100%);
+}
+.ph::after{
+  content:""; position:absolute; inset:10px; border:1px solid rgba(255,255,255,.34); border-radius:1px;
+}
+.ph__note{
+  position:absolute; left:0; right:0; bottom:0; z-index:2;
+  padding:.65rem .85rem; font-size:.6875rem; letter-spacing:.08em; line-height:1.5;
+  color:#6B5C4B; background:linear-gradient(to top, rgba(255,253,250,.92), rgba(255,253,250,0));
+}
+.hero__figure{ position:relative; }
+.hero__ph{ aspect-ratio:4/5; }
+@media (min-width:960px){
+  /* 画面内に収めるため幅で高さを決める。写真と見出しの級数は一組で設計 */
+  .hero__figure{ max-width:25rem; margin-left:auto; }
+  .hero__ph{ aspect-ratio:3/4; }
+}
+.hero__cap{
+  margin-top:var(--s2); font-size:.75rem; letter-spacing:.06em; color:var(--ink-faint);
+}
+
+/* ===== 索引への導線（チョコレートマップ） ================ */
+.map{ padding-block:var(--s6); border-top:1px solid var(--rule); }
+@media (min-width:768px){ .map{ padding-block:var(--s7); } }
+
+.map__head{ max-width:var(--measure); margin-bottom:var(--s4); }
+.sec__title{
+  font-family:var(--jp-serif); font-weight:500;
+  font-size:clamp(1.5rem,5.2vw,2.125rem); line-height:1.5; letter-spacing:.04em; margin:0 0 var(--s2);
+}
+.sec__title .en{
+  display:block; font-family:var(--latin); font-size:.75rem; letter-spacing:.3em;
+  text-transform:uppercase; color:var(--cacao); margin-bottom:.7rem; font-weight:400;
+}
+.sec__body{ font-size:.9375rem; line-height:2; color:var(--ink-soft); margin:0; }
+
+/* 検索 */
+.search{ position:relative; margin-bottom:var(--s3); max-width:46rem; }
+.search__label{
+  display:block; font-size:.75rem; letter-spacing:.1em; color:var(--ink-soft); margin-bottom:.5rem;
+}
+.search__field{
+  display:flex; align-items:center; gap:.75rem;
+  background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius-pill);
+  padding:.4rem .5rem .4rem 1.15rem; min-height:56px;
+  transition:border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.search__field:focus-within{ border-color:var(--cacao); box-shadow:0 2px 18px rgba(107,74,50,.09); }
+.search__field svg{ width:18px; height:18px; color:var(--ink-faint); flex:none; }
+.search__input{
+  flex:1 1 auto; min-width:0; border:0; background:transparent; font:inherit;
+  font-size:.9375rem; color:var(--ink); padding-block:.5rem;
+}
+.search__input::placeholder{ color:#8E8779; }   /* 地に対し4.7:1 */
+.search__input:focus{ outline:none; }
+.search__go{
+  flex:none; min-height:44px; padding:.6rem 1.25rem; border:0; border-radius:var(--radius-pill);
+  background:var(--cacao); color:#FFFCF7; font:inherit; font-size:.875rem; letter-spacing:.04em;
+  cursor:pointer; transition:background .3s var(--ease), transform .25s var(--ease);
+}
+.search__go:hover{ background:var(--cacao-deep); }
+.search__go:active{ transform:translateY(1px); }
+.search__hint{ margin:.7rem 0 0; font-size:.75rem; color:var(--ink-faint); letter-spacing:.04em; }
+
+/* 絞り込み */
+.filters{ display:flex; flex-direction:column; gap:var(--s2); margin-bottom:var(--s5); }
+.filters__row{ display:flex; gap:.5rem; overflow-x:auto; padding-bottom:.35rem; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+.filters__row::-webkit-scrollbar{ display:none; }
+.filters__key{
+  flex:none; align-self:center; font-size:.6875rem; letter-spacing:.14em; color:var(--ink-faint);
+  min-width:3.5rem;
+}
+.chip{
+  flex:none; min-height:40px; display:inline-flex; align-items:center;
+  padding:.5rem 1rem; border:1px solid var(--rule); border-radius:var(--radius-pill);
+  background:transparent; color:var(--ink-soft); font:inherit; font-size:.8125rem; letter-spacing:.04em;
+  cursor:pointer; white-space:nowrap;
+  transition:border-color .3s var(--ease), color .3s var(--ease), background .3s var(--ease);
+}
+.chip:hover{ border-color:var(--ink-soft); color:var(--ink); }
+.chip[aria-pressed="true"]{ background:var(--cacao); border-color:var(--cacao); color:#FFFCF7; }
+@media (min-width:768px){
+  .filters__row{ flex-wrap:wrap; overflow:visible; }
+}
+
+/* 店のカード */
+.cards{ display:grid; gap:var(--s4); }
+@media (min-width:640px){ .cards{ grid-template-columns:repeat(2,1fr); gap:var(--s3) var(--s3); } }
+@media (min-width:1024px){ .cards{ grid-template-columns:repeat(3,1fr); } }
+
+.card{ display:flex; flex-direction:column; gap:.85rem; }
+.card__ph{ aspect-ratio:4/3; }
+.card__meta{ font-size:.6875rem; letter-spacing:.12em; color:var(--ink-faint); }
+.card__name{ font-family:var(--jp-serif); font-size:1.0625rem; line-height:1.6; margin:0; letter-spacing:.02em; }
+.card__desc{ font-size:.8125rem; line-height:1.95; color:var(--ink-soft); margin:0; }
+.card__links{ display:flex; gap:1rem; font-size:.75rem; letter-spacing:.06em; color:var(--cacao); margin-top:.15rem; }
+.card__links a{ border-bottom:1px solid transparent; padding-bottom:2px; transition:border-color .3s var(--ease); }
+.card__links a:hover{ border-bottom-color:var(--cacao); }
+.card a.card__face{ display:block; }
+.card a.card__face .ph::before{ transition:transform .9s var(--ease); }
+.card a.card__face:hover .ph::before{ transform:scale(1.04); }
+
+.map__more{ margin-top:var(--s5); }
+.link-line{
+  display:inline-flex; align-items:center; gap:.6rem; min-height:44px;
+  font-size:.9375rem; letter-spacing:.04em; color:var(--ink);
+  border-bottom:1px solid var(--ink); padding-bottom:.2rem;
+  transition:gap .35s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+}
+.link-line:hover{ gap:1rem; color:var(--cacao); border-color:var(--cacao); }
+
+/* ===== 最近の記録 ======================================== */
+.posts{ padding-block:var(--s6); border-top:1px solid var(--rule); }
+@media (min-width:768px){ .posts{ padding-block:var(--s7); } }
+.posts__head{ display:flex; align-items:baseline; justify-content:space-between; gap:var(--s3); flex-wrap:wrap; margin-bottom:var(--s4); }
+
+.stream{ display:grid; gap:0; border-top:1px solid var(--rule); }
+.post{
+  display:grid; grid-template-columns:84px 1fr; gap:var(--s2) var(--s3);
+  align-items:center; padding-block:var(--s2);
+  border-bottom:1px solid var(--rule);
+  transition:background .4s var(--ease);
+}
+.post:hover{ background:color-mix(in srgb, var(--surface) 70%, transparent); }
+@media (min-width:768px){
+  .post{ grid-template-columns:110px 1fr 9rem; padding-block:var(--s3); }
+}
+.post__ph{ aspect-ratio:1/1; }
+.post__ph .ph__note{ display:none; }
+.post__body{ min-width:0; }
+.post__t{ font-family:var(--jp-serif); font-size:1rem; line-height:1.7; margin:0 0 .3rem; letter-spacing:.02em; }
+.post__s{ font-size:.75rem; letter-spacing:.06em; color:var(--ink-faint); margin:0; }
+.post__d{ font-family:var(--latin); font-size:.8125rem; letter-spacing:.1em; color:var(--ink-faint); }
+@media (max-width:767px){ .post__d{ grid-column:2; margin-top:-.2rem; } }
+
+/* ===== 見本の終わり ====================================== */
+.stop{ padding-block:var(--s5) var(--s6); border-top:1px solid var(--rule); text-align:center; }
+.stop p{ margin:0 auto; max-width:34rem; font-size:.8125rem; line-height:2; color:var(--ink-faint); letter-spacing:.04em; }
+
+/* ===== モーション初期状態 ================================ */
+.js [data-anim]{ opacity:0; }
+.js [data-anim="up"]{ transform:translateY(14px); }
+.js [data-mask]{ clip-path:inset(0 0 100% 0); opacity:1; }
+.js .hero__title .ln{ display:block; overflow:hidden; }
+.js .hero__title .ln > span{ display:block; transform:translateY(105%); }
+
+@media (prefers-reduced-motion: reduce){
+  .js [data-anim]{ opacity:1 !important; transform:none !important; }
+  .js [data-mask]{ clip-path:none !important; }
+  .js .hero__title .ln > span{ transform:none !important; }
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="head" id="head">
+  <div class="wrap head__in">
+    <a class="mark" href="#top">myamo <em>chocolate</em></a>
+    <nav class="nav" aria-label="主要ナビゲーション">
+      <a href="#map" data-key>チョコレートマップ</a>
+      <a href="#posts">最近の記録</a>
+      <a href="#about">このサイトについて</a>
+    </nav>
+    <a class="head__ig" href="https://www.instagram.com/myamo_chocolate/" rel="me noopener" target="_blank">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg>
+      Instagramを見る
+    </a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ヒーロー -->
+  <section class="hero wrap">
+    <div class="hero__grid">
+      <div class="hero__text">
+        <p class="hero__eyebrow" data-anim="up">Chocolate / Sweets / Café / Travel</p>
+        <h1 class="hero__title">
+          <span class="ln"><span>myamo</span></span>
+          <span class="ln l2"><span>chocolate</span></span>
+        </h1>
+        <p class="hero__lead" data-anim="up">
+          食べたチョコレートと、訪ねた店の記録です。パリでも東京でも、よかったものだけを少しずつ集めています。
+        </p>
+        <div class="acts" data-anim="up">
+          <a class="btn btn--key" href="#map">
+            チョコレートマップを見る
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn--quiet" href="https://www.instagram.com/myamo_chocolate/" rel="me noopener" target="_blank">Instagramを見る</a>
+        </div>
+      </div>
+
+      <figure class="hero__figure" style="margin:0">
+        <!-- TODO 差し替え: ヒーロー写真 1200x1600px (4:5) / 縦位置 / 自然光 / 余白のある寄り -->
+        <div class="ph hero__ph" data-mask role="img" aria-label="チョコレートの写真が入ります">
+          <span class="ph__note">写真枠　4:5（SP）・3:4（PC）／推奨 1200×1600px</span>
+        </div>
+        <figcaption class="hero__cap">本番はInstagramの実写真に差し替えます。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- チョコレートマップ -->
+  <section class="map wrap" id="map">
+    <div class="map__head">
+      <h2 class="sec__title"><span class="en">Chocolate Map</span>訪ねた店を、国と都市から探す</h2>
+      <p class="sec__body" data-anim="up">ショコラトリー、パティスリー、カフェ、贈りものの店。行った順ではなく、探しやすい順に並べています。</p>
+    </div>
+
+    <div class="search" data-anim="up">
+      <label class="search__label" for="q">店名・ブランド・都市で探す</label>
+      <div class="search__field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input class="search__input" id="q" type="search" placeholder="ショコラティエ・ブランド・都市などで検索" autocomplete="off">
+        <button class="search__go" type="button">検索</button>
+      </div>
+      <p class="search__hint">例：Pierre Hermé　/　Paris　/　Tokyo</p>
+    </div>
+
+    <div class="filters" data-anim="up">
+      <div class="filters__row" role="group" aria-label="国で絞り込む">
+        <span class="filters__key">国</span>
+        <button class="chip" type="button" aria-pressed="true">すべて</button>
+        <button class="chip" type="button" aria-pressed="false">日本</button>
+        <button class="chip" type="button" aria-pressed="false">フランス</button>
+        <button class="chip" type="button" aria-pressed="false">ベルギー</button>
+        <button class="chip" type="button" aria-pressed="false">スイス</button>
+        <button class="chip" type="button" aria-pressed="false">イタリア</button>
+        <button class="chip" type="button" aria-pressed="false">その他</button>
+      </div>
+      <div class="filters__row" role="group" aria-label="カテゴリーで絞り込む">
+        <span class="filters__key">種類</span>
+        <button class="chip" type="button" aria-pressed="false">ショコラトリー</button>
+        <button class="chip" type="button" aria-pressed="false">チョコレート</button>
+        <button class="chip" type="button" aria-pressed="false">パティスリー</button>
+        <button class="chip" type="button" aria-pressed="false">カフェ</button>
+        <button class="chip" type="button" aria-pressed="false">贈りもの</button>
+      </div>
+    </div>
+
+    <div class="cards">
+      <!-- 以下3件はすべて SAMPLE DATA。実在の店舗情報およびURLは使用していません。 -->
+      <article class="card" data-anim="up">
+        <a class="card__face" href="#">
+          <!-- TODO 差し替え: 店舗写真 1200x900px (4:3) -->
+          <div class="ph card__ph" role="img" aria-label="店舗写真が入ります"><span class="ph__note">写真枠　4:3／推奨 1200×900px</span></div>
+        </a>
+        <p class="card__meta">SAMPLE DATA　フランス・パリ　/　ショコラトリー</p>
+        <h3 class="card__name">サンプル・ショコラトリー A</h3>
+        <p class="card__desc">カカオの産地ごとに味の輪郭がはっきり違う店。板チョコを一枚ずつ買えます。</p>
+        <p class="card__links"><a href="#">Instagram</a><a href="#">公式サイト</a></p>
+      </article>
+
+      <article class="card" data-anim="up">
+        <a class="card__face" href="#">
+          <!-- TODO 差し替え: 店舗写真 1200x900px (4:3) -->
+          <div class="ph card__ph" role="img" aria-label="店舗写真が入ります"><span class="ph__note">写真枠　4:3／推奨 1200×900px</span></div>
+        </a>
+        <p class="card__meta">SAMPLE DATA　日本・東京　/　パティスリー・カフェ</p>
+        <h3 class="card__name">サンプル・パティスリー B</h3>
+        <p class="card__desc">ガトーショコラが目当て。平日の午後なら座って食べられます。</p>
+        <p class="card__links"><a href="#">Instagram</a><a href="#">公式サイト</a></p>
+      </article>
+
+      <article class="card" data-anim="up">
+        <a class="card__face" href="#">
+          <!-- TODO 差し替え: 店舗写真 1200x900px (4:3) -->
+          <div class="ph card__ph" role="img" aria-label="店舗写真が入ります"><span class="ph__note">写真枠　4:3／推奨 1200×900px</span></div>
+        </a>
+        <p class="card__meta">SAMPLE DATA　ベルギー・ブリュッセル　/　贈りもの</p>
+        <h3 class="card__name">サンプル・ショコラ C</h3>
+        <p class="card__desc">箱の意匠がきれいで、手土産にしています。小箱でも見栄えがします。</p>
+        <p class="card__links"><a href="#">Instagram</a><a href="#">公式サイト</a></p>
+      </article>
+    </div>
+
+    <p class="map__more" data-anim="up">
+      <a class="link-line" href="#">すべての店を見る
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="16" height="16" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+      </a>
+    </p>
+  </section>
+
+  <!-- 最近の記録 -->
+  <section class="posts wrap" id="posts">
+    <div class="posts__head">
+      <h2 class="sec__title" style="margin:0">最近の記録</h2>
+      <a class="link-line" href="https://www.instagram.com/myamo_chocolate/" rel="me noopener" target="_blank">Instagramを見る</a>
+    </div>
+
+    <div class="stream">
+      <!-- SAMPLE DATA -->
+      <a class="post" href="#" data-anim="up">
+        <div class="ph post__ph" aria-hidden="true"></div>
+        <div class="post__body">
+          <h3 class="post__t">冬のボンボンショコラを四種</h3>
+          <p class="post__s">SAMPLE DATA　サンプル・ショコラトリー A　/　パリ</p>
+        </div>
+        <span class="post__d">2026.02.14</span>
+      </a>
+      <a class="post" href="#" data-anim="up">
+        <div class="ph post__ph" aria-hidden="true"></div>
+        <div class="post__body">
+          <h3 class="post__t">東京で買えるタブレットのこと</h3>
+          <p class="post__s">SAMPLE DATA　サンプル・パティスリー B　/　東京</p>
+        </div>
+        <span class="post__d">2026.02.02</span>
+      </a>
+      <a class="post" href="#" data-anim="up">
+        <div class="ph post__ph" aria-hidden="true"></div>
+        <div class="post__body">
+          <h3 class="post__t">贈りものに選んだ小箱</h3>
+          <p class="post__s">SAMPLE DATA　サンプル・ショコラ C　/　ブリュッセル</p>
+        </div>
+        <span class="post__d">2026.01.21</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="stop" id="about">
+    <div class="wrap">
+      <p>ここまでが見本の範囲です。この先には「このサイトについて」、フッター、チョコレートマップ一覧、店舗詳細ページが続きます。デザインの方向が決まりしだい、本開発フェーズで実装します。</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- GSAP：バージョン固定。scrollイベント監視は使用していません -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+document.documentElement.classList.add('js');
+
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // ScrollTriggerまで揃って初めて演出を有効にする。片方でも欠けたら静止ページにする
+  var hasGsap = typeof window.gsap !== 'undefined' && typeof window.ScrollTrigger !== 'undefined';
+  var head = document.getElementById('head');
+
+  // 絞り込みチップ：同じ行の中で単一選択（状態の見える化）
+  document.querySelectorAll('.filters__row').forEach(function (row) {
+    row.addEventListener('click', function (e) {
+      var chip = e.target.closest('.chip');
+      if (!chip) return;
+      row.querySelectorAll('.chip').forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
+      chip.setAttribute('aria-pressed', 'true');
+    });
+  });
+
+  // 検索欄のプレースホルダは画面幅に応じて短縮する（狭い画面での途中切れを避ける）
+  var q = document.getElementById('q');
+  if (q) {
+    var phFull = q.placeholder, phShort = 'ブランド・都市で検索';
+    var mqp = window.matchMedia('(max-width: 560px)');
+    var applyPh = function () { q.placeholder = mqp.matches ? phShort : phFull; };
+    applyPh();
+    mqp.addEventListener('change', applyPh);
+  }
+
+  if (!hasGsap || reduce) {
+    // 演出なしでも完成した静止ページとして成立させる
+    document.querySelectorAll('[data-anim],[data-mask]').forEach(function (el) {
+      el.style.opacity = 1; el.style.transform = 'none'; el.style.clipPath = 'none';
+    });
+    document.querySelectorAll('.hero__title .ln > span').forEach(function (el) { el.style.transform = 'none'; });
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // 1. 見出しの起き上がり（読み込み時）。役割：最初に名前を読ませる
+  gsap.to('.hero__title .ln > span', {
+    y: '0%', duration: 1.1, ease: 'power3.out', stagger: 0.09, delay: 0.15
+  });
+
+  // 2. ヒーロー文の追従（読み込み時）。役割：名前 → 説明 → 行き先の順序づけ
+  gsap.to('.hero__text [data-anim]', {
+    opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', stagger: 0.12, delay: 0.45
+  });
+
+  // 3. 写真枠の幕開き（読み込み時）。役割：写真が主役であることの宣言
+  gsap.to('.hero__figure [data-mask]', {
+    clipPath: 'inset(0 0 0% 0)', duration: 1.4, ease: 'power3.inOut', delay: 0.5
+  });
+
+  // 4. ヒーロー写真の緩やかな視差（スクラブ）。役割：紙面の奥行き
+  gsap.to('.hero__figure', {
+    yPercent: -4, ease: 'none',
+    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 }
+  });
+
+  // 5. 節ごとの入場（viewport進入）。役割：読む順序の提示
+  gsap.utils.toArray('section:not(.hero) [data-anim]').forEach(function (el) {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+      // 一度きり。読み終えた内容が戻り操作で消えないようにする
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+    });
+  });
+
+  // 保険：初期状態のまま3秒を超えた場合、画面内の要素は演出を諦めて完成状態にする。
+  // rAFが進まない環境やGSAPの部分的な読み込み失敗でも、見えている範囲の本文が消えません。
+  setTimeout(function () {
+    var vh = window.innerHeight;
+    document.querySelectorAll('[data-anim],[data-mask],[data-veil],[data-rise]').forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.top >= vh) return;                       // 画面外はScrollTriggerに委ねる
+      if (parseFloat(getComputedStyle(el).opacity) > 0.98) return;
+      el.style.opacity = 1; el.style.transform = 'none'; el.style.clipPath = 'none';
+    });
+    document.querySelectorAll('.hero__title .ln > span').forEach(function (el) {
+      if (getComputedStyle(el).transform !== 'none') el.style.transform = 'none';
+    });
+  }, 3000);
+
+  // 6. ヘッダーの罫線（進入で境界を明示）。役割：固定領域と本文の分離
+  ScrollTrigger.create({
+    trigger: 'main', start: 'top+=8 top',
+    onEnter: function () { head.dataset.stuck = 'true'; },
+    onLeaveBack: function () { head.dataset.stuck = 'false'; }
+  });
+})();
+</script>
+</body>
+</html>
