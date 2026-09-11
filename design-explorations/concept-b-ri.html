@@ -1,0 +1,1199 @@
+<title>Soigné Coffee Roastery — 理</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   CONCEPT B — 「理」RI  /  Structure, information as beauty
+   Swiss editorial grid + spec-sheet rigor.
+   Paper / Ink / one printer's second colour.
+   ============================================================ */
+
+:root{
+  /* --- substrate: cool neutral press paper, deliberately NOT cream --- */
+  --paper:      #F1F1EF;
+  --paper-2:    #E9E9E6;
+  --ink:        #121212;
+  --ink-70:     #4C4C49;
+  --ink-45:     #83837E;
+  --ink-25:     #B3B3AE;
+  --rule:       #CFCFC9;
+  --rule-soft:  #E0E0DA;
+  /* --- the second colour. Used like a printer's spot plate, never decoratively --- */
+  --signal:     #D7472C;
+
+  --f-display: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --f-data:    "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --f-jp:      "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+
+  --gutter: 16px;
+  --maxw: 1480px;
+  --ease: cubic-bezier(.22,1,.36,1);   /* precise, no overshoot, no drift */
+  --ease-m: cubic-bezier(.65,0,.35,1); /* mechanical in/out */
+}
+
+*, *::before, *::after{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--f-jp);
+  font-size:14px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  font-feature-settings:"palt" 1;
+}
+
+/* every corner is 90°. no shadows anywhere. */
+img,svg{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+h1,h2,h3,h4,p,figure,dl,dd{ margin:0; }
+ul{ margin:0; padding:0; list-style:none; }
+
+/* ---------- the module ------------------------------------ */
+.shell{
+  max-width:var(--maxw);
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+  position:relative;
+}
+.grid12{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  column-gap:16px;
+}
+@media (max-width:900px){ .grid12{ grid-template-columns:repeat(6,1fr); } }
+
+/* visible modular grid — hairline columns printed under the content */
+.gridlines{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  max-width:var(--maxw); margin-inline:auto;
+  padding-inline:var(--gutter);
+  display:grid; grid-template-columns:repeat(12,1fr); column-gap:16px;
+}
+.gridlines span{ border-left:1px solid var(--rule-soft); }
+.gridlines span:last-child{ border-right:1px solid var(--rule-soft); }
+@media (max-width:900px){
+  .gridlines{ grid-template-columns:repeat(6,1fr); }
+  .gridlines span:nth-child(n+7){ display:none; }
+}
+
+/* ---------- typographic roles ----------------------------- */
+.meta{
+  font-family:var(--f-data);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  line-height:1.4;
+  color:var(--ink-45);
+  font-variant-numeric:tabular-nums;
+}
+.meta--ink{ color:var(--ink); }
+.meta--sig{ color:var(--signal); }
+
+.num{
+  font-family:var(--f-display);
+  font-weight:600;
+  font-variant-numeric:tabular-nums lining-nums;
+  letter-spacing:-.04em;
+  line-height:.82;
+}
+
+.display{
+  font-family:var(--f-display);
+  font-weight:600;
+  letter-spacing:-.035em;
+  line-height:.92;
+  text-transform:uppercase;
+}
+
+.jp-head{
+  font-family:var(--f-jp);
+  font-weight:500;
+  letter-spacing:.02em;
+  line-height:1.5;
+}
+
+.body{
+  max-width:62ch;
+  color:var(--ink-70);
+  font-size:13.5px;
+  line-height:2.0;
+}
+
+/* hairline that draws itself */
+.hair{
+  height:1px; background:var(--ink); width:100%;
+  transform:scaleX(0); transform-origin:left center;
+  transition:transform 1.1s var(--ease);
+}
+.hair--soft{ background:var(--rule); }
+.hair--sig{ background:var(--signal); }
+.is-in .hair{ transform:scaleX(1); }
+
+/* staggered grid reveal */
+.rv{ opacity:0; transform:translateY(14px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+.is-in .rv{ opacity:1; transform:none; }
+
+/* =================== NAV ================================== */
+header.nav{
+  position:fixed; top:0; left:0; right:0; z-index:60;
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:saturate(1.1) blur(6px);
+  border-bottom:1px solid var(--rule);
+}
+.nav__bar{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; height:60px;
+}
+.mark{ display:flex; align-items:baseline; gap:10px; white-space:nowrap; }
+.mark__n{ font-family:var(--f-display); font-weight:700; font-size:15px; letter-spacing:-.02em; }
+.mark__jp{ font-family:var(--f-jp); font-size:9.5px; letter-spacing:.18em; color:var(--ink-45); }
+.nav__links{ display:flex; gap:22px; }
+.nav__links a{ position:relative; padding-block:4px; }
+.nav__links a::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--signal);
+  transform:scaleX(0); transform-origin:left; transition:transform .35s var(--ease-m);
+}
+.nav__links a:hover::after, .nav__links a:focus-visible::after{ transform:scaleX(1); }
+.nav__cart{
+  display:flex; align-items:center; gap:8px;
+  border:1px solid var(--ink); padding:5px 10px;
+}
+.nav__prog{ height:2px; background:var(--signal); width:0; transition:width .08s linear; }
+@media (max-width:900px){ .nav__links{ display:none; } }
+
+/* =================== HERO ================================= */
+.hero{ padding-top:60px; position:relative; z-index:1; }
+.hero__top{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:16px; padding-top:34px; padding-bottom:10px; flex-wrap:wrap;
+}
+.hero__main{ padding-block:26px 0; }
+.hero__kicker{ grid-column:1/-1; display:flex; gap:28px; flex-wrap:wrap; padding-bottom:18px; }
+
+.hero__h1{ grid-column:1/9; }
+@media (max-width:900px){ .hero__h1{ grid-column:1/-1; } }
+.hero__lat{
+  font-size:clamp(46px,9.2vw,124px);
+  display:block;
+}
+.hero__lat em{ font-style:normal; color:var(--signal); }
+.hero__jp{
+  font-size:clamp(15px,1.65vw,22px);
+  margin-top:26px;
+  max-width:26ch;
+}
+.hero__body{ margin-top:20px; }
+
+/* hero right column: live spec readout */
+.hero__spec{ grid-column:9/13; align-self:end; }
+@media (max-width:900px){ .hero__spec{ grid-column:1/-1; margin-top:38px; } }
+.spec-row{
+  display:grid; grid-template-columns:1fr auto;
+  align-items:baseline; gap:12px;
+  padding-block:9px; border-top:1px solid var(--rule);
+}
+.spec-row:last-child{ border-bottom:1px solid var(--rule); }
+.spec-row dd{ font-family:var(--f-data); font-size:11.5px; font-variant-numeric:tabular-nums; letter-spacing:.02em; color:var(--ink); }
+.spec-row--lead dd{ font-family:var(--f-display); font-size:34px; font-weight:600; letter-spacing:-.03em; line-height:1; }
+
+/* counting index strip */
+.strip{
+  border-top:1px solid var(--ink);
+  border-bottom:1px solid var(--rule);
+  margin-top:54px;
+  display:grid; grid-template-columns:repeat(4,1fr);
+}
+.strip > div{ padding:20px 14px 22px 0; border-left:1px solid var(--rule); }
+.strip > div:first-child{ border-left:0; }
+.strip > div:not(:first-child){ padding-left:14px; }
+.strip .num{ font-size:clamp(30px,4.2vw,54px); display:block; margin-top:10px; }
+.strip .num sup{ font-size:.34em; font-weight:500; letter-spacing:.06em; vertical-align:super; margin-left:3px; color:var(--ink-45); }
+@media (max-width:700px){
+  .strip{ grid-template-columns:repeat(2,1fr); }
+  .strip > div:nth-child(3){ border-left:0; padding-left:0; }
+  .strip > div:nth-child(n+3){ border-top:1px solid var(--rule); }
+}
+
+/* =================== SECTION FRAME ======================== */
+section{ position:relative; z-index:1; }
+.sec{ padding-block:clamp(72px,9vw,136px); }
+.sec__head{
+  display:grid; grid-template-columns:auto 1fr auto; align-items:baseline;
+  gap:16px; padding-bottom:14px;
+}
+.sec__idx{ font-family:var(--f-display); font-weight:700; font-size:12px; letter-spacing:.04em; }
+.sec__rule{ height:1px; background:var(--rule); transform:scaleX(0); transform-origin:left; transition:transform 1.2s var(--ease); }
+.is-in .sec__rule{ transform:scaleX(1); }
+.sec__title{
+  font-size:clamp(28px,4.4vw,58px);
+  padding-top:20px;
+  max-width:18ch;
+}
+.sec__lede{ padding-top:18px; }
+
+/* =================== BEAN INDEX (horizontal) ============== */
+.index-wrap{ position:relative; overflow:hidden; }
+.index-track{ display:flex; align-items:stretch; padding-inline-start:var(--gutter); }
+.lot{
+  flex:0 0 clamp(300px,30vw,430px);
+  border-left:1px solid var(--rule);
+  padding:0 22px 0 22px;
+  display:flex; flex-direction:column;
+}
+.lot:first-child{ border-left:1px solid var(--ink); }
+.lot__no{
+  font-family:var(--f-display); font-weight:700;
+  font-size:clamp(64px,8vw,108px); letter-spacing:-.05em; line-height:.8;
+  padding-top:26px;
+  color:var(--ink-25);
+  transition:color .4s var(--ease-m);
+}
+.lot:hover .lot__no{ color:var(--signal); }
+.lot__origin{ margin-top:18px; font-family:var(--f-display); font-weight:600; font-size:21px; letter-spacing:-.01em; text-transform:uppercase; }
+.lot__jp{ font-size:12.5px; color:var(--ink-70); margin-top:2px; }
+.lot__dl{ margin-top:22px; }
+.lot__foot{ margin-top:auto; padding-block:20px 26px; }
+.score{ display:flex; align-items:baseline; gap:8px; }
+.score .num{ font-size:46px; }
+.buy-line{
+  margin-top:16px; display:flex; align-items:center; justify-content:space-between;
+  border-top:1px solid var(--ink); padding-top:12px;
+}
+.buy-line .price{ font-family:var(--f-display); font-weight:600; font-size:19px; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.buy-line a{ border-bottom:1px solid var(--signal); color:var(--signal); padding-bottom:1px; }
+
+/* roast position axis inside each lot */
+.axis{ margin-top:20px; }
+.axis__line{ position:relative; height:1px; background:var(--rule); margin-top:12px; }
+.axis__ticks{ position:absolute; inset:0; display:flex; justify-content:space-between; }
+.axis__ticks i{ width:1px; height:5px; background:var(--rule); display:block; }
+.axis__mark{
+  position:absolute; top:-4px; width:9px; height:9px; background:var(--signal);
+  transform:translateX(-50%) scale(0); transition:transform .5s var(--ease) .25s;
+}
+.is-in .axis__mark{ transform:translateX(-50%) scale(1); }
+.axis__legend{ display:flex; justify-content:space-between; margin-top:8px; }
+
+@media (max-width:900px){
+  .index-wrap{ overflow:visible; }
+  .index-track{ overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:8px; }
+  .lot{ flex:0 0 78vw; scroll-snap-align:start; }
+}
+
+/* =================== FLAVOUR / RATIO BARS ================= */
+.profile{ align-items:start; }
+.profile__left{ grid-column:1/6; position:sticky; top:92px; }
+.profile__right{ grid-column:6/13; }
+@media (max-width:900px){
+  .profile__left{ grid-column:1/-1; position:static; }
+  .profile__right{ grid-column:1/-1; margin-top:40px; }
+}
+.bar{ padding-block:18px; border-top:1px solid var(--rule); }
+.bar:last-child{ border-bottom:1px solid var(--rule); }
+.bar__top{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+.bar__label{ font-family:var(--f-display); font-weight:500; font-size:15px; letter-spacing:-.01em; text-transform:uppercase; }
+.bar__jp{ font-size:11.5px; color:var(--ink-45); margin-left:8px; font-family:var(--f-jp); letter-spacing:.06em; }
+.bar__val{ font-family:var(--f-data); font-size:11px; letter-spacing:.1em; color:var(--ink); font-variant-numeric:tabular-nums; }
+.bar__track{ position:relative; height:14px; margin-top:11px; }
+.bar__scale{ position:absolute; inset:0; display:flex; }
+.bar__scale i{ flex:1; border-left:1px solid var(--rule-soft); }
+.bar__scale i:first-child{ border-left:0; }
+.bar__fill{
+  position:absolute; left:0; top:5px; height:4px; background:var(--ink);
+  transform:scaleX(0); transform-origin:left; transition:transform 1s var(--ease);
+}
+.bar:nth-child(odd) .bar__fill{ background:var(--ink); }
+.bar__fill--sig{ background:var(--signal); }
+.is-in .bar__fill{ transform:scaleX(1); }
+
+/* =================== SOURCING TABLE ======================= */
+.tablewrap{ overflow-x:auto; border-top:1px solid var(--ink); }
+table{ border-collapse:collapse; width:100%; min-width:840px; }
+thead th{
+  position:sticky; top:60px; background:var(--paper);
+  font-family:var(--f-data); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-45); font-weight:500; text-align:left;
+  padding:12px 14px 12px 0; border-bottom:1px solid var(--rule);
+}
+thead th:first-child{ width:56px; }
+tbody td{
+  padding:16px 14px 16px 0; border-bottom:1px solid var(--rule-soft);
+  font-size:12.5px; vertical-align:baseline;
+}
+tbody tr{ transition:background .25s var(--ease-m); }
+tbody tr:hover{ background:var(--paper-2); }
+td.c-no{ font-family:var(--f-display); font-weight:700; font-size:13px; color:var(--ink-25); }
+tbody tr:hover td.c-no{ color:var(--signal); }
+td.c-num{ font-family:var(--f-data); font-variant-numeric:tabular-nums; letter-spacing:.02em; font-size:11.5px; white-space:nowrap; }
+td.c-name{ font-family:var(--f-display); font-weight:500; letter-spacing:-.01em; font-size:14px; white-space:nowrap; }
+
+/* =================== ROAST CURVE ========================== */
+.roast{ align-items:start; }
+.roast__sticky{ grid-column:1/5; position:sticky; top:100px; }
+.roast__plot{ grid-column:5/13; }
+@media (max-width:900px){
+  .roast__sticky{ grid-column:1/-1; position:static; }
+  .roast__plot{ grid-column:1/-1; margin-top:34px; }
+}
+.plot{ width:100%; height:auto; }
+.plot .axisline{ stroke:var(--rule); stroke-width:1; vector-effect:non-scaling-stroke; }
+.plot .gridline{ stroke:var(--rule-soft); stroke-width:1; vector-effect:non-scaling-stroke; }
+.plot .curve{ fill:none; stroke:var(--ink); stroke-width:1.75; vector-effect:non-scaling-stroke; }
+.plot .curve--rate{ stroke:var(--signal); stroke-width:1.25; stroke-dasharray:4 3; vector-effect:non-scaling-stroke; }
+.plot text{ font-family:var(--f-data); font-size:8px; letter-spacing:.08em; fill:var(--ink-45); text-transform:uppercase; }
+.plot .evt{ stroke:var(--signal); stroke-width:1; vector-effect:non-scaling-stroke; }
+.plot .evtdot{ fill:var(--signal); }
+.plot .evtlabel{ fill:var(--signal); }
+.phase{ display:grid; grid-template-columns:auto 1fr auto; gap:14px; align-items:baseline; padding-block:11px; border-top:1px solid var(--rule); }
+.phase:last-child{ border-bottom:1px solid var(--rule); }
+.phase b{ font-family:var(--f-display); font-weight:600; font-size:13px; letter-spacing:-.01em; text-transform:uppercase; }
+.phase span:last-child{ font-family:var(--f-data); font-size:11px; font-variant-numeric:tabular-nums; color:var(--ink); }
+
+/* =================== PHOTOGRAPHY SLOT ===================== */
+.photoslot{
+  position:relative; border:1px solid var(--ink);
+  aspect-ratio:16/9; max-width:100%;
+  display:grid; place-items:center;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 39px, var(--rule-soft) 39px 40px),
+    repeating-linear-gradient(0deg, transparent 0 39px, var(--rule-soft) 39px 40px);
+}
+.photoslot::before, .photoslot::after{
+  content:""; position:absolute; background:var(--ink);
+}
+.photoslot::before{ left:50%; top:0; bottom:0; width:1px; transform:translateX(-50%); opacity:.22; }
+.photoslot::after{ top:50%; left:0; right:0; height:1px; transform:translateY(-50%); opacity:.22; }
+.photoslot__c{ position:relative; text-align:center; padding:16px; }
+.photoslot__c .display{ font-size:clamp(16px,2.4vw,28px); }
+.crosshair{ position:absolute; width:13px; height:13px; }
+.crosshair::before,.crosshair::after{ content:""; position:absolute; background:var(--signal); }
+.crosshair::before{ left:6px; top:0; width:1px; height:13px; }
+.crosshair::after{ top:6px; left:0; height:1px; width:13px; }
+.ch-tl{ left:8px; top:8px; } .ch-tr{ right:8px; top:8px; }
+.ch-bl{ left:8px; bottom:8px; } .ch-br{ right:8px; bottom:8px; }
+
+/* =================== PURCHASE ============================= */
+.buy{ border-top:1px solid var(--ink); padding-top:0; }
+.buy__l{ grid-column:1/7; padding-top:34px; border-right:1px solid var(--rule); padding-right:28px; }
+.buy__r{ grid-column:7/13; padding-top:34px; padding-left:28px; }
+@media (max-width:900px){
+  .buy__l{ grid-column:1/-1; border-right:0; padding-right:0; }
+  .buy__r{ grid-column:1/-1; padding-left:0; padding-top:20px; }
+}
+.bigprice{ display:flex; align-items:baseline; gap:10px; margin-top:16px; }
+.bigprice .num{ font-size:clamp(64px,11vw,150px); }
+.bigprice .cur{ font-family:var(--f-display); font-weight:500; font-size:20px; letter-spacing:-.01em; }
+.opts{ margin-top:26px; }
+.opt{ display:grid; grid-template-columns:auto 1fr; gap:12px; padding-block:12px; border-top:1px solid var(--rule); }
+.opt:last-of-type{ border-bottom:1px solid var(--rule); }
+.chips{ display:flex; flex-wrap:wrap; gap:0; }
+.chip{
+  font-family:var(--f-data); font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+  border:1px solid var(--rule); margin:0 -1px -1px 0; padding:8px 12px;
+  background:transparent; color:var(--ink-70); cursor:pointer;
+  transition:color .2s var(--ease-m), border-color .2s var(--ease-m), background .2s var(--ease-m);
+}
+.chip:hover{ color:var(--ink); border-color:var(--ink); position:relative; z-index:2; }
+.chip[aria-pressed="true"]{ background:var(--ink); color:var(--paper); border-color:var(--ink); position:relative; z-index:3; }
+.cta{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  width:100%; margin-top:30px; padding:19px 20px;
+  background:var(--ink); color:var(--paper);
+  border:1px solid var(--ink);
+  font-family:var(--f-display); font-weight:600; font-size:15px; letter-spacing:.02em;
+  text-transform:uppercase; cursor:pointer;
+  transition:background .28s var(--ease-m), color .28s var(--ease-m);
+}
+.cta:hover{ background:var(--signal); border-color:var(--signal); color:#fff; }
+.cta:active{ transform:translateY(1px); }
+.cta__arrow{ transition:transform .3s var(--ease-m); }
+.cta:hover .cta__arrow{ transform:translateX(6px); }
+
+/* =================== FOOTER =============================== */
+footer{ border-top:1px solid var(--ink); padding-block:44px 30px; position:relative; z-index:1; }
+.fcol{ grid-column:span 3; }
+@media (max-width:900px){ .fcol{ grid-column:span 3; } }
+@media (max-width:560px){ .fcol{ grid-column:span 6; } }
+.fcol li{ padding-block:5px; }
+.fcol li a{ font-size:12.5px; color:var(--ink-70); border-bottom:1px solid transparent; transition:color .2s, border-color .2s; }
+.fcol li a:hover{ color:var(--ink); border-color:var(--signal); }
+.colophon{ display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:50px; padding-top:14px; border-top:1px solid var(--rule); }
+
+/* =================== A11Y ================================= */
+:focus-visible{ outline:2px solid var(--signal); outline-offset:2px; }
+@media (prefers-reduced-motion:reduce){
+  .hair, .sec__rule, .bar__fill{ transform:scaleX(1) !important; transition:none !important; }
+  .rv{ opacity:1 !important; transform:none !important; transition:none !important; }
+  .axis__mark{ transform:translateX(-50%) scale(1) !important; transition:none !important; }
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+}
+</style>
+
+<div class="gridlines" aria-hidden="true">
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<header class="nav">
+  <div class="shell">
+    <div class="nav__bar">
+      <a class="mark" href="#top">
+        <span class="mark__n">SOIGNÉ</span>
+        <span class="mark__jp">ソワニエ コーヒーロースタリー</span>
+      </a>
+      <nav class="nav__links meta meta--ink" aria-label="主要ナビゲーション">
+        <a href="#index">01 — 豆の索引</a>
+        <a href="#profile">02 — 風味設計</a>
+        <a href="#sourcing">03 — 調達記録</a>
+        <a href="#roast">04 — 焙煎曲線</a>
+        <a href="#buy">05 — 購入</a>
+      </nav>
+      <a class="nav__cart meta meta--ink" href="#buy">CART <span style="color:var(--signal)">02</span></a>
+    </div>
+  </div>
+  <div class="nav__prog" id="prog"></div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO =================================== -->
+<section class="hero" data-io>
+  <div class="shell">
+    <div class="hero__top">
+      <p class="meta">SOIGNÉ COFFEE ROASTERY — TOKYO, JAPAN<br>SPECIALTY GREEN COFFEE / SINGLE LOT INDEX</p>
+      <p class="meta">REV. 2026.09 &nbsp;/&nbsp; <span class="meta--sig">出荷可能ロット 05</span></p>
+    </div>
+    <div class="hair" style="transition-delay:.05s"></div>
+
+    <div class="grid12 hero__main">
+      <div class="hero__h1">
+        <h1 class="display hero__lat rv" style="transition-delay:.12s">
+          THE<br>SPECI<em>F</em>I<br>CATION
+        </h1>
+        <p class="jp-head hero__jp rv" style="transition-delay:.22s">
+          一杯を、数値で語る。<br>珈琲は感性ではなく、記録である。
+        </p>
+        <p class="body hero__body rv" style="transition-delay:.3s">
+          ソワニエは、生産地・標高・品種・精製・焙煎・カッピングスコアのすべてを開示します。
+          味の良し悪しを言葉で飾らず、検証可能な数値と手順として残す。
+          それが、私たちが考える誠実な焙煎所のかたちです。
+        </p>
+      </div>
+
+      <div class="hero__spec rv" style="transition-delay:.38s">
+        <p class="meta" style="padding-bottom:12px">CURRENT BATCH / 本日の基準ロット</p>
+        <dl>
+        <div class="spec-row spec-row--lead">
+          <dt class="meta">CUPPING SCORE</dt>
+          <dd><span class="num" data-count="91.25" data-dec="2">0.00</span></dd>
+        </div>
+        <div class="spec-row"><dt class="meta">ORIGIN</dt><dd>PANAMA / BOQUETE</dd></div>
+        <div class="spec-row"><dt class="meta">FARM</dt><dd>HACIENDA ALTAMIRA</dd></div>
+        <div class="spec-row"><dt class="meta">ALTITUDE</dt><dd><span data-count="1600" data-dec="0" data-comma="1">0</span> M.A.S.L.</dd></div>
+        <div class="spec-row"><dt class="meta">VARIETAL</dt><dd>GEISHA</dd></div>
+        <div class="spec-row"><dt class="meta">PROCESS</dt><dd>YELLOW HONEY</dd></div>
+        <div class="spec-row"><dt class="meta">ROAST</dt><dd>LIGHT / 中心温度 205.0℃</dd></div>
+        <div class="spec-row"><dt class="meta">LOT SIZE</dt><dd><span data-count="84" data-dec="0">0</span> KG</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="strip" data-io>
+      <div>
+        <p class="meta">生産国 / ORIGINS</p>
+        <span class="num"><span data-count="11" data-dec="0">0</span></span>
+      </div>
+      <div>
+        <p class="meta">取引農園 / PARTNER FARMS</p>
+        <span class="num"><span data-count="24" data-dec="0">0</span></span>
+      </div>
+      <div>
+        <p class="meta">平均スコア / AVG. SCA</p>
+        <span class="num"><span data-count="88.15" data-dec="2">0.00</span></span>
+      </div>
+      <div>
+        <p class="meta">焙煎記録 / LOGGED ROASTS</p>
+        <span class="num"><span data-count="3184" data-dec="0" data-comma="1">0</span><sup>件</sup></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 01 BEAN INDEX ========================== -->
+<section class="sec" id="index" data-io>
+  <div class="shell">
+    <div class="sec__head">
+      <span class="sec__idx">01</span>
+      <span class="sec__rule"></span>
+      <span class="meta">SINGLE LOT INDEX / 豆の索引 — 05 ITEMS</span>
+    </div>
+    <h2 class="display sec__title rv">BEAN<br>INDEX</h2>
+    <p class="body sec__lede rv" style="transition-delay:.08s">
+      現在出荷可能な五つのロット。横スクロールで全項目を参照できます。数値はすべて当該ロットの実測値です。
+    </p>
+  </div>
+
+  <div class="index-wrap" id="indexWrap" style="margin-top:56px">
+    <div class="index-track" id="indexTrack">
+
+      <!-- LOT 01 -->
+      <article class="lot" data-io>
+        <span class="lot__no">01</span>
+        <h3 class="lot__origin">Ethiopia<br>Guji Hambela</h3>
+        <p class="lot__jp">エチオピア / グジ・ハンベラ</p>
+        <dl class="lot__dl">
+          <div class="spec-row"><dt class="meta">FARM</dt><dd>BUKU ABEL</dd></div>
+          <div class="spec-row"><dt class="meta">ALTITUDE</dt><dd>2,050–2,150 M</dd></div>
+          <div class="spec-row"><dt class="meta">VARIETAL</dt><dd>KURUME / WUSH WUSH</dd></div>
+          <div class="spec-row"><dt class="meta">PROCESS</dt><dd>NATURAL ANAEROBIC 72H</dd></div>
+          <div class="spec-row"><dt class="meta">HARVEST</dt><dd>2025.11 — 2026.01</dd></div>
+        </dl>
+        <div class="axis">
+          <p class="meta">ROAST POSITION / 焙煎度</p>
+          <div class="axis__line">
+            <div class="axis__ticks"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="axis__mark" style="left:14%"></div>
+          </div>
+          <div class="axis__legend meta"><span>LIGHT</span><span>MEDIUM</span><span>DARK</span></div>
+        </div>
+        <div class="lot__foot">
+          <p class="meta">CUPPING SCORE</p>
+          <div class="score"><span class="num" data-count="88.75" data-dec="2">0.00</span><span class="meta">/ 100</span></div>
+          <p class="body" style="font-size:12.5px;line-height:1.9;margin-top:12px">白桃、ジャスミン、黒糖。温度が下がるにつれて輪郭が締まり、余韻に紅茶様の渋みが残ります。</p>
+          <div class="buy-line">
+            <span class="price">¥2,180 <span class="meta">/ 100G</span></span>
+            <a href="#buy">購入する →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- LOT 02 -->
+      <article class="lot" data-io>
+        <span class="lot__no">02</span>
+        <h3 class="lot__origin">Colombia<br>Huila Pitalito</h3>
+        <p class="lot__jp">コロンビア / ウイラ・ピタリート</p>
+        <dl class="lot__dl">
+          <div class="spec-row"><dt class="meta">FARM</dt><dd>EL MIRADOR</dd></div>
+          <div class="spec-row"><dt class="meta">ALTITUDE</dt><dd>1,780 M</dd></div>
+          <div class="spec-row"><dt class="meta">VARIETAL</dt><dd>PINK BOURBON</dd></div>
+          <div class="spec-row"><dt class="meta">PROCESS</dt><dd>WASHED / 36H FERMENT</dd></div>
+          <div class="spec-row"><dt class="meta">HARVEST</dt><dd>2025.10 — 2025.12</dd></div>
+        </dl>
+        <div class="axis">
+          <p class="meta">ROAST POSITION / 焙煎度</p>
+          <div class="axis__line">
+            <div class="axis__ticks"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="axis__mark" style="left:30%"></div>
+          </div>
+          <div class="axis__legend meta"><span>LIGHT</span><span>MEDIUM</span><span>DARK</span></div>
+        </div>
+        <div class="lot__foot">
+          <p class="meta">CUPPING SCORE</p>
+          <div class="score"><span class="num" data-count="87.50" data-dec="2">0.00</span><span class="meta">/ 100</span></div>
+          <p class="body" style="font-size:12.5px;line-height:1.9;margin-top:12px">赤りんご、キャラメル、オレンジピール。酸は穏やかで、甘さの持続が長い一本です。</p>
+          <div class="buy-line">
+            <span class="price">¥1,780 <span class="meta">/ 100G</span></span>
+            <a href="#buy">購入する →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- LOT 03 -->
+      <article class="lot" data-io>
+        <span class="lot__no">03</span>
+        <h3 class="lot__origin">Guatemala<br>Huehuetenango</h3>
+        <p class="lot__jp">グアテマラ / ウエウエテナンゴ</p>
+        <dl class="lot__dl">
+          <div class="spec-row"><dt class="meta">FARM</dt><dd>FINCA LA BOLSA</dd></div>
+          <div class="spec-row"><dt class="meta">ALTITUDE</dt><dd>1,650 M</dd></div>
+          <div class="spec-row"><dt class="meta">VARIETAL</dt><dd>BOURBON / CATURRA</dd></div>
+          <div class="spec-row"><dt class="meta">PROCESS</dt><dd>FULLY WASHED</dd></div>
+          <div class="spec-row"><dt class="meta">HARVEST</dt><dd>2026.01 — 2026.03</dd></div>
+        </dl>
+        <div class="axis">
+          <p class="meta">ROAST POSITION / 焙煎度</p>
+          <div class="axis__line">
+            <div class="axis__ticks"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="axis__mark" style="left:48%"></div>
+          </div>
+          <div class="axis__legend meta"><span>LIGHT</span><span>MEDIUM</span><span>DARK</span></div>
+        </div>
+        <div class="lot__foot">
+          <p class="meta">CUPPING SCORE</p>
+          <div class="score"><span class="num" data-count="86.25" data-dec="2">0.00</span><span class="meta">/ 100</span></div>
+          <p class="body" style="font-size:12.5px;line-height:1.9;margin-top:12px">ミルクチョコレート、胡桃、乾燥いちじく。日常の一杯として最も再現性の高いロットです。</p>
+          <div class="buy-line">
+            <span class="price">¥1,480 <span class="meta">/ 100G</span></span>
+            <a href="#buy">購入する →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- LOT 04 -->
+      <article class="lot" data-io>
+        <span class="lot__no">04</span>
+        <h3 class="lot__origin">Kenya<br>Nyeri</h3>
+        <p class="lot__jp">ケニア / ニエリ</p>
+        <dl class="lot__dl">
+          <div class="spec-row"><dt class="meta">FARM</dt><dd>GICHATHAINI AA</dd></div>
+          <div class="spec-row"><dt class="meta">ALTITUDE</dt><dd>1,850 M</dd></div>
+          <div class="spec-row"><dt class="meta">VARIETAL</dt><dd>SL28 / SL34 / RUIRU 11</dd></div>
+          <div class="spec-row"><dt class="meta">PROCESS</dt><dd>WASHED / 72H FERMENT</dd></div>
+          <div class="spec-row"><dt class="meta">HARVEST</dt><dd>2025.12 — 2026.02</dd></div>
+        </dl>
+        <div class="axis">
+          <p class="meta">ROAST POSITION / 焙煎度</p>
+          <div class="axis__line">
+            <div class="axis__ticks"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="axis__mark" style="left:22%"></div>
+          </div>
+          <div class="axis__legend meta"><span>LIGHT</span><span>MEDIUM</span><span>DARK</span></div>
+        </div>
+        <div class="lot__foot">
+          <p class="meta">CUPPING SCORE</p>
+          <div class="score"><span class="num" data-count="89.00" data-dec="2">0.00</span><span class="meta">/ 100</span></div>
+          <p class="body" style="font-size:12.5px;line-height:1.9;margin-top:12px">ブラックカラント、トマト、黒糖。強い酸質と骨格。浅煎りの基準として置いています。</p>
+          <div class="buy-line">
+            <span class="price">¥2,380 <span class="meta">/ 100G</span></span>
+            <a href="#buy">購入する →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- LOT 05 -->
+      <article class="lot" data-io>
+        <span class="lot__no">05</span>
+        <h3 class="lot__origin">Panama<br>Boquete</h3>
+        <p class="lot__jp">パナマ / ボケテ・ハラミージョ</p>
+        <dl class="lot__dl">
+          <div class="spec-row"><dt class="meta">FARM</dt><dd>HACIENDA ALTAMIRA</dd></div>
+          <div class="spec-row"><dt class="meta">ALTITUDE</dt><dd>1,600 M</dd></div>
+          <div class="spec-row"><dt class="meta">VARIETAL</dt><dd>GEISHA</dd></div>
+          <div class="spec-row"><dt class="meta">PROCESS</dt><dd>YELLOW HONEY</dd></div>
+          <div class="spec-row"><dt class="meta">HARVEST</dt><dd>2026.02 — 2026.04</dd></div>
+        </dl>
+        <div class="axis">
+          <p class="meta">ROAST POSITION / 焙煎度</p>
+          <div class="axis__line">
+            <div class="axis__ticks"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="axis__mark" style="left:11%"></div>
+          </div>
+          <div class="axis__legend meta"><span>LIGHT</span><span>MEDIUM</span><span>DARK</span></div>
+        </div>
+        <div class="lot__foot">
+          <p class="meta">CUPPING SCORE</p>
+          <div class="score"><span class="num" data-count="91.25" data-dec="2">0.00</span><span class="meta">/ 100</span></div>
+          <p class="body" style="font-size:12.5px;line-height:1.9;margin-top:12px">ベルガモット、白桃、蜂蜜。透明感が際立つ限定ロット。年間 84kg のみの取扱いです。</p>
+          <div class="buy-line">
+            <span class="price">¥4,800 <span class="meta">/ 100G</span></span>
+            <a href="#buy">購入する →</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 FLAVOUR PROFILE ===================== -->
+<section class="sec" id="profile" data-io>
+  <div class="shell">
+    <div class="sec__head">
+      <span class="sec__idx">02</span>
+      <span class="sec__rule"></span>
+      <span class="meta">FLAVOUR PROFILE / 風味設計 — LOT 05 GEISHA</span>
+    </div>
+
+    <div class="grid12 profile" style="margin-top:22px">
+      <div class="profile__left">
+        <h2 class="display sec__title rv" style="max-width:11ch">FLAVOUR<br>AS DATA</h2>
+        <p class="body sec__lede rv" style="transition-delay:.08s">
+          社内のカッピングは三名体制、ブラインドで実施します。SCA プロトコルに準拠し、
+          各項目を 10 点満点で採点。下の目盛りは LOT 05 の平均値です。主観は、
+          手順を固定することではじめて比較可能になります。
+        </p>
+        <dl style="margin-top:34px">
+          <div class="spec-row"><dt class="meta">PROTOCOL</dt><dd>SCA CUPPING FORM</dd></div>
+          <div class="spec-row"><dt class="meta">PANEL</dt><dd>3 Q-GRADERS / BLIND</dd></div>
+          <div class="spec-row"><dt class="meta">RATIO</dt><dd>8.25 G / 150 ML</dd></div>
+          <div class="spec-row"><dt class="meta">WATER TDS</dt><dd>78 PPM / pH 7.1</dd></div>
+        </dl>
+      </div>
+
+      <div class="profile__right">
+        <div class="bar" data-io>
+          <div class="bar__top"><span class="bar__label">Acidity<span class="bar__jp">酸味</span></span><span class="bar__val">9.0 / 10</span></div>
+          <div class="bar__track">
+            <div class="bar__scale"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="bar__fill bar__fill--sig" style="width:90%"></div>
+          </div>
+        </div>
+        <div class="bar" data-io>
+          <div class="bar__top"><span class="bar__label">Sweetness<span class="bar__jp">甘味</span></span><span class="bar__val">8.75 / 10</span></div>
+          <div class="bar__track">
+            <div class="bar__scale"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="bar__fill" style="width:87.5%"></div>
+          </div>
+        </div>
+        <div class="bar" data-io>
+          <div class="bar__top"><span class="bar__label">Body<span class="bar__jp">コク</span></span><span class="bar__val">7.5 / 10</span></div>
+          <div class="bar__track">
+            <div class="bar__scale"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="bar__fill" style="width:75%"></div>
+          </div>
+        </div>
+        <div class="bar" data-io>
+          <div class="bar__top"><span class="bar__label">Aroma<span class="bar__jp">香り</span></span><span class="bar__val">9.25 / 10</span></div>
+          <div class="bar__track">
+            <div class="bar__scale"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="bar__fill bar__fill--sig" style="width:92.5%"></div>
+          </div>
+        </div>
+        <div class="bar" data-io>
+          <div class="bar__top"><span class="bar__label">Aftertaste<span class="bar__jp">余韻</span></span><span class="bar__val">8.5 / 10</span></div>
+          <div class="bar__track">
+            <div class="bar__scale"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="bar__fill" style="width:85%"></div>
+          </div>
+        </div>
+        <div class="bar" data-io>
+          <div class="bar__top"><span class="bar__label">Balance<span class="bar__jp">均衡</span></span><span class="bar__val">8.75 / 10</span></div>
+          <div class="bar__track">
+            <div class="bar__scale"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="bar__fill" style="width:87.5%"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;margin-top:12px" class="meta">
+          <span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 SOURCING TABLE ====================== -->
+<section class="sec" id="sourcing" data-io>
+  <div class="shell">
+    <div class="sec__head">
+      <span class="sec__idx">03</span>
+      <span class="sec__rule"></span>
+      <span class="meta">SOURCING RECORD / 調達記録 — 2025–26 CROP</span>
+    </div>
+    <h2 class="display sec__title rv">SOURCING<br>RECORD</h2>
+    <p class="body sec__lede rv" style="transition-delay:.08s">
+      2025–26 クロップの全取引。生産者への支払額は C 価格ではなく FOB を開示しています。表は横にスクロールします。
+    </p>
+
+    <div class="tablewrap" style="margin-top:44px">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">NO.</th>
+            <th scope="col">ORIGIN / 生産地</th>
+            <th scope="col">FARM / 農園</th>
+            <th scope="col">ALT.</th>
+            <th scope="col">VARIETAL</th>
+            <th scope="col">PROCESS</th>
+            <th scope="col">LOT</th>
+            <th scope="col">FOB / LB</th>
+            <th scope="col">SCA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="c-no">01</td><td class="c-name">Ethiopia — Guji</td><td>Buku Abel</td><td class="c-num">2,100 m</td><td>Kurume</td><td>Natural AN.</td><td class="c-num">240 kg</td><td class="c-num">$ 9.20</td><td class="c-num">88.75</td></tr>
+          <tr><td class="c-no">02</td><td class="c-name">Colombia — Huila</td><td>El Mirador</td><td class="c-num">1,780 m</td><td>Pink Bourbon</td><td>Washed</td><td class="c-num">420 kg</td><td class="c-num">$ 6.40</td><td class="c-num">87.50</td></tr>
+          <tr><td class="c-no">03</td><td class="c-name">Guatemala — Huehue.</td><td>Finca La Bolsa</td><td class="c-num">1,650 m</td><td>Bourbon</td><td>Fully Washed</td><td class="c-num">600 kg</td><td class="c-num">$ 4.85</td><td class="c-num">86.25</td></tr>
+          <tr><td class="c-no">04</td><td class="c-name">Kenya — Nyeri</td><td>Gichathaini AA</td><td class="c-num">1,850 m</td><td>SL28 / SL34</td><td>Washed 72H</td><td class="c-num">180 kg</td><td class="c-num">$ 10.10</td><td class="c-num">89.00</td></tr>
+          <tr><td class="c-no">05</td><td class="c-name">Panama — Boquete</td><td>Hda. Altamira</td><td class="c-num">1,600 m</td><td>Geisha</td><td>Yellow Honey</td><td class="c-num">84 kg</td><td class="c-num">$ 32.00</td><td class="c-num">91.25</td></tr>
+          <tr><td class="c-no">06</td><td class="c-name">Rwanda — Nyamasheke</td><td>Gasharu</td><td class="c-num">1,900 m</td><td>Red Bourbon</td><td>Natural</td><td class="c-num">300 kg</td><td class="c-num">$ 7.30</td><td class="c-num">87.00</td></tr>
+          <tr><td class="c-no">07</td><td class="c-name">Costa Rica — Tarrazú</td><td>Don Mayo</td><td class="c-num">1,700 m</td><td>Villa Sarchí</td><td>White Honey</td><td class="c-num">240 kg</td><td class="c-num">$ 8.60</td><td class="c-num">87.75</td></tr>
+          <tr><td class="c-no">08</td><td class="c-name">Indonesia — Aceh</td><td>Ketiara Co-op</td><td class="c-num">1,500 m</td><td>Ateng</td><td>Wet Hulled</td><td class="c-num">360 kg</td><td class="c-num">$ 5.10</td><td class="c-num">85.50</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid12" style="margin-top:58px">
+      <div style="grid-column:1/-1">
+        <figure class="photoslot">
+          <span class="crosshair ch-tl"></span><span class="crosshair ch-tr"></span>
+          <span class="crosshair ch-bl"></span><span class="crosshair ch-br"></span>
+          <div class="photoslot__c">
+            <p class="meta meta--sig">PHOTOGRAPHY SLOT — 写真差替え領域</p>
+            <p class="display" style="margin-top:10px">FIG. 3.1 — HAND SORTING</p>
+            <p class="meta" style="margin-top:10px">生豆ハンドピック工程 / 1600 × 900 PX / B&amp;W, DIFFUSED LIGHT, TOP-DOWN</p>
+          </div>
+        </figure>
+        <p class="meta" style="margin-top:10px">FIG. 3.1 — 本番環境では実写を配置。グリッド上 12 カラム全幅、16:9。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 ROAST CURVE ========================= -->
+<section class="sec" id="roast" data-io>
+  <div class="shell">
+    <div class="sec__head">
+      <span class="sec__idx">04</span>
+      <span class="sec__rule"></span>
+      <span class="meta">ROAST PROFILE / 焙煎曲線 — LOT 05 / PROBAT P12</span>
+    </div>
+
+    <div class="grid12 roast" style="margin-top:22px">
+      <div class="roast__sticky">
+        <h2 class="display sec__title rv" style="max-width:9ch">ROAST<br>CURVE</h2>
+        <p class="body sec__lede rv" style="transition-delay:.08s">
+          焙煎は再現性の作業です。投入から排出までの温度と上昇率を毎回記録し、
+          許容差 ±1.5℃・±8 秒の範囲で管理しています。下の曲線は LOT 05 の基準プロファイルです。
+        </p>
+        <div style="margin-top:32px">
+          <div class="phase"><b>Drying</b><span class="meta">乾燥</span><span>00:00 — 04:20</span></div>
+          <div class="phase"><b>Maillard</b><span class="meta">メイラード</span><span>04:20 — 09:10</span></div>
+          <div class="phase"><b>First Crack</b><span class="meta">一ハゼ</span><span>09:10 / 196.0℃</span></div>
+          <div class="phase"><b>Development</b><span class="meta">発達</span><span>01:55 / DTR 17.4%</span></div>
+          <div class="phase"><b>Drop</b><span class="meta">排出</span><span>11:05 / 205.0℃</span></div>
+        </div>
+      </div>
+
+      <div class="roast__plot">
+        <svg class="plot" id="plot" viewBox="0 0 720 420" role="img"
+             aria-label="焙煎曲線。投入198度から排出205度まで11分05秒。一ハゼは9分10秒、196度。">
+          <!-- frame -->
+          <line class="axisline" x1="56" y1="18" x2="56" y2="360"/>
+          <line class="axisline" x1="56" y1="360" x2="700" y2="360"/>
+          <!-- horizontal gridlines -->
+          <line class="gridline" x1="56" y1="292" x2="700" y2="292"/>
+          <line class="gridline" x1="56" y1="224" x2="700" y2="224"/>
+          <line class="gridline" x1="56" y1="156" x2="700" y2="156"/>
+          <line class="gridline" x1="56" y1="88"  x2="700" y2="88"/>
+          <text x="0" y="364">50 ℃</text>
+          <text x="0" y="296">90 ℃</text>
+          <text x="0" y="228">130 ℃</text>
+          <text x="0" y="160">170 ℃</text>
+          <text x="0" y="92">210 ℃</text>
+          <!-- vertical time ticks -->
+          <line class="gridline" x1="173" y1="18" x2="173" y2="360"/>
+          <line class="gridline" x1="290" y1="18" x2="290" y2="360"/>
+          <line class="gridline" x1="407" y1="18" x2="407" y2="360"/>
+          <line class="gridline" x1="524" y1="18" x2="524" y2="360"/>
+          <line class="gridline" x1="641" y1="18" x2="641" y2="360"/>
+          <text x="50"  y="378">00:00</text>
+          <text x="160" y="378">02:00</text>
+          <text x="277" y="378">04:00</text>
+          <text x="394" y="378">06:00</text>
+          <text x="511" y="378">08:00</text>
+          <text x="628" y="378">10:00</text>
+
+          <!-- bean temperature curve -->
+          <path id="curveBT" class="curve"
+            d="M56,106 C68,150 80,208 98,246 C122,296 140,300 160,296 C196,288 232,264 268,238 C312,206 356,178 400,156 C452,131 508,114 560,102 C600,93 630,88 654,84"/>
+          <!-- rate of rise (second plate colour) -->
+          <path id="curveROR" class="curve curve--rate"
+            d="M160,96 C210,118 262,140 318,160 C378,181 444,200 510,216 C562,229 614,240 654,248"/>
+
+          <!-- event: first crack -->
+          <line id="fcLine" class="evt" x1="592" y1="18" x2="592" y2="360" opacity="0"/>
+          <circle id="fcDot" class="evtdot" cx="592" cy="96" r="4" opacity="0"/>
+          <text id="fcText" class="evtlabel" x="500" y="34" opacity="0">FIRST CRACK 09:10 / 196.0℃</text>
+
+          <text x="56" y="404">TIME →</text>
+          <text x="600" y="404">ROR (Δ℃/MIN)</text>
+        </svg>
+        <p class="meta" style="margin-top:12px">FIG. 4.1 — 実線 = 豆温度 / 破線 = 上昇率。PROBAT P12, 投入量 9.0 KG, 投入温度 198.0℃。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 PURCHASE ============================ -->
+<section class="sec" id="buy" data-io>
+  <div class="shell">
+    <div class="sec__head">
+      <span class="sec__idx">05</span>
+      <span class="sec__rule"></span>
+      <span class="meta">ORDER / 購入 — LOT 05 PANAMA GEISHA</span>
+    </div>
+
+    <div class="grid12 buy" style="margin-top:26px">
+      <div class="buy__l">
+        <p class="meta">LOT 05 / PANAMA — BOQUETE, JARAMILLO</p>
+        <h2 class="display" style="font-size:clamp(30px,4.6vw,54px);margin-top:14px">HACIENDA<br>ALTAMIRA<br>GEISHA</h2>
+        <div class="bigprice">
+          <span class="cur">¥</span>
+          <span class="num" data-count="4800" data-dec="0" data-comma="1">0</span>
+          <span class="meta" style="align-self:flex-end;padding-bottom:8px">/ 100 G &nbsp;TAX INCL.</span>
+        </div>
+        <p class="body" style="margin-top:24px">
+          年間 84kg のみの限定ロット。焙煎は毎週火曜・金曜、ご注文後に行い、翌営業日に発送します。
+          開封後は二週間以内を目安にお召し上がりください。
+        </p>
+        <dl style="margin-top:28px">
+          <div class="spec-row"><dt class="meta">在庫 / STOCK</dt><dd><span class="meta--sig">残 18 袋</span></dd></div>
+          <div class="spec-row"><dt class="meta">焙煎日 / ROASTED</dt><dd>2026.09.15 (TUE)</dd></div>
+          <div class="spec-row"><dt class="meta">発送 / SHIPPING</dt><dd>全国一律 ¥550 / ¥8,000 以上無料</dd></div>
+        </dl>
+      </div>
+
+      <div class="buy__r">
+        <div class="opts">
+          <div class="opt">
+            <span class="meta" style="min-width:78px;padding-top:8px">容量</span>
+            <div class="chips" role="group" aria-label="容量">
+              <button class="chip" type="button" aria-pressed="false">100 G</button>
+              <button class="chip" type="button" aria-pressed="true">200 G</button>
+              <button class="chip" type="button" aria-pressed="false">400 G</button>
+            </div>
+          </div>
+          <div class="opt">
+            <span class="meta" style="min-width:78px;padding-top:8px">挽き方</span>
+            <div class="chips" role="group" aria-label="挽き方">
+              <button class="chip" type="button" aria-pressed="true">豆のまま</button>
+              <button class="chip" type="button" aria-pressed="false">ペーパー</button>
+              <button class="chip" type="button" aria-pressed="false">エアロプレス</button>
+              <button class="chip" type="button" aria-pressed="false">エスプレッソ</button>
+              <button class="chip" type="button" aria-pressed="false">フレンチプレス</button>
+            </div>
+          </div>
+          <div class="opt">
+            <span class="meta" style="min-width:78px;padding-top:8px">定期便</span>
+            <div class="chips" role="group" aria-label="定期便">
+              <button class="chip" type="button" aria-pressed="true">単発</button>
+              <button class="chip" type="button" aria-pressed="false">2 週ごと −5%</button>
+              <button class="chip" type="button" aria-pressed="false">4 週ごと −8%</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="cta" type="button">
+          <span>カートに入れる</span>
+          <span class="cta__arrow">→</span>
+        </button>
+
+        <p class="meta" style="margin-top:16px;line-height:1.9">
+          ※ 本ページの数値はすべて当該ロットの実測・記録値です。<br>
+          ※ 焙煎証明書（ROAST LOG PDF）を同梱いたします。
+        </p>
+
+        <dl style="margin-top:38px">
+          <div class="spec-row"><dt class="meta">決済 / PAYMENT</dt><dd>CREDIT / PAYPAY / 銀行振込</dd></div>
+          <div class="spec-row"><dt class="meta">返品 / RETURNS</dt><dd>品質不良に限り到着後 7 日以内</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer data-io>
+  <div class="shell">
+    <div class="grid12">
+      <div class="fcol">
+        <p class="meta meta--ink">SHOP / 商品</p>
+        <ul style="margin-top:12px">
+          <li><a href="#index">シングルロット</a></li>
+          <li><a href="#index">ブレンド</a></li>
+          <li><a href="#buy">定期便</a></li>
+          <li><a href="#buy">ギフト</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <p class="meta meta--ink">RECORD / 記録</p>
+        <ul style="margin-top:12px">
+          <li><a href="#sourcing">調達記録</a></li>
+          <li><a href="#roast">焙煎ログ</a></li>
+          <li><a href="#profile">カッピング結果</a></li>
+          <li><a href="#sourcing">取引価格の開示</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <p class="meta meta--ink">ABOUT / 私たち</p>
+        <ul style="margin-top:12px">
+          <li><a href="#top">焙煎所について</a></li>
+          <li><a href="#top">設備仕様</a></li>
+          <li><a href="#top">卸・業務用</a></li>
+          <li><a href="#top">採用</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <p class="meta meta--ink">CONTACT / 連絡先</p>
+        <ul style="margin-top:12px">
+          <li><a href="#top">お問い合わせ</a></li>
+          <li><a href="#top">特定商取引法に基づく表記</a></li>
+          <li><a href="#top">プライバシーポリシー</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="colophon">
+      <p class="meta">SOIGNÉ COFFEE ROASTERY / ソワニエ コーヒーロースタリー<br>〒153-0051 東京都目黒区上目黒 2-14-6 &nbsp;/&nbsp; ROASTERY OPEN 10:00—18:00 (CLOSED MON)</p>
+      <p class="meta">SET IN ARCHIVO &amp; IBM PLEX MONO &amp; ZEN KAKU GOTHIC NEW<br>GRID 12 COL / 16 PX GUTTER &nbsp;·&nbsp; DOC. REV. 2026.09 — 「理」</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- 1. staggered grid reveal + hairline draw ---------- */
+  var blocks = document.querySelectorAll("[data-io]");
+  if (reduce || !("IntersectionObserver" in window)) {
+    blocks.forEach(function(b){ b.classList.add("is-in"); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+      });
+    }, { threshold:0.12, rootMargin:"0px 0px -8% 0px" });
+    blocks.forEach(function(b){ io.observe(b); });
+  }
+
+  /* ---------- 2. mechanical counting numerals ---------- */
+  var counters = document.querySelectorAll("[data-count]");
+  function fmt(v, dec, comma){
+    var s = v.toFixed(dec);
+    if (comma) {
+      var parts = s.split(".");
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      s = parts.join(".");
+    }
+    return s;
+  }
+  function run(el){
+    var target = parseFloat(el.getAttribute("data-count"));
+    var dec = parseInt(el.getAttribute("data-dec") || "0", 10);
+    var comma = el.getAttribute("data-comma") === "1";
+    if (reduce) { el.textContent = fmt(target, dec, comma); return; }
+    var dur = 1150, t0 = null;
+    function step(ts){
+      if (t0 === null) t0 = ts;
+      var p = Math.min((ts - t0) / dur, 1);
+      /* expo-out: decisive arrival, no drift */
+      var e = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+      el.textContent = fmt(target * e, dec, comma);
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = fmt(target, dec, comma);
+    }
+    requestAnimationFrame(step);
+  }
+  if (!("IntersectionObserver" in window) || reduce) {
+    counters.forEach(run);
+  } else {
+    var cio = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { run(e.target); cio.unobserve(e.target); }
+      });
+    }, { threshold:0.6 });
+    counters.forEach(function(c){ cio.observe(c); });
+  }
+
+  /* ---------- 3. scroll progress hairline in the nav ---------- */
+  var prog = document.getElementById("prog");
+  function onScroll(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? (window.scrollY / h) * 100 : 0;
+    prog.style.width = p.toFixed(2) + "%";
+  }
+  window.addEventListener("scroll", onScroll, { passive:true });
+  onScroll();
+
+  /* ---------- 4. option chips ---------- */
+  document.querySelectorAll(".chips").forEach(function(group){
+    group.addEventListener("click", function(ev){
+      var btn = ev.target.closest(".chip");
+      if (!btn) return;
+      group.querySelectorAll(".chip").forEach(function(c){ c.setAttribute("aria-pressed","false"); });
+      btn.setAttribute("aria-pressed","true");
+    });
+  });
+
+  if (reduce || typeof gsap === "undefined") {
+    /* reduced motion: show the roast curve in its final state */
+    ["curveBT","curveROR"].forEach(function(id){
+      var p = document.getElementById(id); if (p) p.style.strokeDasharray = "none";
+    });
+    ["fcLine","fcDot","fcText"].forEach(function(id){
+      var n = document.getElementById(id); if (n) n.setAttribute("opacity","1");
+    });
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- 5. bean index: pinned horizontal pan (desktop only) ---------- */
+  var wrap = document.getElementById("indexWrap");
+  var track = document.getElementById("indexTrack");
+  ScrollTrigger.matchMedia({
+    "(min-width: 901px)": function(){
+      var getDist = function(){ return Math.max(0, track.scrollWidth - window.innerWidth + 32); };
+      var tween = gsap.to(track, {
+        x: function(){ return -getDist(); },
+        ease: "none",
+        scrollTrigger: {
+          trigger: wrap,
+          start: "top top",
+          end: function(){ return "+=" + getDist(); },
+          pin: true,
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+          anticipatePin: 1
+        }
+      });
+      return function(){ tween.scrollTrigger && tween.scrollTrigger.kill(); tween.kill(); gsap.set(track,{clearProps:"x"}); };
+    }
+  });
+
+  /* ---------- 6. roast curve: paths draw themselves, scrubbed ---------- */
+  ["curveBT","curveROR"].forEach(function(id, i){
+    var path = document.getElementById(id);
+    if (!path) return;
+    var len = path.getTotalLength();
+    gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
+    gsap.to(path, {
+      strokeDashoffset: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#plot",
+        start: "top 72%",
+        end: "bottom 62%",
+        scrub: 0.5
+      }
+    });
+  });
+
+  /* first-crack event marker snaps in after the curve passes it */
+  gsap.timeline({
+    scrollTrigger: { trigger: "#plot", start: "top 30%", toggleActions: "play none none reverse" }
+  })
+  .to("#fcLine", { attr:{opacity:0.55}, duration:0.35, ease:"power2.out" })
+  .to("#fcDot",  { attr:{opacity:1}, duration:0.2, ease:"power2.out" }, "-=0.1")
+  .to("#fcText", { attr:{opacity:1}, duration:0.3, ease:"power2.out" }, "-=0.05");
+
+  /* ---------- 7. section titles: clipped mechanical wipe ---------- */
+  gsap.utils.toArray(".sec__title").forEach(function(el){
+    gsap.fromTo(el,
+      { clipPath: "inset(0 100% 0 0)" },
+      { clipPath: "inset(0 0% 0 0)", duration: 0.85, ease: "power3.inOut",
+        scrollTrigger: { trigger: el, start: "top 86%", once: true } }
+    );
+  });
+
+  /* ---------- 8. table rows: staggered hairline entry ---------- */
+  gsap.from("tbody tr", {
+    opacity: 0, y: 10, duration: 0.45, ease: "power2.out", stagger: 0.045,
+    scrollTrigger: { trigger: "tbody", start: "top 82%", once: true }
+  });
+
+})();
+</script>
