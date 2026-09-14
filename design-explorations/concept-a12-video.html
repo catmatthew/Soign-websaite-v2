@@ -1,0 +1,1566 @@
+<title>Soigné — 映像の頁 / Le cahier filmé</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500&family=Noto+Serif+JP:wght@200;300;400&family=Zen+Kaku+Gothic+New:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap">
+
+<style>
+/* ============================================================
+   案A12 — 映像主体 / LE CAHIER FILMÉ
+   A1's typography and A1's motion system, carrying A2's
+   atmosphere: warm ivory stock, bordeaux, central axis,
+   filet double, a French label layer, engraved small type.
+
+   New axis: moving image is the primary visual material.
+   Every media slot below is built at its real aspect ratio,
+   in its real position, with its real scroll behaviour, and
+   filled with a designed placeholder. Production <video>
+   markup is written as a comment immediately above each one.
+
+   Tawaraya precedent: video-led and completely quiet.
+   No music. Sound is off by default and opt-in only.
+   ============================================================ */
+
+:root{
+  /* ---- papier : A2's warm ivory, one step deeper than A2 so that
+         high-key footage sitting on it reads as brighter than paper --- */
+  --paper:      #f6f2e8;
+  --paper-deep: #f0eadd;   /* the plate ground, behind every media slot */
+  --ink:        #1b1a17;   /* warm printing black, never #000 */
+  --ink-82:     rgba(27,26,23,.82);
+  --ink-56:     rgba(27,26,23,.56);
+  --ink-34:     rgba(27,26,23,.34);
+  --ink-18:     rgba(27,26,23,.18);
+  --rule:       rgba(27,26,23,.20);
+  --rule-f:     rgba(27,26,23,.10);
+
+  /* ---- l'unique accent : BORDEAUX. A2's #6E1D2B over A1's 蘇芳,
+         because it is the darker of the two and is the only one that
+         survives being laid over moving footage without turning pink.
+         Six appearances on the whole page, counted in comments. ---- */
+  --bordeaux:   #6e1d2b;
+
+  --gutter: clamp(16px, 5.5vw, 104px);
+  --measure: 34ch;
+  --axis: 980px;
+
+  --ease: cubic-bezier(.16,1,.3,1);
+
+  --mincho: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --serif:  "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --latin:  "Zen Kaku Gothic New", "Hiragino Sans", "Helvetica Neue", sans-serif;
+  /* ONE added Latin display face, for the French label layer only.
+     Removable: delete this variable, swap .fr to var(--mincho), and the
+     page still stands — nothing structural depends on it. */
+  --french: "Cormorant Garamond", "EB Garamond", Garamond, serif;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ overflow-x:clip; }
+body{
+  margin:0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:clip;
+}
+
+/* ---------- the sheet : fixed light + tooth, A1's pointer light ---- */
+#paper{ position:fixed; inset:0; z-index:-4; pointer-events:none; background:var(--paper); }
+#light{
+  position:fixed; inset:-24%; z-index:-3; pointer-events:none;
+  animation: drift 82s ease-in-out infinite alternate; will-change:transform;
+}
+#light-i{
+  position:absolute; inset:0; will-change:transform; opacity:.9;
+  background:
+    radial-gradient(54% 42% at 50% 12%, rgba(255,252,243,.95), rgba(255,252,243,0) 64%),
+    radial-gradient(44% 44% at 82% 78%, rgba(110,29,43,.035), rgba(110,29,43,0) 60%);
+}
+@keyframes drift{
+  0%   { transform: translate3d(-2%,-1.5%,0) scale(1.00); }
+  100% { transform: translate3d( 2.4%, 2.2%,0) scale(1.07); }
+}
+#grain{
+  position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.05;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.84' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- 00 開幕 ------------------------------------------ */
+#veil{
+  position:fixed; inset:0; z-index:60; pointer-events:none;
+  background: var(--paper); display:grid; place-items:center;
+}
+#veil .vmark{
+  font-family: var(--french); font-size:26px; font-weight:300;
+  letter-spacing:.32em; text-indent:.32em; color:var(--ink-56);
+}
+
+/* ---------- shared type -------------------------------------- */
+h1,h2,h3{ font-family:var(--mincho); font-weight:400; margin:0; }
+p{ margin:0; }
+a{ color:inherit; text-decoration:none; }
+.wrap{ padding-inline:var(--gutter); max-width:calc(var(--axis) + 208px); margin-inline:auto; }
+.axis{ max-width:var(--axis); margin-inline:auto; }
+section{ position:relative; }
+
+/* the French label layer : Cormorant small caps, engraved scale */
+.fr{
+  font-family: var(--french); font-weight:400; font-style:normal;
+  font-size: clamp(11px, 1.2vw, 13px);
+  letter-spacing:.26em; text-transform:uppercase; color:var(--ink-56);
+  line-height:2;
+}
+.fr-title{
+  font-family: var(--french); font-weight:300; text-transform:none;
+  font-size: clamp(1.8rem, 4.6vw, 3.1rem);
+  letter-spacing:.06em; line-height:1.2; color:var(--ink);
+}
+.fr-it{ font-family:var(--french); font-style:italic; font-weight:300; text-transform:none; letter-spacing:.03em; }
+/* A1's Latin caption face stays, and does all the technical small type */
+.latin{
+  font-family:var(--latin); font-weight:400; font-size:10px;
+  letter-spacing:.15em; text-transform:uppercase; color:var(--ink-34); line-height:1.9;
+}
+
+/* ---------- filet double : opens from the centre --------------- */
+.rule-d{
+  height:4px; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+  width:min(100%, 560px); margin:0 auto;
+  transform:scaleX(0); transform-origin:center;
+}
+.lozenge{
+  display:block; width:5px; height:5px; margin:20px auto;
+  background:var(--bordeaux);              /* ——— ACCENT 1 / 6 ——— */
+  transform:rotate(45deg);
+}
+
+/* ---------- 進行 : A1's reading rail --------------------------- */
+#rail{
+  position:fixed; left:calc(var(--gutter)*.40); top:50%;
+  transform:translateY(-50%); z-index:15; pointer-events:none; display:none;
+}
+@media (min-width:1220px){ #rail{ display:block; } }
+#rail .stem{ width:1px; height:42vh; background:var(--rule-f); position:relative; }
+#rail .stem .ink{
+  position:absolute; left:0; top:0; width:1px; height:100%;
+  background:var(--ink-18); transform-origin:top; transform:scaleY(0);
+}
+#rail .dot{
+  position:absolute; left:-2px; top:0; width:5px; height:5px; border-radius:50%;
+  background:var(--ink-56); transform:translateY(-2.5px);
+}
+#rail .tick{ position:absolute; left:-4px; width:9px; height:1px; background:var(--rule); opacity:.55; }
+
+/* ---------- 01 header ----------------------------------------- */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:20;
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:20px var(--gutter);
+  border-bottom:1px solid transparent;
+  background:linear-gradient(var(--paper) 58%, rgba(246,242,232,0));
+}
+header.lifted{ border-bottom-color:var(--rule-f); background:var(--paper); }
+header .mark{ font-family:var(--french); font-size:19px; font-weight:400; letter-spacing:.2em; }
+header nav{ display:flex; align-items:center; gap:clamp(12px,2.6vw,30px); }
+header nav a{
+  font-family:var(--latin); font-size:10px; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--ink-56); transition:color .9s var(--ease);
+}
+header nav a:hover{ color:var(--ink); }
+@media (max-width:620px){ header nav a.hide-s{ display:none; } }
+
+/* le son — off by default, quiet, never the accent colour */
+#son{
+  font-family:var(--latin); font-size:9.5px; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--ink-34); background:none; border:0; border-bottom:1px solid var(--rule-f);
+  padding:0 0 4px; cursor:pointer; transition:color .9s var(--ease), border-color .9s var(--ease);
+}
+#son:hover{ color:var(--ink-56); border-color:var(--rule); }
+#son[aria-pressed="true"]{ color:var(--ink); border-color:var(--ink-56); }
+
+/* ============================================================
+   MEDIA SLOTS — shared chassis
+   Every slot reserves its box with aspect-ratio before any byte
+   of footage arrives. No slot ever collapses or shifts.
+   ============================================================ */
+.slot{ position:relative; margin:0; }
+.slot .frame{
+  position:relative; width:100%; overflow:hidden;
+  background:var(--paper-deep);
+  /* aspect-ratio is set per slot below — never omitted */
+}
+.slot .cap{
+  display:block; margin-top:10px;
+  font-family:var(--latin); font-size:9px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-34); line-height:1.9;
+}
+.slot .cap b{ font-weight:400; color:var(--ink-56); }
+/* the placeholder layer. In production this element is deleted and the
+   <video> in the comment above takes its place, inside the same .frame. */
+.ph{ position:absolute; inset:0; }
+.ph svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+/* the high-key ground every piece of footage is graded to sit on */
+.ph-field{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(62% 48% at 46% 20%, rgba(255,253,246,1), rgba(255,253,246,0) 72%),
+    linear-gradient(168deg, #f4eee1 0%, #ebe3d2 52%, #ded4c0 100%);
+}
+/* raking window light — the perpetual micro-motion inside every frame */
+.ph-rake{
+  position:absolute; inset:-30%;
+  background:radial-gradient(40% 32% at 30% 22%, rgba(255,255,250,.8), rgba(255,255,250,0) 68%);
+  animation: rake 28s ease-in-out infinite alternate; will-change:transform,opacity;
+}
+@keyframes rake{
+  0%{ transform:translate3d(-3%,-2%,0) scale(1); opacity:.7; }
+  100%{ transform:translate3d(4%,3%,0) scale(1.12); opacity:1; }
+}
+/* 湯気 — rising steam, the one thing that moves in an almost-static shot */
+.ph-steam i{
+  position:absolute; bottom:8%; width:1px; height:46%;
+  background:linear-gradient(to top, rgba(27,26,23,.20), rgba(27,26,23,0));
+  transform-origin:bottom; animation: rise 11s ease-in-out infinite;
+}
+@keyframes rise{
+  0%{   transform:translateY(16px) scaleY(.5) skewX(0deg); opacity:0; }
+  26%{  opacity:.85; }
+  72%{  opacity:.45; }
+  100%{ transform:translateY(-26px) scaleY(1.1) skewX(6deg); opacity:0; }
+}
+
+/* ---------- 02 hero : the silent ambient loop, full-bleed ------- */
+#hero{
+  min-height:100svh; display:grid; grid-template-rows:1fr auto;
+  padding-top:clamp(112px, 20vh, 220px); text-align:center;
+}
+#hero-media{
+  position:absolute; inset:0; z-index:-2; overflow:hidden; pointer-events:none;
+  /* the shot is 16:9 landscape (9:16 portrait asset below 720px), and it is
+     always cropped to the viewport — object-fit:cover on the real <video>. */
+}
+#hero-media .ph{ inset:-2%; }
+/* the veil that keeps the footage subordinate to the type. The hero lot is
+   shot high-key on ivory linen precisely so this can stay this light. */
+#hero-media::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(246,242,232,.72) 0%, rgba(246,242,232,.46) 42%, rgba(246,242,232,.80) 100%);
+}
+#hero .inner{ display:grid; align-content:center; }
+#hero .wordmark{
+  font-family:var(--french); font-weight:300;
+  font-size:clamp(3rem, 11.5vw, 7.4rem); line-height:1.02;
+  letter-spacing:.1em; text-indent:.1em;
+}
+#hero .wordmark .ch{ display:inline-block; will-change:transform,opacity; }
+#hero h1{
+  margin-top:clamp(28px,6vh,60px);
+  font-family:var(--mincho); font-size:clamp(1.02rem, 2.5vw, 1.46rem);
+  line-height:2.5; letter-spacing:.32em; text-indent:.32em;
+}
+#hero h1 .ln{ display:block; }
+#hero .sub{
+  margin:clamp(28px,5vh,54px) auto 0; max-width:var(--measure);
+  font-size:clamp(.8rem,1.4vw,.9rem); line-height:2.5; letter-spacing:.13em; color:var(--ink-82);
+}
+#hero .foot{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:18px;
+  padding-bottom:30px; text-align:left;
+}
+#hero .foot .mid{ text-align:center; }
+#hero .foot .right{ text-align:right; }
+.cue{ display:inline-flex; flex-direction:column; align-items:center; gap:10px; }
+.cue .line{
+  display:block; width:1px; height:46px; background:var(--rule-f);
+  position:relative; overflow:hidden;
+}
+.cue .line::after{
+  content:""; position:absolute; left:0; top:0; width:1px; height:34%;
+  background:var(--ink-56); animation: fall 5s cubic-bezier(.45,0,.2,1) infinite;
+}
+@keyframes fall{
+  0%{ transform:translateY(-120%); opacity:0; }
+  22%{ opacity:1; } 78%{ opacity:1; }
+  100%{ transform:translateY(300%); opacity:0; }
+}
+@media (max-width:660px){
+  #hero .foot{ display:block; text-align:center; }
+  #hero .foot .left{ display:none; }
+  #hero .foot .right{ text-align:center; margin-top:18px; }
+}
+/* the hero's own production caption, kept at the very bottom, very small */
+#hero-cap{
+  position:absolute; left:var(--gutter); right:var(--gutter); bottom:8px;
+  text-align:center; font-family:var(--latin); font-size:8.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-34);
+}
+
+/* ---------- 03 nos cafés : rows, and one looping vignette ------ */
+#cafes{ padding-block:clamp(130px,25vh,300px); }
+.sec-head{ text-align:center; margin-bottom:clamp(58px,11vh,132px); }
+.sec-head .jp{
+  margin-top:14px; font-family:var(--mincho);
+  font-size:clamp(.88rem,1.7vw,1.05rem); letter-spacing:.38em; text-indent:.38em; color:var(--ink-56);
+}
+.cafes-layout{ display:grid; gap:clamp(46px,7vw,92px); }
+@media (min-width:920px){ .cafes-layout{ grid-template-columns:1fr .66fr; align-items:start; } }
+
+.cafe{
+  display:block; padding-block:clamp(28px,4.2vh,46px);
+  position:relative; cursor:pointer; transition:opacity 1.1s var(--ease);
+}
+.cafe::before{
+  content:""; position:absolute; left:0; right:0; top:0; height:1px;
+  background:var(--rule-f); transform:scaleX(0); transform-origin:left;
+}
+.cafe:last-of-type::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:var(--rule-f); transform:scaleX(0); transform-origin:left;
+}
+.cafelist[data-focused="true"] .cafe:not(.is-on){ opacity:.30; }
+.cafe .mk{
+  position:absolute; left:0; top:0; height:1px; width:44px; background:var(--ink-18);
+  transform:scaleX(0); transform-origin:left; transition:transform 1.05s var(--ease);
+}
+.cafe.is-on .mk{ transform:scaleX(1); }
+.cafe-top{ display:flex; align-items:baseline; gap:clamp(13px,2.4vw,26px); }
+.cafe .no{
+  font-family:var(--french); font-size:12px; letter-spacing:.24em;
+  color:var(--ink-34); flex:0 0 auto; padding-top:.3em;
+  transition:color 1.1s var(--ease);
+}
+.cafe.is-on .no{ color:var(--bordeaux); }   /* ——— ACCENT 2 / 6 ——— */
+.cafe .name{
+  font-family:var(--mincho); font-size:clamp(1.04rem,2.2vw,1.5rem);
+  letter-spacing:.16em; line-height:1.9; transition:letter-spacing 1.4s var(--ease);
+}
+.cafe.is-on .name{ letter-spacing:.23em; }
+.cafe .origin{
+  margin-top:10px; margin-left:calc(12px + clamp(13px,2.4vw,26px));
+  font-family:var(--french); font-style:italic; font-weight:300;
+  font-size:clamp(.88rem,1.5vw,1rem); letter-spacing:.03em; color:var(--ink-56);
+}
+.cafe .meta{
+  margin-top:16px; margin-left:calc(12px + clamp(13px,2.4vw,26px));
+  display:flex; flex-wrap:wrap; gap:6px 22px;
+  font-size:.77rem; letter-spacing:.11em; line-height:2.2; color:var(--ink-56);
+}
+.cafe .meta .price{ color:var(--ink-82); }
+@media (max-width:520px){ .cafe .origin,.cafe .meta{ margin-left:0; } }
+
+/* the vignette column : three looping clips, one per row, 4:5 portrait */
+.vig-stack{ position:sticky; top:clamp(88px,15vh,150px); }
+.vig-stack .frame{ aspect-ratio:4/5; border:1px solid var(--rule-f); }
+.vig{
+  position:absolute; inset:0; opacity:0;
+  transition:opacity 1.6s var(--ease);
+}
+.vig.on{ opacity:1; }
+.vig-stack .stackcap{ display:flex; justify-content:space-between; gap:12px; }
+
+/* ---------- 04 la torréfaction : pinned, scrubbed footage ------ */
+#torref{ padding-block:clamp(140px,28vh,330px); }
+#torref .stage{ position:relative; }
+#torref .lede{ text-align:center; }
+#torref .statement{
+  font-family:var(--mincho); font-size:clamp(1.6rem,4.6vw,3rem);
+  letter-spacing:.28em; text-indent:.28em; line-height:2;
+}
+#torref .epigraph{
+  margin-top:clamp(22px,4vh,44px); font-size:clamp(1rem,2.1vw,1.28rem); color:var(--ink-56);
+}
+/* the scrubbed plate. 16:9, centred on the axis, ruled like a plate. */
+#roast-slot{ margin:clamp(48px,8vh,96px) auto 0; width:min(100%, 860px); }
+#roast-slot .frame{ aspect-ratio:16/9; border:1px solid var(--rule); }
+#roastCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+/* the loading state of the frame sequence: a hairline that fills, nothing more */
+#seqbar{
+  position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--rule-f);
+}
+#seqbar span{
+  position:absolute; inset:0; background:var(--ink-34);
+  transform-origin:left; transform:scaleX(0); transition:transform .4s linear;
+}
+#torref .body{
+  margin:clamp(40px,7vh,84px) auto 0; max-width:38ch; text-align:left;
+  font-size:.85rem; line-height:2.6; letter-spacing:.11em; color:var(--ink-82);
+}
+#torref .body .lettrine{
+  float:left; font-family:var(--french); font-weight:300;
+  font-size:3.4em; line-height:.86; padding:.06em .14em 0 0; letter-spacing:0; color:var(--ink);
+}
+.readout{
+  margin-top:clamp(46px,9vh,104px);
+  display:flex; justify-content:center; gap:clamp(24px,6vw,72px); flex-wrap:wrap; align-items:baseline;
+}
+.readout .rd{ display:flex; align-items:baseline; gap:9px; }
+.readout .rd .k{ font-family:var(--latin); font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-34); }
+.readout .rd .v{
+  font-family:var(--mincho); font-size:clamp(1.1rem,2.4vw,1.6rem);
+  letter-spacing:.1em; font-variant-numeric:tabular-nums; color:var(--ink-82);
+}
+.echelle{ margin:clamp(34px,6vh,72px) auto 0; max-width:680px; display:grid; gap:18px; }
+.echelle .track{ position:relative; height:1px; background:var(--rule); }
+.echelle .track .fill{
+  position:absolute; inset:0 auto 0 0; width:100%; background:var(--ink);
+  transform-origin:left; transform:scaleX(0);
+}
+.echelle .track .seed{
+  position:absolute; top:50%; left:0; width:9px; height:9px; margin:-4.5px 0 0 -4.5px;
+  background:#b7bb9f; transform:rotate(45deg); will-change:transform;
+}
+.echelle .ticks{
+  display:flex; justify-content:space-between;
+  font-family:var(--mincho); font-size:.72rem; letter-spacing:.14em; color:var(--ink-34);
+}
+.echelle .ticks span{ transition:color 1s var(--ease); }
+.echelle .ticks span.on{ color:var(--ink); }
+
+/* ---------- 05 saison : no footage. the page falls silent. ----- */
+#saison{
+  padding-block:clamp(130px,25vh,300px);
+  border-top:1px solid var(--rule-f); border-bottom:1px solid var(--rule-f);
+  overflow:hidden; text-align:center;
+}
+#bleed{
+  position:absolute; left:50%; top:52%; z-index:0; pointer-events:none;
+  width:min(120vw,1100px); aspect-ratio:1;
+  transform:translate(-50%,-50%) scale(.55); opacity:0; will-change:transform,opacity;
+  background:radial-gradient(circle at 50% 50%, rgba(27,26,23,.07), rgba(27,26,23,.028) 42%, rgba(27,26,23,0) 66%);
+}
+.justification{
+  position:relative; z-index:1;
+  margin:clamp(44px,8vh,88px) auto 0; width:min(100%,600px);
+  padding:clamp(24px,5vw,52px) clamp(16px,4vw,42px);
+  border:1px solid var(--rule-f);
+  display:flex; justify-content:center; align-items:flex-start; gap:clamp(16px,4vw,44px);
+}
+.vert{
+  writing-mode:vertical-rl; text-orientation:upright;
+  font-family:var(--mincho); font-size:clamp(.88rem,1.5vw,1.02rem);
+  line-height:2.9; letter-spacing:.24em; max-height:min(58vh,470px);
+  color:var(--ink-82); text-align:start;
+}
+.vert .mark{ color:var(--bordeaux); }        /* ——— ACCENT 3 / 6 ——— */
+.vert.title{
+  font-size:clamp(1.12rem,2.3vw,1.46rem); letter-spacing:.3em;
+  line-height:1.7; color:var(--ink); max-height:none;
+}
+.sig{
+  writing-mode:vertical-rl; font-family:var(--mincho); font-size:.72rem;
+  letter-spacing:.2em; color:var(--ink-34); max-height:none; align-self:flex-start;
+}
+.cachet{
+  display:block; margin-top:16px; width:27px; height:27px;
+  border:1px solid var(--bordeaux); color:var(--bordeaux);  /* ——— ACCENT 4 / 6 ——— */
+  font-family:var(--french); font-size:14px; line-height:25px; text-align:center;
+  opacity:.9; will-change:transform,opacity;
+}
+@media (max-width:520px){ .justification{ gap:13px; padding-inline:11px; } .vert{ font-size:.84rem; letter-spacing:.2em; } }
+
+/* ---------- 06 l'infusion : three square loops ---------------- */
+#infusion{ padding-block:clamp(130px,25vh,300px); }
+.steps{ display:grid; gap:clamp(52px,9vh,96px); }
+@media (min-width:880px){ .steps{ grid-template-columns:repeat(3,1fr); gap:clamp(30px,4.4vw,66px); } }
+.step{ text-align:center; }
+.step .frame{ aspect-ratio:1/1; border:1px solid var(--rule-f); }
+.step .num{
+  margin-top:24px; font-family:var(--french); font-weight:300;
+  font-size:clamp(1.5rem,3.2vw,2.1rem); letter-spacing:.14em; color:var(--ink-34); line-height:1;
+}
+.step .numrule{ width:32px; height:1px; background:var(--rule); margin:16px auto 0; }
+.step .t{ margin-top:22px; font-family:var(--mincho); font-size:.98rem; letter-spacing:.2em; line-height:2.2; }
+.step .d{
+  margin:13px auto 0; font-size:.78rem; line-height:2.5; letter-spacing:.1em;
+  color:var(--ink-56); max-width:28ch;
+}
+.goutte{ margin:clamp(56px,10vh,116px) auto 0; width:1px; height:130px; background:var(--rule-f); position:relative; }
+.goutte::after{
+  content:""; position:absolute; left:50%; top:0; width:5px; height:5px;
+  margin-left:-2.5px; border-radius:50%;
+  background:var(--bordeaux); opacity:0;     /* ——— ACCENT 5 / 6 ——— */
+  animation: drip 5.4s cubic-bezier(.5,0,.35,1) infinite;
+}
+@keyframes drip{
+  0%{ transform:translateY(0) scale(.6); opacity:0; }
+  12%{ opacity:.9; transform:translateY(0) scale(1); }
+  70%{ opacity:.9; transform:translateY(122px) scale(1); }
+  84%{ opacity:0; transform:translateY(130px) scale(.35); }
+  100%{ opacity:0; transform:translateY(130px) scale(.35); }
+}
+
+/* ---------- 07 commander -------------------------------------- */
+#commander{
+  min-height:90svh; display:grid; align-content:center; text-align:center;
+  padding-block:clamp(110px,18vh,230px); border-top:1px solid var(--rule-f);
+}
+#commander h2{
+  margin-top:18px; font-size:clamp(1.3rem,3.8vw,2.5rem);
+  letter-spacing:.26em; text-indent:.26em; line-height:2.1;
+}
+.actions{ margin-top:clamp(50px,9vh,110px); display:flex; flex-direction:column; align-items:center; gap:clamp(22px,4vh,38px); }
+.cta{
+  position:relative; font-family:var(--french); font-weight:400;
+  font-size:clamp(1.12rem,2.4vw,1.46rem); letter-spacing:.22em; text-indent:.22em;
+  padding-bottom:13px; display:inline-block;
+}
+.cta .jp{
+  display:block; font-family:var(--mincho); font-size:.74rem;
+  letter-spacing:.24em; text-indent:.24em; color:var(--ink-56); margin-top:10px;
+}
+.cta::after{
+  content:""; position:absolute; left:0; bottom:0; height:1px; width:100%;
+  background:var(--ink); transform:scaleX(0); transform-origin:center;
+  transition:transform 1.5s var(--ease), background-color .8s var(--ease);
+}
+.cta.drawn::after{ transform:scaleX(1); }
+.cta:hover::after{ background:var(--bordeaux); }   /* ——— ACCENT 6 / 6 ——— */
+.cta-2{
+  font-family:var(--latin); font-size:10px; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--ink-56); border-bottom:1px solid var(--rule-f); padding-bottom:6px;
+  transition:color .9s var(--ease), border-color .9s var(--ease);
+}
+.cta-2:hover{ color:var(--ink); border-color:var(--ink-56); }
+#commander .note{ margin-top:clamp(36px,6vh,70px); font-size:.73rem; letter-spacing:.11em; line-height:2.4; color:var(--ink-34); }
+
+/* ---------- 08 footer ----------------------------------------- */
+footer{
+  border-top:1px solid var(--rule-f); padding-block:clamp(58px,9vh,104px) 44px;
+  font-size:.75rem; letter-spacing:.11em; line-height:2.5; color:var(--ink-56);
+}
+.f-grid{ display:grid; gap:clamp(34px,5vw,64px); }
+@media (min-width:780px){ .f-grid{ grid-template-columns:1.1fr .9fr auto; align-items:start; } }
+footer .fmark{ font-family:var(--french); font-size:21px; letter-spacing:.2em; color:var(--ink); }
+footer ul{ list-style:none; margin:0; padding:0; }
+footer ul a{ color:var(--ink-56); transition:color .9s var(--ease); }
+footer ul a:hover{ color:var(--ink); }
+footer .legal{ margin-top:50px; font-family:var(--latin); font-size:9px; letter-spacing:.16em; color:var(--ink-34); text-transform:uppercase; }
+
+/* ============================================================
+   静止 — prefers-reduced-motion AND Save-Data both land here.
+   Every loop stops on its poster frame. The page stays complete.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation:none !important; transition-duration:.01ms !important; }
+  #veil{ display:none !important; }
+  .rule-d{ transform:scaleX(1) !important; }
+  .cafe::before,.cafe:last-of-type::after{ transform:scaleX(1) !important; }
+  .echelle .track .fill{ transform:scaleX(1) !important; }
+  .cta::after{ transform:scaleX(1) !important; }
+  #bleed{ opacity:.55 !important; transform:translate(-50%,-50%) scale(1) !important; }
+  #rail .stem .ink{ transform:scaleY(1) !important; }
+  .vig{ opacity:0; } .vig.on{ opacity:1; }
+  .ph-steam{ opacity:.45; }
+}
+/* the same still state, requested by the network rather than the reader */
+body.still *,body.still *::before,body.still *::after{ animation:none !important; }
+body.still .ph-steam{ opacity:.45; }
+body.still #hero-media .ph-rake{ opacity:.85; }
+</style>
+
+<div id="paper"></div>
+<div id="light"><div id="light-i"></div></div>
+<div id="grain"></div>
+
+<div id="veil" aria-hidden="true"><span class="vmark">Soigné</span></div>
+
+<div id="rail" aria-hidden="true">
+  <div class="stem">
+    <span class="ink"></span>
+    <span class="tick" style="top:0%"></span>
+    <span class="tick" style="top:24%"></span>
+    <span class="tick" style="top:44%"></span>
+    <span class="tick" style="top:60%"></span>
+    <span class="tick" style="top:78%"></span>
+    <span class="tick" style="top:100%"></span>
+    <span class="dot"></span>
+  </div>
+</div>
+
+<header>
+  <a class="mark" href="#hero">Soigné</a>
+  <nav>
+    <a href="#cafes">Nos cafés</a>
+    <a class="hide-s" href="#torref">La torréfaction</a>
+    <a href="#commander">Panier&nbsp;(0)</a>
+    <!-- Tawaraya precedent: the page has no music. This control does not
+         start music; it only un-mutes the room tone already inside the hero
+         clip. It is OFF on every visit and its state is never remembered. -->
+    <button id="son" type="button" aria-pressed="false">Son&nbsp;·&nbsp;Off</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ══ 01 FRONTISPICE ══ the silent ambient loop, full-bleed ══════════ -->
+  <section id="hero" class="wrap">
+
+    <!-- ─────────────────────────────────────────────────────────────────
+         MEDIA SLOT V-01 · hero-ambient-loop · 16:9 landscape (9:16 below 720px)
+         PRODUCTION MARKUP — delete the .ph placeholder inside .frame and
+         insert exactly this in its place:
+
+         <video id="v-hero"
+                class="media"
+                data-media="hero-ambient-loop-autumn"
+                muted
+                playsinline
+                webkit-playsinline
+                autoplay
+                loop
+                preload="auto"
+                disablepictureinpicture
+                disableremoteplayback
+                poster="/media/poster/hero-autumn-1920.avif"
+                aria-hidden="true"
+                tabindex="-1"
+                style="width:100%;height:100%;object-fit:cover">
+           <source src="/media/hero-autumn-1920.av1.webm"  type="video/webm; codecs=av01.0.05M.08">
+           <source src="/media/hero-autumn-1920.h264.mp4"  type="video/mp4;  codecs=avc1.640028">
+         </video>
+
+         · <source> order is AV1/WebM first, H.264/MP4 second. Safari ≤16 and
+           older Android fall through to the MP4; everything current takes AV1
+           at roughly half the bytes.
+         · `muted` + `playsinline` are BOTH required or iOS Safari refuses to
+           autoplay and shows native controls. `autoplay` without `muted` is
+           blocked on every mobile browser.
+         · The portrait asset is not selected with <source media>, which is
+           unreliable once a source has been committed; it is chosen in JS at
+           load time from matchMedia("(max-width:719px)") and written to .src.
+         · Under prefers-reduced-motion or Save-Data the <video> is never
+           inserted at all — the poster <img> stays and nothing downloads.
+         · Seasonality: only the file name changes. /media/hero-{saison}-*.webm
+           where {saison} comes from the server (or a build-time constant),
+           so a new lot means a new file, not new markup.
+         ───────────────────────────────────────────────────────────────── -->
+    <div id="hero-media" data-media="hero-ambient-loop-autumn" aria-hidden="true">
+      <div class="ph">
+        <div class="ph-field"></div>
+        <div class="ph-rake"></div>
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <radialGradient id="hb" cx="42%" cy="40%" r="70%">
+              <stop offset="0%"   stop-color="#6d5c47" stop-opacity=".34"/>
+              <stop offset="100%" stop-color="#2c241d" stop-opacity=".44"/>
+            </radialGradient>
+          </defs>
+          <!-- a shallow dish of beans, low in frame, the way the shot is framed -->
+          <ellipse cx="800" cy="690" rx="470" ry="118" fill="url(#hb)"/>
+          <ellipse cx="800" cy="690" rx="470" ry="118" fill="none" stroke="rgba(27,26,23,.16)" stroke-width="1"/>
+          <g stroke="rgba(27,26,23,.10)" stroke-width=".8" fill="none">
+            <path d="M400 726 C 560 776, 1040 776, 1200 726"/>
+            <path d="M356 744 C 546 806, 1054 806, 1244 744"/>
+          </g>
+          <ellipse cx="800" cy="826" rx="500" ry="22" fill="rgba(27,26,23,.05)"/>
+        </svg>
+        <div class="ph-steam" aria-hidden="true">
+          <i style="left:44%; animation-delay:-0.4s"></i>
+          <i style="left:49%; height:38%; animation-delay:-4.1s"></i>
+          <i style="left:54%; height:31%; animation-delay:-7.6s"></i>
+          <i style="left:58%; height:26%; animation-delay:-2.2s"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner">
+      <p class="fr" style="margin-bottom:clamp(30px,7vh,76px)">Maison de torréfaction — Tokyo, Aobadai</p>
+
+      <p class="wordmark" id="wordmark" data-t="Soigné"></p>
+
+      <div id="heroRuleWrap">
+        <div class="rule-d" id="heroRule"></div>
+        <span class="lozenge" aria-hidden="true"></span>
+        <p class="fr">Torréfacteur depuis 2018 · Automne 2026</p>
+      </div>
+
+      <h1 id="heroline">
+        <span class="ln" data-t="静かな一杯を、"></span>
+        <span class="ln" data-t="焙煎する。"></span>
+      </h1>
+
+      <p class="sub">少量焙煎。週に一度、火を入れます。<br>その日に出会えた豆のことだけを考えて。</p>
+    </div>
+
+    <div class="foot">
+      <p class="latin left">No.&nbsp;01</p>
+      <div class="mid"><span class="cue"><span class="line"></span><span class="latin">Descendre</span></span></div>
+      <p class="latin right">Automne&nbsp;2026 — 初秋</p>
+    </div>
+
+    <p id="hero-cap">
+      V-01 · Hero ambient loop · 16:9 (9:16 mobile) · 12 s seamless · no cuts · silent · AV1 1.4 MB / H.264 2.6 MB
+    </p>
+  </section>
+
+  <!-- ══ 02 NOS CAFÉS ══ rows, and one looping vignette that answers ═══ -->
+  <section id="cafes" class="wrap">
+    <div class="sec-head rv">
+      <h2 class="fr-title">Nos cafés</h2>
+      <p class="jp">今季の三種</p>
+      <div class="rule-d" style="margin-top:30px;"></div>
+    </div>
+
+    <div class="cafes-layout">
+      <div class="cafelist" id="cafelist">
+
+        <article class="cafe" data-i="1">
+          <span class="mk" aria-hidden="true"></span>
+          <div class="cafe-top">
+            <span class="no">I</span>
+            <h3 class="name">エチオピア イルガチェフェ／コンガ</h3>
+          </div>
+          <p class="origin">Éthiopie · Yirgacheffe · lavé · 1 950 m</p>
+          <div class="meta">
+            <span>白桃・ベルガモット・紅茶</span><span>浅煎り</span><span class="price">¥1,980 / 200g</span>
+          </div>
+        </article>
+
+        <article class="cafe" data-i="2">
+          <span class="mk" aria-hidden="true"></span>
+          <div class="cafe-top">
+            <span class="no">II</span>
+            <h3 class="name">グアテマラ アンティグア／エル・ソコロ</h3>
+          </div>
+          <p class="origin">Guatemala · Antigua · entièrement lavé · 1 650 m</p>
+          <div class="meta">
+            <span>焦がしカラメル・胡桃・黒糖</span><span>中煎り</span><span class="price">¥1,760 / 200g</span>
+          </div>
+        </article>
+
+        <article class="cafe" data-i="3">
+          <span class="mk" aria-hidden="true"></span>
+          <div class="cafe-top">
+            <span class="no">III</span>
+            <h3 class="name">ケニア ニエリ／カリンダ AA</h3>
+          </div>
+          <p class="origin">Kenya · Nyeri · lavé, SL28 · 1 780 m</p>
+          <div class="meta">
+            <span>黒すぐり・レモングラス・蜜</span><span>中浅煎り</span><span class="price">¥2,420 / 200g</span>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- ─────────────────────────────────────────────────────────────
+           MEDIA SLOTS V-02 / V-03 / V-04 · cafe-vignette-{1,2,3}
+           4:5 portrait, 6 s seamless, silent, no camera move.
+           Three <video> elements stacked in the same frame; the one whose
+           row is being read is opacity:1, the other two are 0 and PAUSED.
+
+           PRODUCTION MARKUP — one per vignette, all three inside .frame:
+
+           <video id="v-cafe-1"
+                  class="media vig"
+                  data-media="cafe-vignette-1-yirgacheffe"
+                  muted playsinline webkit-playsinline loop
+                  preload="metadata"
+                  disablepictureinpicture disableremoteplayback
+                  poster="/media/poster/cafe-1-720.avif"
+                  aria-hidden="true" tabindex="-1"
+                  style="width:100%;height:100%;object-fit:cover">
+             <source src="/media/cafe-1-1080.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+             <source src="/media/cafe-1-1080.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+           </video>
+
+           · preload="metadata", NOT "auto": three clips here plus the hero
+             would otherwise be four concurrent downloads on first paint.
+             The clip is fetched on first focus and cached thereafter.
+           · No `autoplay`. play() is called on focus, pause() on blur and
+             whenever the slot leaves the viewport or the tab is hidden.
+           · The poster is a real frame from the same clip, so the swap
+             between still and moving is invisible.
+           ───────────────────────────────────────────────────────────── -->
+      <figure class="slot vig-stack" id="vigStack">
+        <div class="frame">
+          <div class="vig on" id="vig-1" data-media="cafe-vignette-1-yirgacheffe">
+            <div class="ph">
+              <div class="ph-field" style="filter:saturate(.80) brightness(1.045)"></div>
+              <div class="ph-rake"></div>
+              <svg viewBox="0 0 400 500" aria-hidden="true">
+                <defs><radialGradient id="b1" cx="40%" cy="32%" r="74%">
+                  <stop offset="0%" stop-color="#6d5c47" stop-opacity=".44"/>
+                  <stop offset="100%" stop-color="#2c241d" stop-opacity=".58"/>
+                </radialGradient></defs>
+                <ellipse cx="200" cy="246" rx="96" ry="66" fill="url(#b1)"/>
+                <path d="M104 246 C 150 202, 250 202, 296 246 C 250 290, 150 290, 104 246 Z" fill="none" stroke="rgba(27,26,23,.30)" stroke-width="1"/>
+                <path d="M120 246 C 160 232, 240 232, 280 246 C 240 260, 160 260, 120 246 Z" fill="none" stroke="rgba(27,26,23,.20)" stroke-width="1"/>
+                <ellipse cx="200" cy="340" rx="104" ry="12" fill="rgba(27,26,23,.06)"/>
+              </svg>
+              <div class="ph-steam"><i style="left:47%;height:30%;animation-delay:-1.2s"></i><i style="left:53%;height:22%;animation-delay:-6.4s"></i></div>
+            </div>
+          </div>
+          <div class="vig" id="vig-2" data-media="cafe-vignette-2-antigua">
+            <div class="ph">
+              <div class="ph-field" style="filter:hue-rotate(-9deg) saturate(1.06) brightness(.96)"></div>
+              <div class="ph-rake" style="animation-duration:32s"></div>
+              <svg viewBox="0 0 400 500" aria-hidden="true">
+                <defs><radialGradient id="b2" cx="44%" cy="36%" r="72%">
+                  <stop offset="0%" stop-color="#5e4a35" stop-opacity=".50"/>
+                  <stop offset="100%" stop-color="#241c15" stop-opacity=".62"/>
+                </radialGradient></defs>
+                <ellipse cx="200" cy="258" rx="102" ry="60" fill="url(#b2)"/>
+                <path d="M98 258 C 148 216, 252 216, 302 258 C 252 300, 148 300, 98 258 Z" fill="none" stroke="rgba(27,26,23,.30)" stroke-width="1"/>
+                <path d="M126 258 C 162 246, 238 246, 274 258 C 238 270, 162 270, 126 258 Z" fill="none" stroke="rgba(27,26,23,.20)" stroke-width="1"/>
+                <ellipse cx="200" cy="344" rx="108" ry="12" fill="rgba(27,26,23,.06)"/>
+              </svg>
+              <div class="ph-steam"><i style="left:44%;height:26%;animation-delay:-3.4s"></i><i style="left:56%;height:34%;animation-delay:-8.1s"></i></div>
+            </div>
+          </div>
+          <div class="vig" id="vig-3" data-media="cafe-vignette-3-nyeri">
+            <div class="ph">
+              <div class="ph-field" style="filter:hue-rotate(-17deg) saturate(1.16) brightness(.925)"></div>
+              <div class="ph-rake" style="animation-duration:24s"></div>
+              <svg viewBox="0 0 400 500" aria-hidden="true">
+                <defs><radialGradient id="b3" cx="36%" cy="30%" r="76%">
+                  <stop offset="0%" stop-color="#6a5540" stop-opacity=".46"/>
+                  <stop offset="100%" stop-color="#201911" stop-opacity=".64"/>
+                </radialGradient></defs>
+                <ellipse cx="200" cy="240" rx="90" ry="72" fill="url(#b3)"/>
+                <path d="M110 240 C 152 194, 248 194, 290 240 C 248 286, 152 286, 110 240 Z" fill="none" stroke="rgba(27,26,23,.30)" stroke-width="1"/>
+                <path d="M124 240 C 160 226, 240 226, 276 240 C 240 254, 160 254, 124 240 Z" fill="none" stroke="rgba(27,26,23,.20)" stroke-width="1"/>
+                <ellipse cx="200" cy="336" rx="98" ry="12" fill="rgba(27,26,23,.06)"/>
+              </svg>
+              <div class="ph-steam"><i style="left:50%;height:33%;animation-delay:-0.9s"></i><i style="left:57%;height:24%;animation-delay:-5.5s"></i></div>
+            </div>
+          </div>
+        </div>
+        <figcaption class="cap stackcap">
+          <span>V-02 / 03 / 04 · <b>Vignette 4:5 · 6 s loop · silent</b></span>
+          <span id="vigNo">I</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ══ 03 LA TORRÉFACTION ══ pinned, and the reader scrubs the fire ══ -->
+  <section id="torref" class="wrap">
+    <div class="stage" id="torrefStage">
+
+      <div class="sec-head rv" style="margin-bottom:clamp(40px,7vh,80px)">
+        <h2 class="fr-title">La torréfaction</h2>
+        <p class="jp">焙煎</p>
+      </div>
+
+      <div class="lede">
+        <h3 class="statement rv">火を、待つ。</h3>
+        <p class="epigraph fr-it rv">Attendre le feu, et ne rien précipiter.</p>
+      </div>
+
+      <!-- ─────────────────────────────────────────────────────────────
+           MEDIA SLOT V-05 · roast-scrub · 16:9 · THE SCRUBBED SEQUENCE
+           RECOMMENDED DELIVERY: a numbered frame sequence painted to
+           <canvas>, NOT a <video> driven by currentTime. Reasons, in order:
+
+           1. currentTime seeking is keyframe-bound. To scrub smoothly a
+              clip must be re-encoded at GOP 1 (every frame a keyframe),
+              which costs 3-5x the bytes of a normal encode — at which
+              point the frame sequence is already cheaper.
+           2. iOS Safari services seeks asynchronously and coalesces them.
+              Scrubbing backwards stutters and occasionally freezes on the
+              last decoded frame. There is no reliable event to wait on.
+           3. A frame sequence has a deterministic loading state we can
+              draw (the hairline under the plate) and a deterministic
+              memory ceiling. A seeking <video> has neither.
+           4. Under reduced motion we paint frame 0 and stop — one image.
+
+           SPEC: 60 frames, 1280×720, AVIF q50 (~20 KB each, ~1.2 MB total),
+           WebP fallback (~28 KB each). Fetched only when the section is
+           within two viewports; the poster holds the frame until ready.
+
+           If the client prefers a single file, the <video> form is:
+
+           <video id="v-roast"
+                  data-media="roast-scrub-18min"
+                  muted playsinline webkit-playsinline
+                  preload="auto"
+                  disablepictureinpicture disableremoteplayback
+                  poster="/media/poster/roast-1280.avif"
+                  aria-hidden="true" tabindex="-1"
+                  style="width:100%;height:100%;object-fit:cover">
+             <source src="/media/roast-gop1-1280.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+             <source src="/media/roast-gop1-1280.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+           </video>
+
+           …with NO autoplay and NO loop, and v.currentTime = progress *
+           v.duration written inside the ScrollTrigger onUpdate. Same
+           section, same pin, same readout — only the delivery changes.
+           ───────────────────────────────────────────────────────────── -->
+      <figure class="slot rv" id="roast-slot" data-media="roast-scrub-18min">
+        <div class="frame">
+          <canvas id="roastCanvas" aria-hidden="true"></canvas>
+          <div id="seqbar" aria-hidden="true"><span id="seqfill"></span></div>
+        </div>
+        <figcaption class="cap">
+          V-05 · <b>Scrub sequence 16:9 · 60 frames · 1280×720 AVIF ≈ 1.2 MB</b> · silent · scroll-driven, never autoplayed
+        </figcaption>
+      </figure>
+
+      <p class="body rv">
+        <span class="lettrine">D</span>ix-huit minutes : 生豆の水分が抜け、香りが立ちのぼるまでの時間です。
+        焙煎士にできるのは、その時間を急かさないことだけ。数字は記録しますが、
+        最後に信じるのはドラムの音と、立ちのぼる香りの変わり目です。
+      </p>
+
+      <div class="readout rv">
+        <span class="rd"><span class="k">Temps</span><span class="v" id="rTime">00:00</span></span>
+        <span class="rd"><span class="k">Tambour</span><span class="v" id="rTemp">22°C</span></span>
+        <span class="rd"><span class="k">Stade</span><span class="v" id="rStage">生豆</span></span>
+      </div>
+
+      <div class="echelle rv" id="echelle">
+        <div class="track"><span class="fill"></span><span class="seed"></span></div>
+        <div class="ticks">
+          <span data-k="0">生豆</span><span data-k="1">乾燥</span><span data-k="2">一ハゼ</span><span data-k="3">焙煎止め</span>
+        </div>
+        <p class="latin" style="text-align:center;margin-top:4px">Courbe de torréfaction — 18 min</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ 04 SAISON ══ no footage at all. one screen of silence. ═══════ -->
+  <section id="saison" class="wrap">
+    <div id="bleed" aria-hidden="true"></div>
+    <div class="sec-head rv" style="margin-bottom:0">
+      <h2 class="fr-title">Saison</h2>
+      <p class="jp">季節の便り</p>
+    </div>
+
+    <div class="justification rv">
+      <div class="sig">
+        焙煎士　中村 佳乃
+        <span class="cachet" id="cachet" aria-hidden="true">S</span>
+      </div>
+      <p class="vert" id="letter">
+        九月。朝の空気が澄みはじめると、豆の香りの立ち方が静かに変わります。
+        夏のあいだ遠ざけていた<span class="mark">中浅煎り</span>を、
+        今月から少しずつ棚に戻しました。余韻の長い一杯を、窓辺でどうぞ。
+      </p>
+      <h3 class="vert title">季節の便り</h3>
+    </div>
+
+    <p class="latin rv" style="margin-top:24px">Lettre de saison — septembre · 映像なし／ここだけは文字のみ</p>
+  </section>
+
+  <!-- ══ 05 L'INFUSION ══ three square loops, cut to nothing ═════════ -->
+  <section id="infusion" class="wrap">
+    <div class="sec-head rv">
+      <h2 class="fr-title">L’infusion</h2>
+      <p class="jp">淹れる</p>
+      <div class="rule-d" style="margin-top:30px;"></div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────────────
+         MEDIA SLOTS V-06 / V-07 / V-08 · brew-step-{1,2,3}
+         1:1 square, 4 s seamless, silent, fixed tripod, no cut.
+         PRODUCTION MARKUP — one per step, replacing each .ph:
+
+         <video id="v-brew-1"
+                class="media"
+                data-media="brew-step-1-kettle"
+                muted playsinline webkit-playsinline loop
+                preload="none"
+                disablepictureinpicture disableremoteplayback
+                poster="/media/poster/brew-1-720.avif"
+                aria-hidden="true" tabindex="-1"
+                style="width:100%;height:100%;object-fit:cover">
+           <source src="/media/brew-1-720.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+           <source src="/media/brew-1-720.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+         </video>
+
+         · preload="none" — these are the last things on the page and must
+           cost nothing until the reader actually arrives.
+         · An IntersectionObserver plays them on entry and pauses them on
+           exit; document.visibilitychange pauses all three.
+         · 720×720 is deliberate: at the size this box is ever rendered
+           (max 300 CSS px), 720 is already 2x on a retina screen.
+         ───────────────────────────────────────────────────────────── -->
+    <div class="steps" id="steps">
+
+      <div class="step rv">
+        <figure class="slot" id="brew-1" data-media="brew-step-1-kettle">
+          <div class="frame">
+            <div class="ph">
+              <div class="ph-field"></div>
+              <div class="ph-rake" style="animation-duration:30s"></div>
+              <svg viewBox="0 0 300 300" aria-hidden="true">
+                <path d="M150 62 C 150 120, 134 150, 134 206" fill="none" stroke="rgba(27,26,23,.26)" stroke-width="1.4" stroke-linecap="round"/>
+                <ellipse cx="134" cy="214" rx="46" ry="9" fill="none" stroke="rgba(27,26,23,.22)" stroke-width="1"/>
+                <ellipse cx="134" cy="214" rx="46" ry="9" fill="rgba(27,26,23,.05)"/>
+              </svg>
+              <div class="ph-steam"><i style="left:44%;height:30%;animation-delay:-1.8s"></i><i style="left:50%;height:22%;animation-delay:-6.9s"></i></div>
+            </div>
+          </div>
+          <figcaption class="cap">V-06 · <b>1:1 · 4 s loop · silent</b></figcaption>
+        </figure>
+        <div class="num">I</div>
+        <div class="numrule"></div>
+        <p class="t">湯を落ち着かせる</p>
+        <p class="d">沸かしたら火を止め、九十二度まで待ちます。粉は二十グラム、中細挽き。</p>
+      </div>
+
+      <div class="step rv">
+        <figure class="slot" id="brew-2" data-media="brew-step-2-bloom">
+          <div class="frame">
+            <div class="ph">
+              <div class="ph-field" style="filter:brightness(.985)"></div>
+              <div class="ph-rake" style="animation-duration:26s"></div>
+              <svg viewBox="0 0 300 300" aria-hidden="true">
+                <circle cx="150" cy="156" r="66" fill="rgba(27,26,23,.10)"/>
+                <circle cx="150" cy="156" r="66" fill="none" stroke="rgba(27,26,23,.24)" stroke-width="1"/>
+                <circle cx="150" cy="156" r="44" fill="none" stroke="rgba(27,26,23,.16)" stroke-width="1">
+                  <animate attributeName="r" values="40;58;40" dur="9s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values=".55;.12;.55" dur="9s" repeatCount="indefinite"/>
+                </circle>
+              </svg>
+              <div class="ph-steam"><i style="left:47%;height:26%;animation-delay:-3.1s"></i><i style="left:54%;height:20%;animation-delay:-8.2s"></i></div>
+            </div>
+          </div>
+          <figcaption class="cap">V-07 · <b>1:1 · 4 s loop · silent</b></figcaption>
+        </figure>
+        <div class="num">II</div>
+        <div class="numrule"></div>
+        <p class="t">三十秒、蒸らす</p>
+        <p class="d">四十グラムの湯を置くように注ぎ、粉が静かに膨らむのを見ているだけの時間。</p>
+      </div>
+
+      <div class="step rv">
+        <figure class="slot" id="brew-3" data-media="brew-step-3-drawdown">
+          <div class="frame">
+            <div class="ph">
+              <div class="ph-field" style="filter:brightness(.97)"></div>
+              <div class="ph-rake" style="animation-duration:34s"></div>
+              <svg viewBox="0 0 300 300" aria-hidden="true">
+                <path d="M96 96 L150 214 L204 96" fill="none" stroke="rgba(27,26,23,.24)" stroke-width="1"/>
+                <path d="M110 122 L190 122" stroke="rgba(27,26,23,.14)" stroke-width="1"/>
+                <circle cx="150" cy="222" r="3" fill="rgba(27,26,23,.34)">
+                  <animate attributeName="cy" values="214;252;252" dur="4.4s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0;.9;0" dur="4.4s" repeatCount="indefinite"/>
+                </circle>
+              </svg>
+            </div>
+          </div>
+          <figcaption class="cap">V-08 · <b>1:1 · 4 s loop · silent</b></figcaption>
+        </figure>
+        <div class="num">III</div>
+        <div class="numrule"></div>
+        <p class="t">三投で落としきる</p>
+        <p class="d">中心から小さく円を描き、合計三百グラム。二分三十秒で落としきります。</p>
+      </div>
+
+    </div>
+
+    <div class="goutte" aria-hidden="true"></div>
+    <p class="latin rv" style="text-align:center;margin-top:24px">2 min 30 s</p>
+  </section>
+
+  <!-- ══ 06 COMMANDER ═══════════════════════════════════════════════ -->
+  <section id="commander" class="wrap">
+    <p class="fr rv">Commander</p>
+    <h2 class="rv">はじめての方へ、<br>三種の飲み比べを。</h2>
+    <div class="actions rv">
+      <a class="cta" id="cta" href="#cafes">Choisir son café<span class="jp">豆を選ぶ</span></a>
+      <a class="cta-2" href="#cafes">Abonnement — 定期便について</a>
+    </div>
+    <p class="note rv">
+      焙煎日から二日以内に発送。¥5,000 以上のお買い上げで送料無料。<br>
+      100g×3種のテイスティングセット ¥2,860（送料込）。
+    </p>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="f-grid">
+    <div>
+      <p class="fmark">Soigné</p>
+      <p style="margin-top:12px;">ソワニエ コーヒーロースタリー<br>東京都目黒区青葉台 1-2-3<br>11:00–18:00 ／ 水曜定休</p>
+    </div>
+    <ul>
+      <li><a href="#cafes">豆一覧 — Nos cafés</a></li>
+      <li><a href="#commander">定期便 — Abonnement</a></li>
+      <li><a href="#torref">焙煎所について — La torréfaction</a></li>
+      <li><a href="#saison">季節の便り — Saison</a></li>
+    </ul>
+    <ul>
+      <li><a href="#commander">特定商取引法に基づく表記</a></li>
+      <li><a href="#commander">プライバシーポリシー</a></li>
+      <li><a href="#commander">お問い合わせ — Nous écrire</a></li>
+    </ul>
+  </div>
+  <p class="legal">© 2026 Soigné Coffee Roastery — Torréfié à Tokyo</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     0. character splitting — A1's opening, applied to the
+        French wordmark and to the Japanese hero line
+     ========================================================= */
+  function split(el, cls){
+    var t = el.getAttribute("data-t") || "";
+    el.textContent = "";
+    for (var i = 0; i < t.length; i++){
+      var s = document.createElement("span");
+      s.className = cls; s.textContent = t[i];
+      el.appendChild(s);
+    }
+  }
+  var wm = document.getElementById("wordmark");
+  if (wm) split(wm, "ch");
+  document.querySelectorAll("#heroline .ln").forEach(function(ln){ split(ln, "ch"); });
+
+  /* =========================================================
+     1. network / preference gates
+        Save-Data and a 2g/slow-2g effectiveType land on exactly
+        the same still page as prefers-reduced-motion: posters,
+        no loops, no sequence fetch.
+     ========================================================= */
+  var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  var saveData = !!(conn && (conn.saveData === true ||
+                    /^(slow-)?2g$/.test(conn.effectiveType || "")));
+  var reduceQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (saveData) document.body.classList.add("still");
+  var STILL = saveData || reduceQ.matches;
+
+  /* =========================================================
+     2. the roast plate.
+        In the prototype the canvas paints a deterministic frame
+        from a single 0→1 value, exactly as the real sequence will:
+            paintRoast(t)  →  ctx.drawImage(frames[idx], 0, 0, w, h)
+        The scroll plumbing below is production-final either way.
+     ========================================================= */
+  var cvs = document.getElementById("roastCanvas");
+  var ctx = cvs ? cvs.getContext("2d", { alpha:false }) : null;
+  var cw = 0, ch = 0;
+
+  function sizeCanvas(){
+    if (!cvs || !ctx) return;
+    var r = cvs.getBoundingClientRect();
+    if (!r.width) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cw = Math.round(r.width); ch = Math.round(r.height);
+    cvs.width  = Math.round(cw * dpr);
+    cvs.height = Math.round(ch * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  /* 生豆 → 乾燥 → 一ハゼ → 焙煎止め, sampled as real roast colours */
+  var stops = [[185,189,162],[199,178,134],[150,102,66],[74,50,38]];
+  function mix(t){
+    var p = Math.min(0.999, Math.max(0,t)) * (stops.length - 1);
+    var i = Math.floor(p), f = p - i;
+    var a = stops[i], b = stops[Math.min(i+1, stops.length-1)];
+    return [Math.round(a[0]+(b[0]-a[0])*f),
+            Math.round(a[1]+(b[1]-a[1])*f),
+            Math.round(a[2]+(b[2]-a[2])*f)];
+  }
+
+  /* a stable pseudo-random bed of beans — generated once, never per frame */
+  var BEANS = (function(){
+    var out = [], s = 20260914;
+    function rnd(){ s = (s * 1103515245 + 12345) % 2147483648; return s / 2147483648; }
+    for (var i = 0; i < 110; i++){
+      out.push({ x:rnd(), y:rnd(), r:.018 + rnd()*.016, a:rnd()*Math.PI, sp:.6 + rnd()*.9 });
+    }
+    return out;
+  })();
+
+  function paintRoast(t){
+    if (!ctx || !cw) return;
+    t = Math.min(1, Math.max(0, t));
+    /* --- PRODUCTION: this whole body is replaced by two lines ---
+       var idx = Math.min(FRAMES-1, Math.round(t * (FRAMES-1)));
+       if (frames[idx] && frames[idx].complete) ctx.drawImage(frames[idx],0,0,cw,ch);
+       ----------------------------------------------------------- */
+    var c = mix(t);
+    /* the drum interior: warms and darkens as the roast advances */
+    var g = ctx.createRadialGradient(cw*.5, ch*.52, ch*.05, cw*.5, ch*.52, ch*1.05);
+    g.addColorStop(0, "rgb(" + Math.round(236 - t*96) + "," + Math.round(228 - t*104) + "," + Math.round(212 - t*112) + ")");
+    g.addColorStop(1, "rgb(" + Math.round(200 - t*150) + "," + Math.round(190 - t*148) + "," + Math.round(172 - t*140) + ")");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, cw, ch);
+
+    /* the fire, blooming behind the beans at first crack and easing after */
+    var heat = Math.max(0, Math.sin(Math.min(1,t/0.88) * Math.PI)) * .5 + t*.16;
+    var hg = ctx.createRadialGradient(cw*.5, ch*.58, 0, cw*.5, ch*.58, cw*.46);
+    hg.addColorStop(0, "rgba(110,29,43," + (heat*.34).toFixed(3) + ")");
+    hg.addColorStop(1, "rgba(110,29,43,0)");
+    ctx.fillStyle = hg; ctx.fillRect(0, 0, cw, ch);
+
+    /* the drum turning: the bed rotates with the scrub, it does not spin free */
+    var rot = t * Math.PI * 2.4;
+    ctx.save();
+    ctx.translate(cw*.5, ch*.56);
+    ctx.rotate(rot * .16);
+    var col = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+    for (var i = 0; i < BEANS.length; i++){
+      var b = BEANS[i];
+      var a = b.a + rot * b.sp;
+      var rad = (0.10 + b.y * 0.30) * ch;
+      var x = Math.cos(a) * rad * 1.9;
+      var y = Math.sin(a) * rad * 0.62 + (b.x - .5) * ch * .10;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(a * .5);
+      ctx.fillStyle = col;
+      ctx.globalAlpha = .62 + (b.y * .3);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, b.r * ch * 1.35, b.r * ch * .82, 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha = .28;
+      ctx.strokeStyle = "rgba(20,16,12,.7)"; ctx.lineWidth = .8;
+      ctx.beginPath(); ctx.moveTo(-b.r*ch*1.0, 0); ctx.lineTo(b.r*ch*1.0, 0); ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+
+    /* smoke, only once the bean is actually giving any off */
+    if (t > .42){
+      ctx.globalAlpha = Math.min(.22, (t - .42) * .6);
+      var sg = ctx.createLinearGradient(0, 0, 0, ch);
+      sg.addColorStop(0, "rgba(232,226,214,.9)");
+      sg.addColorStop(1, "rgba(232,226,214,0)");
+      ctx.fillStyle = sg; ctx.fillRect(0, 0, cw, ch*.72);
+      ctx.globalAlpha = 1;
+    }
+    /* the vignette that every real lens gives us anyway */
+    var vg = ctx.createRadialGradient(cw*.5, ch*.5, ch*.32, cw*.5, ch*.5, cw*.72);
+    vg.addColorStop(0, "rgba(0,0,0,0)");
+    vg.addColorStop(1, "rgba(18,14,10,.30)");
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, cw, ch);
+  }
+
+  /* the readout and the engraved scale, driven by the same single value */
+  var rTime = document.getElementById("rTime");
+  var rTemp = document.getElementById("rTemp");
+  var rStage = document.getElementById("rStage");
+  var stageNames = ["生豆","乾燥","一ハゼ","焙煎止め"];
+  var ech   = document.getElementById("echelle");
+  var track = ech.querySelector(".track");
+  var fill  = ech.querySelector(".fill");
+  var seed  = ech.querySelector(".seed");
+  var ticks = ech.querySelectorAll(".ticks span");
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+
+  function renderRoast(t){
+    t = Math.min(1, Math.max(0, t));
+    paintRoast(t);
+    if (window.gsap){
+      gsap.set(fill, { scaleX:t });
+      gsap.set(seed, { x: track.offsetWidth * t, backgroundColor:"rgb(" + mix(t).join(",") + ")" });
+    } else {
+      fill.style.transform = "scaleX(" + t + ")";
+      seed.style.transform = "translateX(" + (track.offsetWidth * t) + "px) rotate(45deg)";
+    }
+    var secs = Math.round(t * 18 * 60);
+    rTime.textContent = pad(Math.floor(secs/60)) + ":" + pad(secs % 60);
+    rTemp.textContent = Math.round(22 + t * 190) + "°C";
+    var idx = Math.min(3, Math.floor(t * 3.999));
+    rStage.textContent = stageNames[idx];
+    for (var k = 0; k < ticks.length; k++){
+      ticks[k].classList.toggle("on", k <= idx && t > .02);
+    }
+  }
+
+  /* the sequence loading hairline. In the prototype it completes at once
+     because there is nothing to fetch; in production it tracks decode. */
+  var seqfill = document.getElementById("seqfill");
+  function seqProgress(p){ if (seqfill) seqfill.style.transform = "scaleX(" + p + ")"; }
+
+  /* =========================================================
+     3. the vignette stack — one clip visible, the others paused
+     ========================================================= */
+  var vigs = [null,
+    document.getElementById("vig-1"),
+    document.getElementById("vig-2"),
+    document.getElementById("vig-3")];
+  var vigNo = document.getElementById("vigNo");
+  var ROMAN = { "1":"I", "2":"II", "3":"III" };
+  var activeVig = 1;
+  function showVig(i){
+    if (i === activeVig) return;
+    activeVig = i;
+    for (var k = 1; k <= 3; k++){
+      var on = (k === i);
+      vigs[k].classList.toggle("on", on);
+      /* PRODUCTION: the same two lines, on the <video> instead of the div —
+         on ? vigs[k].play().catch(function(){}) : vigs[k].pause();          */
+    }
+    if (vigNo) vigNo.textContent = ROMAN[String(i)] || "";
+  }
+
+  /* =========================================================
+     4. media lifecycle — nothing plays off-screen or in a
+        hidden tab. Applied to the placeholders here exactly as
+        it will be applied to the <video> elements in production.
+     ========================================================= */
+  var playable = [].slice.call(document.querySelectorAll("[data-media]"));
+  var inView = new WeakSet();
+  function setPlaying(el, on){
+    el.classList.toggle("is-playing", on);
+    /* PRODUCTION:
+       var v = el.matches("video") ? el : el.querySelector("video");
+       if (!v) return;
+       if (on && !STILL) { v.play().catch(function(){}); } else { v.pause(); }   */
+  }
+  if ("IntersectionObserver" in window){
+    var mio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) inView.add(en.target); else inView.delete(en.target);
+        setPlaying(en.target, en.isIntersecting && !document.hidden);
+      });
+    }, { rootMargin:"120px 0px" });
+    playable.forEach(function(el){ mio.observe(el); });
+  }
+  document.addEventListener("visibilitychange", function(){
+    playable.forEach(function(el){ setPlaying(el, !document.hidden && inView.has(el)); });
+    /* the drifting light and the steam are CSS animations, which the browser
+       already suspends in a hidden tab. Nothing here runs a rAF loop of its
+       own: the canvas is painted only from ScrollTrigger's own ticker. */
+  });
+
+  /* =========================================================
+     5. le son — off by default, off on every reload, quiet.
+     ========================================================= */
+  var son = document.getElementById("son");
+  if (son){
+    son.addEventListener("click", function(){
+      var on = son.getAttribute("aria-pressed") === "true";
+      son.setAttribute("aria-pressed", on ? "false" : "true");
+      son.textContent = on ? "Son · Off" : "Son · On";
+      /* PRODUCTION: this un-mutes the room tone already inside V-01.
+         It never starts a second audio file and there is no music.
+           var v = document.getElementById("v-hero");
+           if (v) { v.muted = on; if (!on) v.volume = 0.35; }
+         The state is deliberately NOT persisted: every visit starts silent. */
+    });
+  }
+
+  /* =========================================================
+     6. motion
+     ========================================================= */
+  var veil = document.getElementById("veil");
+
+  if (!window.gsap || !window.ScrollTrigger){
+    veil.style.display = "none";
+    sizeCanvas(); renderRoast(1); seqProgress(1);
+    document.querySelectorAll(".rule-d").forEach(function(r){ r.style.transform = "scaleX(1)"; });
+    return;
+  }
+  gsap.registerPlugin(ScrollTrigger);
+  var mm = gsap.matchMedia();
+
+  var roastCommon = {
+    onUpdate:function(self){ renderRoast(self.progress); },
+    onRefresh:function(self){ sizeCanvas(); renderRoast(self.progress); }
+  };
+
+  /* ---- 6a. STILL : a genuinely complete page ----------------- */
+  mm.add("(prefers-reduced-motion: reduce)", function(){
+    veil.style.display = "none";
+    gsap.set(".rv, #wordmark .ch, #heroline .ch, .cafe", { clearProps:"all", opacity:1 });
+    document.querySelectorAll(".rule-d").forEach(function(r){ r.style.transform = "scaleX(1)"; });
+    document.querySelectorAll(".cafe").forEach(function(b){ b.classList.add("ruled"); });
+    document.getElementById("cta").classList.add("drawn");
+    document.getElementById("rail").style.display = "none";
+    sizeCanvas();
+    /* the scrub plate stops on its poster frame, mid-roast, legible */
+    renderRoast(.62); seqProgress(1);
+    return function(){};
+  });
+
+  /* ---- 6b. FULL MOTION -------------------------------------- */
+  mm.add("(prefers-reduced-motion: no-preference)", function(){
+
+    gsap.set("#wordmark .ch", { opacity:0, y:".10em", filter:"blur(4px)" });
+    gsap.set("#heroline .ch", { opacity:0, y:".16em", filter:"blur(4px)" });
+    gsap.set(["header", "#heroRuleWrap", "#hero .sub", "#hero .foot", "#hero-cap", ".rv"], { opacity:0, y:12 });
+    gsap.set("#hero-media", { opacity:0, scale:1.04 });
+    gsap.set(".cafe", { opacity:0, y:12 });
+
+    /* 開幕 — the paper is lifted, and the footage is already running
+       underneath it. Nothing fades in from black; the loop was there. */
+    var open = gsap.timeline();
+    open.to("#hero-media", { opacity:1, scale:1, duration:4.2, ease:"power2.out" }, .2)
+        .to("#veil .vmark", { opacity:0, duration:.9, ease:"power1.inOut" }, .5)
+        .to("#veil", { opacity:0, duration:1.2, ease:"power2.inOut",
+                       onComplete:function(){ veil.style.display = "none"; } }, .95)
+        .to("#wordmark .ch", { opacity:1, y:0, filter:"blur(0px)",
+                               duration:2.2, ease:"power2.out", stagger:.1 }, 1.1)
+        .to("#heroRuleWrap", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 2.2)
+        .to("#heroRule", { scaleX:1, duration:2.6, ease:"power2.inOut" }, 2.4)
+        .to("#heroline .ch", { opacity:1, y:0, filter:"blur(0px)",
+                               duration:2.0, ease:"power2.out", stagger:.07 }, 2.6)
+        .to("header", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 3.0)
+        .to("#hero .sub", { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.4)
+        .to(["#hero .foot", "#hero-cap"], { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.8);
+
+    /* the hero footage keeps drifting for the whole time it is on screen —
+       a slow push-in, scrubbed, so it never announces itself */
+    gsap.to("#hero-media .ph", {
+      scale:1.07, yPercent:-2.5, ease:"none",
+      scrollTrigger:{ trigger:"#hero", start:"top top", end:"bottom top", scrub:1.4 }
+    });
+    gsap.to("#hero-media", {
+      opacity:.15, ease:"none",
+      scrollTrigger:{ trigger:"#hero", start:"top top", end:"bottom 30%", scrub:1.2 }
+    });
+
+    /* light answers the pointer, lerped, never snappy */
+    var lx = gsap.quickTo("#light-i", "xPercent", { duration:2.2, ease:"power3.out" });
+    var ly = gsap.quickTo("#light-i", "yPercent", { duration:2.2, ease:"power3.out" });
+    function onPointer(e){
+      lx((e.clientX / window.innerWidth  - .5) * 6);
+      ly((e.clientY / window.innerHeight - .5) * 6);
+    }
+    window.addEventListener("pointermove", onPointer, { passive:true });
+
+    /* the sheet warms as it is read : 朝 → 暮 */
+    gsap.to("#paper", { backgroundColor:"#f0eadd", ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:1.2 } });
+    gsap.to("#grain", { opacity:.08, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:1.2 } });
+
+    /* the reading rail */
+    gsap.to("#rail .ink", { scaleY:1, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:.6 } });
+    var stem = document.querySelector("#rail .stem");
+    gsap.to("#rail .dot", {
+      y:function(){ return stem.offsetHeight - 2.5; }, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:.6, invalidateOnRefresh:true }
+    });
+
+    ScrollTrigger.create({
+      trigger:"#hero", start:"bottom 72%",
+      onEnter:function(){ document.querySelector("header").classList.add("lifted"); },
+      onLeaveBack:function(){ document.querySelector("header").classList.remove("lifted"); }
+    });
+
+    /* section reveals — long, settling, never sliding */
+    gsap.utils.toArray(".rv").forEach(function(el){
+      gsap.to(el, { opacity:1, y:0, duration:1.9, ease:"power2.out",
+        scrollTrigger:{ trigger:el, start:"top 88%" } });
+    });
+    /* every filet double opens from its centre as its head arrives */
+    gsap.utils.toArray(".rule-d").forEach(function(r){
+      if (r.id === "heroRule") return;
+      gsap.to(r, { scaleX:1, duration:2.4, ease:"power2.inOut",
+        scrollTrigger:{ trigger:r, start:"top 92%" } });
+    });
+
+    /* the rows */
+    gsap.utils.toArray(".cafe").forEach(function(b){
+      gsap.to(b, { opacity:1, y:0, duration:1.6, ease:"power2.out", delay:.3,
+        scrollTrigger:{ trigger:b, start:"top 86%", onEnter:function(){ b.classList.add("ruled"); } } });
+    });
+    var ruleStyle = document.createElement("style");
+    ruleStyle.textContent =
+      ".cafe.ruled::before,.cafe.ruled:last-of-type::after{transform:scaleX(1);" +
+      "transition:transform 1.5s cubic-bezier(.16,1,.3,1);}" +
+      ".cafe:last-of-type.ruled::after{transition-delay:.25s;}";
+    document.head.appendChild(ruleStyle);
+
+    /* reading one row dims the others, and the vignette answers */
+    var list = document.getElementById("cafelist");
+    var rows = list.querySelectorAll(".cafe");
+    rows.forEach(function(b){
+      var focus = function(){
+        rows.forEach(function(x){ x.classList.remove("is-on"); });
+        b.classList.add("is-on");
+        list.setAttribute("data-focused","true");
+        showVig(parseInt(b.getAttribute("data-i"), 10));
+      };
+      b.addEventListener("mouseenter", focus);
+      b.addEventListener("focusin", focus);
+      b.setAttribute("tabindex","0");
+    });
+    list.addEventListener("mouseleave", function(){
+      list.setAttribute("data-focused","false");
+      rows.forEach(function(x){ x.classList.remove("is-on"); });
+    });
+    /* on touch, where there is no hover, the row nearest the middle of the
+       screen is the one being read, and the vignette follows it */
+    rows.forEach(function(b){
+      ScrollTrigger.create({
+        trigger:b, start:"top 62%", end:"bottom 38%",
+        onToggle:function(self){ if (self.isActive) showVig(parseInt(b.getAttribute("data-i"), 10)); }
+      });
+    });
+
+    /* season : the ink bleeds, the seal is pressed */
+    gsap.to("#bleed", { opacity:1, scale:1.1, ease:"none",
+      scrollTrigger:{ trigger:"#saison", start:"top bottom", end:"bottom top", scrub:1.4 } });
+    gsap.fromTo("#cachet", { opacity:0, scale:1.16 },
+      { opacity:.9, scale:1, duration:1.4, ease:"power3.out",
+        scrollTrigger:{ trigger:"#saison", start:"top 34%" } });
+
+    /* the CTA rule is drawn when the offer arrives */
+    ScrollTrigger.create({
+      trigger:"#commander", start:"top 62%",
+      onEnter:function(){ gsap.delayedCall(.8, function(){ document.getElementById("cta").classList.add("drawn"); }); }
+    });
+
+    return function(){
+      window.removeEventListener("pointermove", onPointer);
+      ruleStyle.remove();
+    };
+  });
+
+  /* ---- 6c. the scrubbed plate : pinned where there is room ---- */
+  mm.add("(prefers-reduced-motion: no-preference) and (min-width: 880px) and (min-height: 700px)", function(){
+    ScrollTrigger.create(Object.assign({
+      trigger:"#torrefStage", start:"center center", end:"+=200%",
+      pin:"#torrefStage", pinSpacing:true, scrub:1, invalidateOnRefresh:true
+    }, roastCommon));
+
+    gsap.timeline({ scrollTrigger:{ trigger:"#torrefStage", start:"center center", end:"+=200%", scrub:1 }})
+      .fromTo("#torref .statement", { letterSpacing:"0.28em" }, { letterSpacing:"0.36em", duration:1, ease:"none" }, 0)
+      .fromTo("#roast-slot .frame", { filter:"brightness(1)" }, { filter:"brightness(.965)", duration:1, ease:"none" }, 0);
+    return function(){};
+  });
+
+  /* narrow or short viewports : no pin, same scrub, tied to the plate passing */
+  mm.add("(prefers-reduced-motion: no-preference) and (max-width: 879px), (prefers-reduced-motion: no-preference) and (max-height: 699px)", function(){
+    ScrollTrigger.create(Object.assign({
+      trigger:"#roast-slot", start:"top 82%", end:"bottom 24%", scrub:1, invalidateOnRefresh:true
+    }, roastCommon));
+    return function(){};
+  });
+
+  /* =========================================================
+     7. geometry hygiene
+     ========================================================= */
+  sizeCanvas();
+  renderRoast(STILL ? .62 : 0);
+  seqProgress(1);   /* PRODUCTION: driven by the frame-sequence decode count */
+
+  var rt = null;
+  window.addEventListener("resize", function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){
+      sizeCanvas();
+      ScrollTrigger.refresh();
+    }, 180);
+  }, { passive:true });
+
+  window.addEventListener("orientationchange", function(){
+    setTimeout(function(){ sizeCanvas(); ScrollTrigger.refresh(); }, 260);
+  }, { passive:true });
+
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ sizeCanvas(); ScrollTrigger.refresh(); });
+  }
+})();
+</script>

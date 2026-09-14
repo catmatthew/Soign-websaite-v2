@@ -1,0 +1,1528 @@
+<title>Soigné — 図版主体</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500;600&family=Noto+Serif+JP:wght@200;300;400&family=Zen+Kaku+Gothic+New:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap">
+
+<style>
+/* ============================================================
+   案A11 — 図版主体 / LA PAGE ILLUSTRÉE
+   A1's typefaces and A1's motion grammar, carrying A2's
+   atmosphere, and now carried by art-directed still photography.
+
+   A1 → the Shippori/Noto Serif/Zen Kaku trio, GSAP+ScrollTrigger,
+        pinned & scrubbed roast, pointer-tracked light, reading rail,
+        perpetual micro-motion, hero set character by character.
+   A2 → the warm ivory stock, the bordeaux, the central axis, the
+        filet double opening from the centre, the French label layer,
+        the engraved caption discipline.
+   NEW → every photographic slot is built at its real aspect ratio
+        and real position, with the real motion already applied.
+        Replace the placeholder, keep the markup, nothing shifts.
+
+   Tokens borrowed in spirit from the reference library:
+     · apple/DESIGN.md  — photography-first; UI recedes; full-bleed
+                          plates; no decorative gradients; imagery
+                          carries the hierarchy, not type weight
+     · airbnb/DESIGN.md — modest display weights because photography
+                          is doing the visual work
+     · wired/DESIGN.md  — hairline rules and an editorial metadata
+                          layer instead of marketing chrome
+   ============================================================ */
+
+:root{
+  /* --- papier : A2's warm ivory, one step deeper so photographs
+         sit on it rather than float off it ------------------- */
+  --paper:       #f6f2e9;
+  --paper-dusk:  #ede7da;   /* the page at the end of the read */
+  --plate:       #efe9dc;   /* the mount a plate is printed on */
+  --ink:         #1b1a17;   /* warm printing black, never pure */
+  --ink-82:      rgba(27,26,23,.82);
+  --ink-56:      rgba(27,26,23,.56);
+  --ink-34:      rgba(27,26,23,.34);
+  --ink-18:      rgba(27,26,23,.18);
+  --rule:        rgba(27,26,23,.20);
+  --rule-f:      rgba(27,26,23,.10);
+
+  /* --- l'unique accent : BORDEAUX. A2's value, chosen over A1's
+         蘇芳 because on the warmer ivory the deeper bordeaux stays
+         a bookbinding colour instead of turning to brick.
+         Exactly six appearances. ---------------------------- */
+  --bordeaux:    #6e1d2b;
+
+  --gutter: clamp(20px, 6vw, 112px);
+  --measure: 34ch;
+  --axis: 940px;
+
+  --ease: cubic-bezier(.16,1,.3,1);
+
+  /* A1's trio, unchanged, as the backbone */
+  --mincho: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --serif:  "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --latin:  "Zen Kaku Gothic New", "Hiragino Sans", "Helvetica Neue", sans-serif;
+  /* one added Latin display face, for the French layer only.
+     Removable: delete this variable, map --fr to --latin, and the
+     page loses the italic epigraph and the lettrine but nothing
+     else — no layout depends on it. */
+  --fr:     "Cormorant Garamond", "EB Garamond", Garamond, "Times New Roman", serif;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ overflow-x:clip; }
+body{
+  margin:0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  font-kerning:normal;
+  overflow-x:clip;
+}
+
+/* ---------- the page itself is the light (A1) ---------------- */
+#paper{ position:fixed; inset:0; z-index:-4; pointer-events:none; background:var(--paper); }
+#light{
+  position:fixed; inset:-24%; z-index:-3; pointer-events:none;
+  animation: drift 74s ease-in-out infinite alternate; will-change:transform;
+}
+#light-i{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(52% 40% at 24% 16%, rgba(255,252,243,.95), rgba(255,252,243,0) 62%),
+    radial-gradient(46% 46% at 82% 76%, rgba(110,29,43,.035), rgba(110,29,43,0) 60%);
+  opacity:.92; will-change:transform;
+}
+@keyframes drift{
+  0%   { transform: translate3d(-2.5%,-1.5%,0) scale(1.00); }
+  100% { transform: translate3d( 3.0%, 2.5%,0) scale(1.08); }
+}
+#grain{
+  position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.84' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+
+/* ---------- 00 開幕 ------------------------------------------ */
+#veil{
+  position:fixed; inset:0; z-index:60; pointer-events:none;
+  background: var(--paper); display:grid; place-items:center;
+}
+#veil .vmark{
+  font-family: var(--fr); font-size:20px; letter-spacing:.34em;
+  color: var(--ink-56); text-indent:.34em;
+}
+
+/* ---------- shared type -------------------------------------- */
+h1,h2,h3{ font-family: var(--mincho); font-weight:400; margin:0; }
+p{ margin:0; }
+a{ color:inherit; text-decoration:none; }
+.wrap{ padding-inline: var(--gutter); max-width:1400px; margin-inline:auto; }
+.axis{ max-width: var(--axis); margin-inline:auto; }
+section{ position:relative; }
+
+/* the technical voice — specs, captions, plate data (A1's Zen Kaku) */
+.latin{
+  font-family: var(--latin); font-weight:400; font-size:10.5px;
+  letter-spacing:.15em; text-transform:uppercase; color: var(--ink-56);
+  line-height:1.9;
+}
+.latin-f{ letter-spacing:.22em; color: var(--ink-34); text-transform:none; }
+/* the French voice — labels, numerals, epigraph, lettrine (A2's layer) */
+.fr{ font-family: var(--fr); font-weight:400; font-style:normal; }
+.fr-label{
+  font-family: var(--fr); font-weight:400; font-style:italic;
+  font-size: clamp(.95rem, 1.8vw, 1.18rem); letter-spacing:.06em;
+  color: var(--ink-56);
+}
+
+/* ---------- the rules : filet simple et filet double --------- */
+.rule-d{
+  height:4px; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+  width:min(100%, var(--axis)); margin-inline:auto;
+  transform: scaleX(0); transform-origin:center;
+  transition: transform 2.4s var(--ease);
+}
+.rule-d.in{ transform: scaleX(1); }
+.lozenge{                                   /* ACCENT 1 / 6 */
+  display:block; width:5px; height:5px; margin:20px auto;
+  background: var(--bordeaux); transform: rotate(45deg);
+}
+
+/* ---------- 進行 : A1's reading rail -------------------------- */
+#rail{
+  position:fixed; left:calc(var(--gutter) * .40); top:50%;
+  transform:translateY(-50%); z-index:15; pointer-events:none; display:none;
+}
+@media (min-width:1180px){ #rail{ display:block; } }
+#rail .stem{ width:1px; height:42vh; background:var(--rule-f); position:relative; }
+#rail .stem .ink{
+  position:absolute; left:0; top:0; width:1px; height:100%;
+  background:var(--ink-18); transform-origin:top; transform:scaleY(0);
+}
+#rail .dot{
+  position:absolute; left:-2px; top:0; width:5px; height:5px; border-radius:50%;
+  background:var(--ink-56); transform:translateY(-2.5px);
+}
+#rail .tick{ position:absolute; left:-4px; width:9px; height:1px; background:var(--rule); opacity:.6; }
+
+/* ---------- 01 header ---------------------------------------- */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:20;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding: 20px var(--gutter);
+  border-bottom:1px solid transparent;
+  background: linear-gradient(var(--paper) 58%, rgba(246,242,233,0));
+}
+header.lifted{ border-bottom-color: var(--rule-f); }
+header .mark{ font-family: var(--fr); font-size:19px; letter-spacing:.24em; line-height:1; }
+header nav{ display:flex; gap:clamp(14px,3vw,34px); }
+header nav a{
+  font-family: var(--latin); font-size:10.5px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--ink-56); transition:color .9s var(--ease);
+}
+header nav a:hover{ color:var(--ink); }
+@media (max-width:600px){ header nav a:nth-child(2){ display:none; } }
+
+/* ============================================================
+   THE PLATE — how a photograph is mounted on this page.
+   A plate is: a mount, a ruled frame, a reserved aspect box,
+   two stacked image layers (for cross-dissolve), a raking light
+   that never stops, and a caption in small precise type.
+   ============================================================ */
+.plate{ margin:0; }
+.plate .mount{ padding:9px; border:1px solid var(--rule-f); }   /* the printed mount */
+.plate .frame{
+  position:relative; overflow:hidden;
+  border:1px solid var(--rule); background: var(--plate);
+}
+/* every frame reserves its space — nothing moves when the real file lands */
+.ar-219 .frame{ aspect-ratio: 21/9; }
+.ar-169 .frame{ aspect-ratio: 16/9; }
+.ar-32  .frame{ aspect-ratio: 3/2; }
+.ar-45  .frame{ aspect-ratio: 4/5; }
+.ar-23  .frame{ aspect-ratio: 2/3; }
+.ar-11  .frame{ aspect-ratio: 1/1; }
+@media (max-width:620px){
+  .ar-219 .frame{ aspect-ratio: 3/2; }   /* the frontispiece re-crops on phones */
+}
+
+/* a layer is one photograph. Two per frame so they can cross-dissolve. */
+.layer{
+  position:absolute; inset:0; will-change: transform, opacity;
+  transform: scale(1.02); transform-origin:50% 52%;
+}
+.layer.b{ opacity:0; }
+.layer .field{ position:absolute; inset:0; }
+.layer svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+/* the raking light inside every frame breathes, always (A1) */
+.rake{
+  position:absolute; inset:-30%; pointer-events:none;
+  background: radial-gradient(42% 34% at 30% 22%, rgba(255,255,248,.72), rgba(255,255,248,0) 68%);
+  animation: rake 26s ease-in-out infinite alternate; will-change: transform, opacity;
+}
+@keyframes rake{
+  0%{   transform: translate3d(-3%,-2%,0) scale(1);    opacity:.72; }
+  100%{ transform: translate3d( 4%, 3%,0) scale(1.12); opacity:1; }
+}
+
+/* the shutters that open a plate from its centre line (filet double, in motion) */
+.shutter{
+  position:absolute; left:0; right:0; height:50.2%;
+  background: var(--paper); z-index:3; pointer-events:none; will-change: transform;
+}
+.shutter.t{ top:0;    transform-origin: top;    }
+.shutter.b{ bottom:0; transform-origin: bottom; }
+
+/* the caption : the production spec, read straight off the page */
+.plate figcaption{
+  display:block; margin-top:11px;
+  font-family: var(--latin); font-size:9.5px; letter-spacing:.14em;
+  color: var(--ink-34); line-height:2;
+}
+.plate figcaption .n{ font-family: var(--fr); font-style:normal; letter-spacing:.14em; color: var(--ink-56); }
+.plate figcaption .spec{ display:block; color: var(--ink-34); }
+
+/* full-bleed plates */
+.bleed{ width:100vw; margin-inline: calc(50% - 50vw); }
+.bleed .mount{ padding:0; border:0; }
+.bleed .frame{ border-left:0; border-right:0; }
+.bleed figcaption{ padding-inline: var(--gutter); max-width:1400px; margin-inline:auto; }
+
+/* ---------- 02 hero ------------------------------------------ */
+#hero{
+  min-height:100svh; display:grid; grid-template-rows: 1fr auto;
+  padding-top: clamp(118px, 20vh, 226px);
+}
+#hero .top{ display:grid; align-content:center; }
+#hero .maison{ text-align:center; }
+#hero .baseline{ margin-top: clamp(28px,5vh,56px); }
+#hero h1{
+  margin-top: clamp(40px, 8vh, 96px);
+  font-size: clamp(2rem, 5.6vw, 4.5rem);
+  line-height: 2.05; letter-spacing:.22em; text-indent:.22em;
+  text-align:center;
+}
+#hero h1 .ln{ display:block; }
+#hero h1 .ch{ display:inline-block; will-change: transform, opacity; }
+#hero .sub{
+  margin: clamp(38px,7vh,82px) auto 0; max-width: var(--measure);
+  font-size: clamp(.82rem, 1.5vw, .94rem);
+  line-height:2.5; letter-spacing:.13em; color:var(--ink-82); text-align:center;
+}
+#hero .foot{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  gap:20px; padding-bottom:30px;
+}
+#hero .foot > *{ flex:1 1 0; }
+#hero .foot .mid{ flex:0 0 auto; text-align:center; }
+#hero .foot .right{ text-align:right; }
+.cue{ display:inline-flex; flex-direction:column; align-items:center; gap:10px; }
+.cue .line{
+  display:block; width:1px; height:50px; background:var(--rule-f);
+  position:relative; overflow:hidden;
+}
+.cue .line::after{
+  content:""; position:absolute; left:0; top:0; width:1px; height:34%;
+  background:var(--ink-56); animation: fall 4.6s cubic-bezier(.45,0,.2,1) infinite;
+}
+@keyframes fall{
+  0%{ transform:translateY(-120%); opacity:0; }
+  22%{ opacity:1; } 78%{ opacity:1; }
+  100%{ transform:translateY(300%); opacity:0; }
+}
+@media (max-width:620px){
+  #hero .foot{ display:block; text-align:center; }
+  #hero .foot .left{ display:none; }
+  #hero .foot .right{ text-align:center; margin-top:20px; }
+}
+
+/* ---------- 03 frontispice (the full-bleed plate) ------------- */
+#frontispice{ padding-block: clamp(30px, 6vh, 70px) clamp(120px, 22vh, 260px); }
+#frontispice .lede{
+  margin: clamp(46px,8vh,96px) auto 0; max-width: var(--measure);
+  text-align:center; font-size:.84rem; line-height:2.6;
+  letter-spacing:.13em; color: var(--ink-82);
+}
+
+/* ---------- 04 beans : rows left, plate right (A1, asymmetric) - */
+#beans{ padding-block: clamp(10px, 2vh, 20px) clamp(140px, 26vh, 300px); }
+.sec-head{ text-align:center; margin-bottom: clamp(62px, 12vh, 140px); }
+.sec-head .fr-title{
+  font-family: var(--fr); font-weight:300;
+  font-size: clamp(1.9rem, 5vw, 3.3rem); line-height:1.16; letter-spacing:.05em;
+}
+.sec-head h2{
+  margin-top:16px; font-size: clamp(.9rem, 1.7vw, 1.05rem);
+  letter-spacing:.4em; text-indent:.4em; color: var(--ink-56);
+}
+
+.beans-layout{ display:grid; gap: clamp(52px, 7vw, 96px); }
+@media (min-width:980px){ .beans-layout{ grid-template-columns: 1fr .74fr; align-items:start; } }
+
+.bean{
+  display:block; padding-block: clamp(30px, 4.4vh, 46px);
+  position:relative; cursor:pointer; transition: opacity 1.1s var(--ease);
+}
+.bean::before{
+  content:""; position:absolute; left:0; right:0; top:0; height:1px;
+  background:var(--rule-f); transform:scaleX(0); transform-origin:left;
+}
+.bean:last-of-type::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:var(--rule-f); transform:scaleX(0); transform-origin:left;
+}
+.beanlist[data-focused="true"] .bean:not(.is-on){ opacity:.30; }
+.bean .mk{
+  position:absolute; left:0; top:0; height:1px; width:44px;
+  background:var(--ink-18); transform:scaleX(0); transform-origin:left;
+  transition: transform 1.05s var(--ease);
+}
+.bean.is-on .mk{ transform:scaleX(1); }
+.bean-top{ display:flex; align-items:baseline; gap:clamp(14px,2.4vw,26px); }
+.bean .no{
+  font-family: var(--fr); font-size:.98rem; letter-spacing:.22em;
+  color: var(--ink-34); flex:0 0 auto; padding-top:.1em;
+  transition: color 1.1s var(--ease);
+}
+.bean.is-on .no{ color: var(--bordeaux); }          /* ACCENT 2 / 6 */
+.bean .name{
+  font-size: clamp(1.05rem, 2.2vw, 1.5rem); font-family:var(--mincho);
+  letter-spacing:.16em; line-height:1.9; transition: letter-spacing 1.4s var(--ease);
+}
+.bean.is-on .name{ letter-spacing:.23em; }
+.bean .origin{
+  font-family: var(--fr); font-style:italic; font-size:clamp(.86rem,1.5vw,1rem);
+  letter-spacing:.04em; color: var(--ink-56);
+  margin-top:11px; margin-left: calc(1rem + clamp(14px,2.4vw,26px));
+}
+.bean .meta{
+  margin-top:16px; margin-left: calc(1rem + clamp(14px,2.4vw,26px));
+  display:flex; flex-wrap:wrap; gap:6px 22px;
+  font-size:.78rem; letter-spacing:.11em; line-height:2.2; color:var(--ink-56);
+}
+.bean .meta .price{ font-family:var(--fr); font-size:.98rem; letter-spacing:.05em; color:var(--ink-82); }
+@media (max-width:520px){ .bean .origin,.bean .meta{ margin-left:0; } }
+
+#plate-beans{ position:sticky; top: clamp(86px, 15vh, 156px); }
+
+/* ---------- 05 roast : pinned, scrubbed, full-bleed ----------- */
+#roast{ padding-block: clamp(20px,4vh,40px) clamp(150px, 28vh, 320px); }
+#roast .stage{ position:relative; }
+#roast .statement,#roast .body,.readout,.roastline,#roast .epigraph{ position:relative; z-index:1; }
+#roast .statement{
+  text-align:center; font-size: clamp(1.7rem, 5vw, 3.2rem);
+  letter-spacing:.28em; line-height:2.0; text-indent:.28em;
+}
+#roast .epigraph{ margin-top: clamp(28px,5vh,56px); text-align:center; }
+#roast .body{
+  margin: clamp(40px,7vh,84px) auto 0; max-width: 40ch; text-align:left;
+  font-size:.84rem; line-height:2.6; letter-spacing:.11em; color:var(--ink-82);
+}
+#roast .body .lettrine{
+  float:left; font-family: var(--fr); font-weight:300;
+  font-size: 3.5em; line-height:.86; padding:.06em .14em 0 0; color: var(--ink);
+}
+.readout{
+  margin: clamp(56px,10vh,124px) auto 0;
+  display:flex; justify-content:center; gap:clamp(26px,6vw,72px);
+  flex-wrap:wrap; align-items:baseline;
+}
+.readout .rd{ display:flex; align-items:baseline; gap:10px; }
+.readout .rd .k{
+  font-family:var(--latin); font-size:9.5px; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--ink-34);
+}
+.readout .rd .v{
+  font-family:var(--mincho); font-size:clamp(1.1rem,2.5vw,1.6rem);
+  letter-spacing:.12em; font-variant-numeric: tabular-nums; color:var(--ink-82);
+}
+.roastline{ margin: clamp(34px,6vh,72px) auto 0; max-width:720px; display:grid; gap:20px; }
+.roastline .track{ position:relative; height:1px; background:var(--rule); }
+.roastline .track .fill{
+  position:absolute; inset:0 auto 0 0; width:100%;
+  background:var(--ink); transform-origin:left; transform:scaleX(0);
+}
+.roastline .track .seed{
+  position:absolute; top:50%; left:0; width:10px; height:10px;
+  margin:-5px 0 0 -5px; background:#b7bb9f; transform:rotate(45deg); will-change:transform;
+}
+.roastline .ticks{
+  display:flex; justify-content:space-between;
+  font-size:.72rem; letter-spacing:.14em; color:var(--ink-34);
+}
+.roastline .ticks span{ transition: color 1s var(--ease); }
+.roastline .ticks span.on{ color: var(--ink); }
+
+/* ---------- 06 season : centred, ruled, one vertical moment --- */
+#season{
+  padding-block: clamp(130px, 24vh, 290px);
+  border-top:1px solid var(--rule-f); border-bottom:1px solid var(--rule-f);
+  overflow:hidden;
+}
+.season-layout{
+  display:grid; gap: clamp(46px, 7vw, 92px); justify-items:center; align-items:start;
+}
+@media (min-width:980px){
+  .season-layout{ grid-template-columns: .62fr 1fr; }
+  .season-layout .justification{ justify-self:start; }
+}
+.justification{
+  width: min(100%, 600px);
+  padding: clamp(24px,5vw,52px) clamp(16px,4vw,42px);
+  border:1px solid var(--rule-f);
+  display:flex; justify-content:center; align-items:flex-start;
+  gap: clamp(18px, 4vw, 46px);
+}
+.vert{
+  writing-mode: vertical-rl; text-orientation: upright;
+  font-family: var(--mincho);
+  font-size: clamp(.9rem, 1.5vw, 1.04rem);
+  line-height: 2.9; letter-spacing:.25em;
+  max-height: min(58vh, 480px); color: var(--ink-82); text-align:start;
+}
+.vert .mark{ color: var(--bordeaux); }              /* ACCENT 3 / 6 */
+.vert.title{
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem); letter-spacing:.32em;
+  line-height:1.7; color:var(--ink); max-height:none;
+}
+.sig{
+  writing-mode: vertical-rl; font-family:var(--mincho);
+  font-size:.72rem; letter-spacing:.2em; color:var(--ink-34);
+  max-height:none; align-self:flex-start;
+}
+.cachet{                                            /* ACCENT 4 / 6 */
+  display:block; margin-top:16px; width:27px; height:27px;
+  border:1px solid var(--bordeaux); color:var(--bordeaux);
+  font-family:var(--fr); font-size:14px; line-height:25px; text-align:center;
+  opacity:.9; will-change: transform, opacity;
+}
+@media (max-width:520px){
+  .justification{ gap:14px; padding-inline:12px; }
+  .vert{ font-size:.86rem; letter-spacing:.2em; }
+}
+
+/* ---------- 07 brew ------------------------------------------ */
+#brew{ padding-block: clamp(130px, 24vh, 290px); }
+.steps{ display:grid; gap: clamp(48px, 9vh, 92px); max-width:var(--axis); margin-inline:auto; }
+@media (min-width:880px){ .steps{ grid-template-columns:repeat(3,1fr); gap:clamp(32px,5vw,72px); } }
+.step{ text-align:center; }
+.step .num{
+  font-family: var(--fr); font-weight:300; font-size: clamp(1.6rem,3.4vw,2.3rem);
+  letter-spacing:.14em; color:var(--ink-34); line-height:1;
+  will-change: filter, opacity;
+}
+.step .numrule{ width:34px; height:1px; background:var(--rule); margin:18px auto 0; }
+.step .t{ margin-top:24px; font-family:var(--mincho); font-size:.98rem; letter-spacing:.2em; line-height:2.2; }
+.step .d{
+  margin:14px auto 0; font-size:.78rem; line-height:2.5; letter-spacing:.11em;
+  color:var(--ink-56); max-width:28ch;
+}
+.pourfig{ margin: clamp(56px,10vh,116px) auto 0; width:120px; }
+.pourfig svg{ display:block; width:120px; height:120px; }
+.pourfig svg path{ fill:none; stroke: var(--rule); stroke-width:1; stroke-linecap:round; }
+.dripper{ margin:0 auto; width:1px; height:132px; background:var(--rule-f); position:relative; }
+.dripper::after{
+  content:""; position:absolute; left:50%; top:0;
+  width:5px; height:5px; margin-left:-2.5px; border-radius:50%;
+  background:var(--bordeaux); opacity:0;             /* ACCENT 5 / 6 */
+  animation: drip 5.2s cubic-bezier(.5,0,.35,1) infinite;
+}
+@keyframes drip{
+  0%{ transform:translateY(0) scale(.6); opacity:0; }
+  12%{ opacity:.9; transform:translateY(0) scale(1); }
+  70%{ opacity:.9; transform:translateY(124px) scale(1); }
+  84%{ opacity:0; transform:translateY(132px) scale(.35); }
+  100%{ opacity:0; transform:translateY(132px) scale(.35); }
+}
+
+/* ---------- 08 buy ------------------------------------------- */
+#buy{
+  padding-block: clamp(120px,20vh,250px);
+  border-top:1px solid var(--rule-f);
+}
+.buy-layout{
+  display:grid; gap: clamp(50px, 7vw, 96px); align-items:center; justify-items:center;
+}
+@media (min-width:920px){ .buy-layout{ grid-template-columns: .55fr 1fr; } }
+.buy-copy{ text-align:center; }
+#buy h2{
+  margin-top:18px; font-size: clamp(1.4rem, 3.8vw, 2.6rem);
+  letter-spacing:.26em; text-indent:.26em; line-height:2.1;
+}
+.actions{
+  margin-top: clamp(48px,9vh,108px);
+  display:flex; flex-direction:column; align-items:center; gap:clamp(24px,4vh,40px);
+}
+.cta{
+  position:relative; font-family:var(--fr); font-weight:400;
+  font-size:clamp(1.1rem,2.4vw,1.42rem); letter-spacing:.22em; text-indent:.22em;
+  padding-bottom:13px; display:inline-block;
+  transition: letter-spacing 1.1s var(--ease);
+}
+.cta .jp{
+  display:block; font-family:var(--mincho); font-size:.74rem;
+  letter-spacing:.24em; text-indent:.24em; color:var(--ink-56); margin-top:10px;
+}
+.cta::after{
+  content:""; position:absolute; left:0; bottom:0; height:1px; width:100%;
+  background:var(--ink); transform:scaleX(0); transform-origin:center;
+  transition: transform 1.6s var(--ease), background-color .9s var(--ease);
+}
+.cta.drawn::after{ transform:scaleX(1); }
+.cta:hover{ letter-spacing:.27em; }
+.cta:hover::after{ background:var(--bordeaux); }    /* ACCENT 6 / 6 */
+.cta-2{
+  font-family:var(--latin); font-size:10.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--ink-56); border-bottom:1px solid var(--rule-f); padding-bottom:6px;
+  transition: color .9s var(--ease), border-color .9s var(--ease);
+}
+.cta-2:hover{ color:var(--ink); border-color:var(--ink-56); }
+#buy .note{
+  margin-top: clamp(36px,6vh,68px); font-size:.73rem;
+  letter-spacing:.12em; line-height:2.4; color:var(--ink-34);
+}
+
+/* ---------- 09 footer ---------------------------------------- */
+footer{
+  border-top:1px solid var(--rule-f);
+  padding-block: clamp(58px,9vh,104px) 44px;
+  font-size:.75rem; letter-spacing:.12em; line-height:2.5; color:var(--ink-56);
+}
+.f-grid{ display:grid; gap:clamp(36px,5vw,64px); }
+@media (min-width:760px){ .f-grid{ grid-template-columns: repeat(3,1fr); align-items:start; } }
+footer .fmark{ font-family:var(--fr); font-size:22px; letter-spacing:.2em; color:var(--ink); }
+footer ul{ list-style:none; margin:0; padding:0; }
+footer ul a{ color:var(--ink-56); transition:color .9s var(--ease); }
+footer ul a:hover{ color:var(--ink); }
+footer .legal{
+  margin-top:50px; font-family:var(--latin); font-size:9.5px;
+  letter-spacing:.16em; color:var(--ink-34); text-transform:uppercase;
+}
+
+/* ---------- 静止 : reduced motion is a COMPLETE page ---------- */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation:none !important; transition-duration:.01ms !important; }
+  #veil{ display:none !important; }
+  #rail{ display:none !important; }
+  .rule-d{ transform:scaleX(1) !important; }
+  .bean::before,.bean:last-of-type::after{ transform:scaleX(1) !important; }
+  .roastline .track .fill{ transform:scaleX(1) !important; }
+  .cta::after{ transform:scaleX(1) !important; }
+  .pourfig svg path{ stroke-dasharray:none !important; stroke-dashoffset:0 !important; }
+  .shutter{ transform: scaleY(0) !important; }   /* every plate fully open */
+  .layer{ transform: scale(1) !important; }
+  .layer.b{ opacity:0 !important; }
+  #plate-beans{ position:static !important; }
+}
+</style>
+
+<div id="paper"></div>
+<div id="light"><div id="light-i"></div></div>
+<div id="grain"></div>
+
+<div id="veil" aria-hidden="true"><span class="vmark">Soigné</span></div>
+
+<div id="rail" aria-hidden="true">
+  <div class="stem">
+    <span class="ink"></span>
+    <span class="tick" style="top:0%"></span>
+    <span class="tick" style="top:20%"></span>
+    <span class="tick" style="top:40%"></span>
+    <span class="tick" style="top:58%"></span>
+    <span class="tick" style="top:78%"></span>
+    <span class="tick" style="top:100%"></span>
+    <span class="dot"></span>
+  </div>
+</div>
+
+<header>
+  <a class="mark" href="#hero">Soigné</a>
+  <nav>
+    <a href="#beans">Nos cafés</a>
+    <a href="#roast">La maison</a>
+    <a href="#buy">Panier&nbsp;(0)</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ══ 01 HERO ══ type on paper. the photographs begin below. ══ -->
+  <section id="hero" class="wrap">
+    <div class="top">
+      <p class="latin latin-f maison">Maison de torréfaction — Tokyo, Aobadai</p>
+
+      <div class="baseline">
+        <div class="rule-d" id="heroRule"></div>
+        <span class="lozenge" aria-hidden="true"></span>
+        <p class="latin">Torréfacteur depuis 2018 · Automne 2026</p>
+      </div>
+
+      <h1 id="heroline">
+        <span class="ln" data-t="静かな一杯を、"></span>
+        <span class="ln" data-t="焙煎する。"></span>
+      </h1>
+
+      <p class="sub">少量焙煎。週に一度、火を入れます。<br>その日に出会えた豆のことだけを考えて。</p>
+    </div>
+
+    <div class="foot">
+      <p class="latin latin-f left">Planche&nbsp;I — suit</p>
+      <div class="mid">
+        <span class="cue"><span class="line"></span><span class="latin latin-f">Descendre</span></span>
+      </div>
+      <p class="latin latin-f right">Automne&nbsp;2026 — 初秋</p>
+    </div>
+  </section>
+
+  <!-- ══ 02 FRONTISPICE ══ the full-bleed plate, opened from its centre ══ -->
+  <section id="frontispice">
+
+    <!-- PRODUCTION: replace the two .layer divs inside #plate-hero .frame with
+         ONE <img> and keep everything else:
+           <img class="layer a" id="heroImgA" src="/img/plate-01-atelier-2560.webp"
+                srcset="/img/plate-01-atelier-1280.webp 1280w,
+                        /img/plate-01-atelier-1920.webp 1920w,
+                        /img/plate-01-atelier-2560.webp 2560w"
+                sizes="100vw" width="2560" height="1097" alt="夜明けの焙煎所"
+                fetchpriority="high" decoding="async"
+                style="object-fit:cover;width:100%;height:100%">
+         The frame already reserves 21/9 (3/2 under 620px) so nothing shifts.
+         Asset: plate-01-atelier. 21:9 横位置. -->
+    <figure class="plate bleed ar-219" id="plate-hero" data-media="plate-01-atelier">
+      <div class="mount">
+        <div class="frame">
+          <div class="layer a" id="heroImgA">
+            <div class="field" style="background:
+                 radial-gradient(70% 90% at 22% 8%, rgba(255,253,246,1), rgba(255,253,246,0) 66%),
+                 linear-gradient(168deg,#f2ecdf 0%,#e6dcc8 44%,#cfc3aa 78%,#b8a98e 100%);"></div>
+            <svg viewBox="0 0 1260 540" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <!-- the window the morning comes through -->
+              <g stroke="rgba(27,26,23,.16)" stroke-width="1" fill="none">
+                <rect x="96" y="58" width="252" height="330"/>
+                <line x1="222" y1="58" x2="222" y2="388"/>
+                <line x1="96" y1="196" x2="348" y2="196"/>
+              </g>
+              <path d="M96 388 L348 388 L512 540 L-40 540 Z" fill="rgba(255,253,244,.46)"/>
+              <!-- the drum roaster, in silhouette, off the centre -->
+              <g stroke="rgba(27,26,23,.26)" stroke-width="1.1" fill="none">
+                <circle cx="880" cy="300" r="112"/>
+                <circle cx="880" cy="300" r="46"/>
+                <path d="M768 300 L768 452 M992 300 L992 452"/>
+                <path d="M742 452 L1018 452"/>
+                <path d="M880 188 L880 96 C 880 74, 900 62, 926 62"/>
+              </g>
+              <ellipse cx="880" cy="466" rx="146" ry="14" fill="rgba(27,26,23,.07)"/>
+              <!-- sacks, stacked low right -->
+              <g stroke="rgba(27,26,23,.18)" stroke-width="1" fill="rgba(27,26,23,.035)">
+                <path d="M1076 452 L1076 372 Q1122 352 1168 372 L1168 452 Z"/>
+                <path d="M1120 452 L1120 396 Q1160 380 1204 396 L1204 452 Z"/>
+              </g>
+              <line x1="0" y1="452" x2="1260" y2="452" stroke="rgba(27,26,23,.13)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="layer b" aria-hidden="true"></div>
+          <div class="rake" aria-hidden="true"></div>
+          <div class="shutter t" aria-hidden="true"></div>
+          <div class="shutter b" aria-hidden="true"></div>
+        </div>
+      </div>
+      <figcaption>
+        <span class="n">Planche I</span> ／ 図版一 — 焙煎所の夜明け
+        <span class="spec">21:9 横位置 ／ 全幅 ／ 自然光のみ ／ 2560×1097px WebP ／ 三脚・F8・低ISO ／ 620px以下は 3:2 に再トリミング</span>
+      </figcaption>
+    </figure>
+
+    <p class="lede">
+      写真は、この店の言葉です。文字はその額縁にすぎません。<br>
+      以下の図版は、すべて自然光のみで撮影します。
+    </p>
+  </section>
+
+  <!-- ══ 03 NOS CAFÉS ══ rows left, one plate right, cross-dissolving ══ -->
+  <section id="beans" class="wrap">
+    <div class="sec-head rv">
+      <p class="fr-title fr">Nos cafés</p>
+      <h2>今季の三種</h2>
+      <div class="rule-d" style="margin-top:30px;"></div>
+    </div>
+
+    <div class="beans-layout">
+      <div class="beanlist" id="beanlist">
+
+        <article class="bean" data-i="1">
+          <span class="mk" aria-hidden="true"></span>
+          <div class="bean-top">
+            <span class="no fr">I</span>
+            <h3 class="name">エチオピア イルガチェフェ／コンガ</h3>
+          </div>
+          <p class="origin">Éthiopie · Yirgacheffe · lavé · 1 950 m</p>
+          <div class="meta">
+            <span>白桃・ベルガモット・紅茶</span>
+            <span>浅煎り</span>
+            <span class="price">¥1,980 / 200g</span>
+          </div>
+        </article>
+
+        <article class="bean" data-i="2">
+          <span class="mk" aria-hidden="true"></span>
+          <div class="bean-top">
+            <span class="no fr">II</span>
+            <h3 class="name">グアテマラ アンティグア／エル・ソコロ</h3>
+          </div>
+          <p class="origin">Guatemala · Antigua · entièrement lavé · 1 650 m</p>
+          <div class="meta">
+            <span>焦がしカラメル・胡桃・黒糖</span>
+            <span>中煎り</span>
+            <span class="price">¥1,760 / 200g</span>
+          </div>
+        </article>
+
+        <article class="bean" data-i="3">
+          <span class="mk" aria-hidden="true"></span>
+          <div class="bean-top">
+            <span class="no fr">III</span>
+            <h3 class="name">ケニア ニエリ／カリンダ AA</h3>
+          </div>
+          <p class="origin">Kenya · Nyeri · lavé, SL28 · 1 780 m</p>
+          <div class="meta">
+            <span>黒すぐり・レモングラス・蜜</span>
+            <span>中浅煎り</span>
+            <span class="price">¥2,420 / 200g</span>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- PRODUCTION: this single mounted plate holds THREE photographs
+           (plate-02a / 02b / 02c) that cross-dissolve as the reader moves
+           between rows. Replace .layer.a and .layer.b with two <img>, keep
+           the ids, and let the script swap src between the three files:
+             <img class="layer a" id="beanA" width="1600" height="2000"
+                  src="/img/plate-02a-ethiopia-1600.webp" alt=""
+                  loading="lazy" decoding="async"
+                  style="object-fit:cover;width:100%;height:100%">
+             <img class="layer b" id="beanB" width="1600" height="2000" src="" alt=""
+                  loading="lazy" decoding="async"
+                  style="object-fit:cover;width:100%;height:100%">
+           Preload all three on first focus; they are 4:5 and identical in
+           framing so the dissolve reads as one light changing, not a slideshow. -->
+      <figure class="plate ar-45" id="plate-beans" data-media="plate-02-cafes(a,b,c)">
+        <div class="mount">
+          <div class="frame">
+            <div class="layer a" id="beanA">
+              <div class="field" id="beanFieldA"></div>
+              <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs>
+                  <radialGradient id="bn" cx="40%" cy="32%" r="74%">
+                    <stop offset="0%"   stop-color="#6d5c47" stop-opacity=".46"/>
+                    <stop offset="100%" stop-color="#2c241d" stop-opacity=".60"/>
+                  </radialGradient>
+                </defs>
+                <ellipse cx="200" cy="244" rx="96" ry="66" fill="url(#bn)"/>
+                <path d="M104 244 C 150 200, 250 200, 296 244 C 250 288, 150 288, 104 244 Z"
+                      fill="none" stroke="rgba(27,26,23,.32)" stroke-width="1"/>
+                <path d="M120 244 C 160 230, 240 230, 280 244 C 240 258, 160 258, 120 244 Z"
+                      fill="none" stroke="rgba(27,26,23,.22)" stroke-width="1"/>
+                <g stroke="rgba(27,26,23,.10)" stroke-width=".75" fill="none">
+                  <path d="M122 262 C 158 280, 242 280, 278 262"/>
+                  <path d="M114 271 C 156 293, 244 293, 286 271"/>
+                </g>
+                <ellipse cx="200" cy="338" rx="102" ry="12" fill="rgba(27,26,23,.06)"/>
+              </svg>
+            </div>
+            <div class="layer b" id="beanB">
+              <div class="field" id="beanFieldB"></div>
+              <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <ellipse cx="200" cy="244" rx="96" ry="66" fill="url(#bn)"/>
+                <path d="M104 244 C 150 200, 250 200, 296 244 C 250 288, 150 288, 104 244 Z"
+                      fill="none" stroke="rgba(27,26,23,.32)" stroke-width="1"/>
+                <path d="M120 244 C 160 230, 240 230, 280 244 C 240 258, 160 258, 120 244 Z"
+                      fill="none" stroke="rgba(27,26,23,.22)" stroke-width="1"/>
+                <ellipse cx="200" cy="338" rx="102" ry="12" fill="rgba(27,26,23,.06)"/>
+              </svg>
+            </div>
+            <div class="rake" aria-hidden="true"></div>
+            <div class="shutter t" aria-hidden="true"></div>
+            <div class="shutter b" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption>
+          <span class="n">Planche II</span> ／ 図版二 — 単一豆の静物（三点・重ね替え）
+          <span class="spec">4:5 縦位置 ／ 三点とも同一の画角・同一の器 ／ 斜光 ／ 各 1600×2000px WebP ／ 読んでいる行に合わせて 2.6 秒で溶暗・溶明</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ══ 04 LA TORRÉFACTION ══ pinned, scrubbed, and the plate roasts with it ══ -->
+  <section id="roast">
+
+    <!-- PRODUCTION: two photographs of the SAME frame, one hour apart in the
+         roast (plate-03a 生豆 / plate-03b 焙煎止め). They cross-dissolve on the
+         scrub, so the drum in the picture darkens as the reader advances the
+         curve. Replace both layers with <img>, same width/height, same crop:
+           <img class="layer a" id="roastImgA" width="2400" height="1350"
+                src="/img/plate-03a-vert-2400.webp" alt="焙煎前の生豆"
+                loading="lazy" decoding="async"
+                style="object-fit:cover;width:100%;height:100%">
+           <img class="layer b" id="roastImgB" width="2400" height="1350"
+                src="/img/plate-03b-fin-2400.webp" alt="焙煎止めの豆"
+                loading="lazy" decoding="async"
+                style="object-fit:cover;width:100%;height:100%">
+         MUST be shot locked off on a tripod — if the two frames do not
+         register, the dissolve reads as a cut and the effect is lost. -->
+    <figure class="plate bleed ar-169" id="plate-roast" data-media="plate-03-torrefaction(a,b)">
+      <div class="mount">
+        <div class="frame">
+          <div class="layer a" id="roastImgA">
+            <div class="field" style="background:
+                 radial-gradient(60% 70% at 36% 22%, rgba(255,252,242,1), rgba(255,252,242,0) 70%),
+                 linear-gradient(172deg,#eee6d6 0%,#ded2b8 52%,#c6b795 100%);"></div>
+            <svg viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <g stroke="rgba(27,26,23,.26)" stroke-width="1.1" fill="none">
+                <circle cx="600" cy="330" r="150"/>
+                <circle cx="600" cy="330" r="62"/>
+                <circle cx="600" cy="330" r="10"/>
+                <path d="M450 330 L450 540 M750 330 L750 540 M414 540 L786 540"/>
+              </g>
+              <g stroke="rgba(27,26,23,.14)" stroke-width="1" fill="none">
+                <path d="M600 180 L600 92 C 600 66, 624 52, 656 52"/>
+                <path d="M540 470 L660 470"/>
+              </g>
+              <ellipse cx="600" cy="556" rx="212" ry="16" fill="rgba(27,26,23,.06)"/>
+            </svg>
+          </div>
+          <div class="layer b" id="roastImgB">
+            <div class="field" style="background:
+                 radial-gradient(56% 64% at 38% 24%, rgba(255,246,228,1), rgba(255,246,228,0) 70%),
+                 linear-gradient(172deg,#e4d5b8 0%,#c4a97f 48%,#8d7350 100%);"></div>
+            <svg viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <g stroke="rgba(27,26,23,.34)" stroke-width="1.2" fill="none">
+                <circle cx="600" cy="330" r="150"/>
+                <circle cx="600" cy="330" r="62"/>
+                <circle cx="600" cy="330" r="10"/>
+                <path d="M450 330 L450 540 M750 330 L750 540 M414 540 L786 540"/>
+              </g>
+              <circle cx="600" cy="330" r="62" fill="rgba(74,50,38,.42)"/>
+              <ellipse cx="600" cy="556" rx="212" ry="16" fill="rgba(27,26,23,.09)"/>
+            </svg>
+          </div>
+          <div class="rake" aria-hidden="true"></div>
+          <div class="shutter t" aria-hidden="true"></div>
+          <div class="shutter b" aria-hidden="true"></div>
+        </div>
+      </div>
+      <figcaption>
+        <span class="n">Planche III</span> ／ 図版三 — ドラムと火（二点・スクロール連動で溶暗）
+        <span class="spec">16:9 横位置 ／ 全幅 ／ 三脚固定・同一画角必須 ／ 焙煎前と焙煎止めの二点 ／ 各 2400×1350px WebP</span>
+      </figcaption>
+    </figure>
+
+    <div class="wrap" style="padding-top:clamp(110px,20vh,220px);">
+      <div class="stage" id="roastStage">
+        <p class="fr-title fr rv" style="text-align:center;font-family:var(--fr);font-weight:300;font-size:clamp(1.9rem,5vw,3.3rem);line-height:1.16;letter-spacing:.05em;">La torréfaction</p>
+
+        <h2 class="statement rv" style="margin-top:34px;">火を、待つ。</h2>
+        <p class="epigraph fr-label rv">Attendre le feu, et ne rien précipiter.</p>
+
+        <p class="body rv">
+          <span class="lettrine">D</span>ix-huit minutes ― 生豆の水分が抜け、香りが立ちのぼるまでの時間です。
+          焙煎士にできるのは、その時間を急かさないことだけ。数字は記録しますが、
+          最後に信じるのはドラムの音と、立ちのぼる香りの変わり目です。
+        </p>
+
+        <div class="readout rv">
+          <span class="rd"><span class="k">Temps</span><span class="v" id="rTime">00:00</span></span>
+          <span class="rd"><span class="k">Tambour</span><span class="v" id="rTemp">22°C</span></span>
+          <span class="rd"><span class="k">Stade</span><span class="v" id="rStage">生豆</span></span>
+        </div>
+
+        <div class="roastline" id="roastline">
+          <div class="track"><span class="fill"></span><span class="seed"></span></div>
+          <div class="ticks">
+            <span data-k="0">生豆</span>
+            <span data-k="1">乾燥</span>
+            <span data-k="2">一ハゼ</span>
+            <span data-k="3">焙煎止め</span>
+          </div>
+          <p class="latin latin-f" style="margin-top:4px;text-align:center;">Courbe de torréfaction — 18 min</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 05 SAISON ══ the one vertical moment, with a portrait plate ══ -->
+  <section id="season" class="wrap">
+    <div class="sec-head rv" style="margin-bottom:clamp(50px,9vh,110px);">
+      <p class="fr-title fr">Saison</p>
+      <h2>季節の便り</h2>
+    </div>
+
+    <div class="season-layout">
+
+      <!-- PRODUCTION: one portrait plate beside the letter. Replace the layer
+           with a single <img>, 2:3, and keep the mount and caption:
+             <img class="layer a" id="seasonImg" width="1400" height="2100"
+                  src="/img/plate-04-fenetre-1400.webp"
+                  srcset="/img/plate-04-fenetre-900.webp 900w,
+                          /img/plate-04-fenetre-1400.webp 1400w"
+                  sizes="(min-width:980px) 34vw, 86vw"
+                  alt="窓辺の一杯" loading="lazy" decoding="async"
+                  style="object-fit:cover;width:100%;height:100%">
+           Asset: plate-04-fenetre. -->
+      <figure class="plate ar-23 rv" id="plate-season" data-media="plate-04-fenetre"
+              style="width:min(100%,360px);">
+        <div class="mount">
+          <div class="frame">
+            <div class="layer a" id="seasonImg">
+              <div class="field" style="background:
+                   radial-gradient(56% 42% at 50% 14%, rgba(255,253,246,1), rgba(255,253,246,0) 70%),
+                   linear-gradient(176deg,#f1ebdd 0%,#e4dac6 56%,#cfc2a6 100%);"></div>
+              <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <g stroke="rgba(27,26,23,.15)" stroke-width="1" fill="none">
+                  <rect x="58" y="42" width="284" height="264"/>
+                  <line x1="200" y1="42" x2="200" y2="306"/>
+                </g>
+                <path d="M58 306 L342 306 L392 468 L8 468 Z" fill="rgba(255,253,244,.42)"/>
+                <g stroke="rgba(27,26,23,.30)" stroke-width="1.1" fill="none">
+                  <path d="M146 408 Q146 470 200 470 Q254 470 254 408 Z"/>
+                  <ellipse cx="200" cy="406" rx="54" ry="15"/>
+                  <path d="M254 418 q30 6 26 26 q-4 20 -28 16"/>
+                </g>
+                <ellipse cx="200" cy="406" rx="46" ry="11" fill="rgba(74,50,38,.34)"/>
+                <ellipse cx="200" cy="486" rx="82" ry="10" fill="rgba(27,26,23,.06)"/>
+              </svg>
+            </div>
+            <div class="layer b" aria-hidden="true"></div>
+            <div class="rake" aria-hidden="true"></div>
+            <div class="shutter t" aria-hidden="true"></div>
+            <div class="shutter b" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption>
+          <span class="n">Planche IV</span> ／ 図版四 — 窓辺の一杯・九月
+          <span class="spec">2:3 縦位置 ／ 午前の窓光のみ ／ 季節ごとに差し替える唯一の図版 ／ 1400×2100px WebP</span>
+        </figcaption>
+      </figure>
+
+      <div class="justification rv">
+        <div class="sig">
+          焙煎士　中村 佳乃
+          <span class="cachet fr" id="cachet" aria-hidden="true">S</span>
+        </div>
+        <p class="vert" id="letter">
+          九月。朝の空気が澄みはじめると、豆の香りの立ち方が静かに変わります。
+          夏のあいだ遠ざけていた<span class="mark">中浅煎り</span>を、
+          今月から少しずつ棚に戻しました。余韻の長い一杯を、窓辺でどうぞ。
+        </p>
+        <h3 class="vert title">季節の便り</h3>
+      </div>
+
+    </div>
+
+    <p class="latin latin-f rv" style="margin-top:28px;text-align:center;">Lettre de saison — septembre</p>
+  </section>
+
+  <!-- ══ 06 L'INFUSION ══ three steps, one plate, mostly space ══ -->
+  <section id="brew" class="wrap">
+    <div class="sec-head rv">
+      <p class="fr-title fr">L’infusion</p>
+      <h2>淹れる</h2>
+      <div class="rule-d" style="margin-top:30px;"></div>
+    </div>
+
+    <!-- PRODUCTION: one wide plate of the pour, mounted and ruled.
+           <img class="layer a" id="brewImg" width="2000" height="1333"
+                src="/img/plate-05-infusion-2000.webp"
+                srcset="/img/plate-05-infusion-1200.webp 1200w,
+                        /img/plate-05-infusion-2000.webp 2000w"
+                sizes="(min-width:980px) 940px, 92vw"
+                alt="湯を注ぐ手元" loading="lazy" decoding="async"
+                style="object-fit:cover;width:100%;height:100%">
+         Asset: plate-05-infusion. 3:2 横位置. -->
+    <figure class="plate ar-32 rv axis" id="plate-brew" data-media="plate-05-infusion"
+            style="margin-bottom:clamp(64px,11vh,128px);">
+      <div class="mount">
+        <div class="frame">
+          <div class="layer a" id="brewImg">
+            <div class="field" style="background:
+                 radial-gradient(58% 60% at 34% 18%, rgba(255,253,246,1), rgba(255,253,246,0) 72%),
+                 linear-gradient(170deg,#f0eade 0%,#e2d8c3 54%,#c9bb9e 100%);"></div>
+            <svg viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <g stroke="rgba(27,26,23,.28)" stroke-width="1.1" fill="none">
+                <!-- the kettle, upper left, spout toward the centre -->
+                <path d="M188 168 q-66 8 -66 74 q0 70 76 70 l96 0 q70 -4 70 -70 q0 -66 -70 -74 Z"/>
+                <path d="M364 202 q104 14 132 96"/>
+                <path d="M212 168 q34 -34 78 -34 q44 0 76 34"/>
+                <!-- the cone -->
+                <path d="M402 330 L618 330 L542 472 L478 472 Z"/>
+                <path d="M470 472 L550 472 L550 496 L470 496 Z"/>
+                <ellipse cx="510" cy="330" rx="108" ry="22"/>
+              </g>
+              <!-- the thread of water -->
+              <path d="M500 302 q6 18 8 30" stroke="rgba(27,26,23,.4)" stroke-width="1.4" fill="none"/>
+              <ellipse cx="510" cy="332" rx="86" ry="15" fill="rgba(74,50,38,.28)"/>
+              <ellipse cx="510" cy="524" rx="142" ry="12" fill="rgba(27,26,23,.06)"/>
+              <line x1="0" y1="496" x2="900" y2="496" stroke="rgba(27,26,23,.12)" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="layer b" aria-hidden="true"></div>
+          <div class="rake" aria-hidden="true"></div>
+          <div class="shutter t" aria-hidden="true"></div>
+          <div class="shutter b" aria-hidden="true"></div>
+        </div>
+      </div>
+      <figcaption>
+        <span class="n">Planche V</span> ／ 図版五 — 注ぎの手元
+        <span class="spec">3:2 横位置 ／ 版面幅 940px ／ 1/200 秒以上・湯の線を止める ／ 自然光＋レフ一枚 ／ 2000×1333px WebP</span>
+      </figcaption>
+    </figure>
+
+    <div class="steps" id="steps">
+      <div class="step">
+        <div class="num fr">I</div>
+        <div class="numrule"></div>
+        <p class="t">湯を落ち着かせる</p>
+        <p class="d">沸かしたら火を止め、九十二度まで待ちます。粉は二十グラム、中細挽き。</p>
+      </div>
+      <div class="step">
+        <div class="num fr">II</div>
+        <div class="numrule"></div>
+        <p class="t">三十秒、蒸らす</p>
+        <p class="d">四十グラムの湯を置くように注ぎ、粉が静かに膨らむのを見ているだけの時間。</p>
+      </div>
+      <div class="step">
+        <div class="num fr">III</div>
+        <div class="numrule"></div>
+        <p class="t">三投で落としきる</p>
+        <p class="d">中心から小さく円を描き、合計三百グラム。二分三十秒で落としきります。</p>
+      </div>
+    </div>
+
+    <div class="pourfig" aria-hidden="true">
+      <svg viewBox="0 0 120 120">
+        <path id="spiral"
+              d="M60 12 A48 48 0 0 1 60 108 A40 40 0 0 1 60 28 A32 32 0 0 1 60 92
+                 A24 24 0 0 1 60 44 A16 16 0 0 1 60 76 A8 8 0 0 1 60 60"/>
+      </svg>
+      <div class="dripper"></div>
+    </div>
+    <p class="latin latin-f" style="margin-top:24px;text-align:center;">2 min 30 s</p>
+  </section>
+
+  <!-- ══ 07 COMMANDER ══ the packaging plate carries the offer ══ -->
+  <section id="buy" class="wrap">
+    <div class="buy-layout">
+
+      <!-- PRODUCTION: one square plate of the bag as it actually ships.
+             <img class="layer a" id="bagImg" width="1600" height="1600"
+                  src="/img/plate-06-sachet-1600.webp"
+                  srcset="/img/plate-06-sachet-900.webp 900w,
+                          /img/plate-06-sachet-1600.webp 1600w"
+                  sizes="(min-width:920px) 34vw, 86vw"
+                  alt="200g の袋" loading="lazy" decoding="async"
+                  style="object-fit:cover;width:100%;height:100%">
+           Asset: plate-06-sachet. This is the commerce photograph: it must
+           show the real label, the real seal, the real colour. -->
+      <figure class="plate ar-11 rv" id="plate-bag" data-media="plate-06-sachet"
+              style="width:min(100%,380px);">
+        <div class="mount">
+          <div class="frame">
+            <div class="layer a" id="bagImg">
+              <div class="field" style="background:
+                   radial-gradient(56% 48% at 42% 20%, rgba(255,253,247,1), rgba(255,253,247,0) 70%),
+                   linear-gradient(168deg,#f2ece0 0%,#e6dcca 56%,#d3c6ab 100%);"></div>
+              <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <g stroke="rgba(27,26,23,.30)" stroke-width="1.1" fill="rgba(27,26,23,.03)">
+                  <path d="M168 132 L332 132 L332 400 L168 400 Z"/>
+                  <path d="M168 132 L188 108 L312 108 L332 132"/>
+                </g>
+                <g stroke="rgba(27,26,23,.20)" stroke-width="1" fill="none">
+                  <rect x="204" y="206" width="92" height="118"/>
+                  <line x1="204" y1="244" x2="296" y2="244"/>
+                  <line x1="216" y1="270" x2="284" y2="270"/>
+                  <line x1="222" y1="290" x2="278" y2="290"/>
+                </g>
+                <ellipse cx="250" cy="414" rx="112" ry="12" fill="rgba(27,26,23,.07)"/>
+              </svg>
+            </div>
+            <div class="layer b" aria-hidden="true"></div>
+            <div class="rake" aria-hidden="true"></div>
+            <div class="shutter t" aria-hidden="true"></div>
+            <div class="shutter b" aria-hidden="true"></div>
+          </div>
+        </div>
+        <figcaption>
+          <span class="n">Planche VI</span> ／ 図版六 — 200g の袋
+          <span class="spec">1:1 ／ 実物のラベルとシール ／ 影は一方向のみ ／ 1600×1600px WebP</span>
+        </figcaption>
+      </figure>
+
+      <div class="buy-copy">
+        <p class="latin latin-f rv">Commander</p>
+        <h2 class="rv">はじめての方へ、<br>三種の飲み比べを。</h2>
+
+        <div class="actions rv">
+          <a class="cta" id="cta" href="#beans">Choisir son café<span class="jp">豆を選ぶ</span></a>
+          <a class="cta-2" href="#beans">Abonnement — 定期便について</a>
+        </div>
+
+        <p class="note rv">
+          焙煎日から二日以内に発送。¥5,000 以上のお買い上げで送料無料。<br>
+          100g×3種のテイスティングセット ¥2,860（送料込）。
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="f-grid">
+    <div>
+      <p class="fmark">Soigné</p>
+      <p style="margin-top:12px;">ソワニエ コーヒーロースタリー<br>東京都目黒区青葉台 1-2-3<br>11:00–18:00 ／ 水曜定休</p>
+    </div>
+    <ul>
+      <li><a href="#beans">豆一覧 — Nos cafés</a></li>
+      <li><a href="#buy">定期便 — Abonnement</a></li>
+      <li><a href="#roast">焙煎所について — La maison</a></li>
+      <li><a href="#season">季節の便り — Saison</a></li>
+    </ul>
+    <ul>
+      <li><a href="#buy">特定商取引法に基づく表記</a></li>
+      <li><a href="#buy">プライバシーポリシー</a></li>
+      <li><a href="#buy">お問い合わせ — Nous écrire</a></li>
+    </ul>
+  </div>
+  <p class="legal">© 2026 Soigné Coffee Roastery — Torréfié à Tokyo</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- 0. the hero line, character by character (A1) ----- */
+  document.querySelectorAll("#heroline .ln").forEach(function(ln){
+    var t = ln.getAttribute("data-t") || "";
+    ln.textContent = "";
+    for (var i = 0; i < t.length; i++){
+      var s = document.createElement("span");
+      s.className = "ch"; s.textContent = t[i];
+      ln.appendChild(s);
+    }
+  });
+
+  /* ---------- 0b. the seasonal letter, character by character --- */
+  var letter = document.getElementById("letter");
+  if (letter){
+    (function split(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(n){
+        if (n.nodeType === 3){
+          var txt = n.nodeValue, frag = document.createDocumentFragment();
+          for (var i = 0; i < txt.length; i++){
+            var c = txt[i];
+            if (/\s/.test(c)) { frag.appendChild(document.createTextNode(c)); continue; }
+            var s = document.createElement("span");
+            s.className = "lc"; s.textContent = c;
+            frag.appendChild(s);
+          }
+          node.replaceChild(frag, n);
+        } else if (n.nodeType === 1){ split(n); }
+      });
+    })(letter);
+  }
+
+  /* ---------- tonality of the three bean plates ----------------
+     In production these become three image sources. Here they are three
+     light-and-tone fields, so the cross-dissolve can be judged for real. */
+  var BEAN_FIELDS = {
+    "1": "radial-gradient(64% 52% at 34% 24%, rgba(255,253,247,1), rgba(255,253,247,0) 70%)," +
+         "linear-gradient(168deg,#f4eee1 0%,#e9e0cc 48%,#d8ccb1 100%)",
+    "2": "radial-gradient(60% 50% at 36% 26%, rgba(255,251,240,1), rgba(255,251,240,0) 70%)," +
+         "linear-gradient(168deg,#efe5d2 0%,#dccdae 50%,#c2ae8b 100%)",
+    "3": "radial-gradient(58% 48% at 38% 24%, rgba(255,249,236,1), rgba(255,249,236,0) 70%)," +
+         "linear-gradient(168deg,#e9dcc3 0%,#d2bd98 50%,#b09a78 100%)"
+  };
+  var fieldA = document.getElementById("beanFieldA");
+  var fieldB = document.getElementById("beanFieldB");
+  if (fieldA) fieldA.style.background = BEAN_FIELDS["1"];
+
+  if (!window.gsap || !window.ScrollTrigger){
+    /* no motion library: leave a complete, readable, fully-opened page */
+    document.getElementById("veil").style.display = "none";
+    document.querySelectorAll(".shutter").forEach(function(s){ s.style.transform = "scaleY(0)"; });
+    document.querySelectorAll(".rule-d").forEach(function(r){ r.classList.add("in"); });
+    document.getElementById("cta").classList.add("drawn");
+    return;
+  }
+  gsap.registerPlugin(ScrollTrigger);
+
+  var veil   = document.getElementById("veil");
+  var spiral = document.getElementById("spiral");
+  var mm     = gsap.matchMedia();
+
+  function prepDraw(p){
+    var L = p.getTotalLength();
+    gsap.set(p, { strokeDasharray: L, strokeDashoffset: L });
+  }
+
+  /* ---------- the roast frame, driven by one 0→1 value (A1) ----- */
+  var roastStops = [[183,187,159],[199,178,134],[150,102,66],[74,50,38]];
+  function mixRoast(t){
+    var p = Math.min(0.999, Math.max(0, t)) * (roastStops.length - 1);
+    var i = Math.floor(p), f = p - i;
+    var a = roastStops[i], b = roastStops[Math.min(i+1, roastStops.length-1)];
+    return "rgb(" + Math.round(a[0]+(b[0]-a[0])*f) + ","
+                  + Math.round(a[1]+(b[1]-a[1])*f) + ","
+                  + Math.round(a[2]+(b[2]-a[2])*f) + ")";
+  }
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+
+  var rTime  = document.getElementById("rTime");
+  var rTemp  = document.getElementById("rTemp");
+  var rStage = document.getElementById("rStage");
+  var stageNames = ["生豆","乾燥","一ハゼ","焙煎止め"];
+  var rl    = document.getElementById("roastline");
+  var fill  = rl.querySelector(".fill");
+  var seed  = rl.querySelector(".seed");
+  var ticks = rl.querySelectorAll(".ticks span");
+  var track = rl.querySelector(".track");
+  var roastB = document.getElementById("roastImgB");
+  var roastA = document.getElementById("roastImgA");
+
+  function renderRoast(t){
+    t = Math.min(1, Math.max(0, t));
+    gsap.set(fill, { scaleX: t });
+    gsap.set(seed, { x: track.offsetWidth * t, rotation: 45, backgroundColor: mixRoast(t) });
+    var secs = Math.round(t * 18 * 60);
+    rTime.textContent  = pad(Math.floor(secs/60)) + ":" + pad(secs % 60);
+    rTemp.textContent  = Math.round(22 + t * 190) + "°C";
+    var idx = Math.min(3, Math.floor(t * 3.999));
+    rStage.textContent = stageNames[idx];
+    for (var k = 0; k < ticks.length; k++){
+      ticks[k].classList.toggle("on", k <= idx && t > 0.02);
+    }
+    /* THE PHOTOGRAPH ROASTS WITH THE CURVE — the second frame of the same
+       locked-off shot dissolves in across the second half of the scrub. */
+    if (roastB){
+      var d = Math.min(1, Math.max(0, (t - 0.22) / 0.62));
+      gsap.set(roastB, { opacity: d, scale: 1.02 + t * 0.035 });
+      gsap.set(roastA, { scale: 1.02 + t * 0.035 });
+    }
+  }
+
+  /* =========================================================
+     REDUCED MOTION — a complete page: every plate open, every
+     rule drawn, every figure in its final state.
+     ========================================================= */
+  mm.add("(prefers-reduced-motion: reduce)", function(){
+    veil.style.display = "none";
+    gsap.set(".shutter", { scaleY: 0 });
+    gsap.set(".layer", { scale: 1, clearProps: "opacity" });
+    gsap.set(".layer.b", { opacity: 0 });
+    gsap.set(".rv, #heroline .ch, .lc, .step, .bean", { clearProps:"all", opacity:1 });
+    if (spiral) gsap.set(spiral, { strokeDasharray:"none", strokeDashoffset:0 });
+    document.querySelectorAll(".rule-d").forEach(function(r){ r.classList.add("in"); });
+    document.querySelectorAll(".bean").forEach(function(b){ b.classList.add("ruled"); });
+    document.getElementById("cta").classList.add("drawn");
+    renderRoast(1);
+    gsap.set(roastB, { opacity: 0 });   /* the un-roasted frame reads first */
+    document.getElementById("rail").style.display = "none";
+    return function(){};
+  });
+
+  /* =========================================================
+     FULL MOTION
+     ========================================================= */
+  mm.add("(prefers-reduced-motion: no-preference)", function(){
+
+    if (spiral) prepDraw(spiral);
+    gsap.set(".shutter", { scaleY: 1 });
+    gsap.set("#heroline .ch", { opacity:0, y:"0.18em", filter:"blur(4px)" });
+    gsap.set(["header", "#hero .sub", "#hero .foot", "#hero .baseline", ".rv"], { opacity:0, y:14 });
+    gsap.set(".lc", { opacity:.07 });
+    gsap.set(".bean", { opacity:0, y:14 });
+    gsap.set(".step .num", { opacity:0, filter:"blur(9px)" });
+    gsap.set(".step .t, .step .d, .step .numrule", { opacity:0, y:12 });
+    gsap.set("#cachet", { opacity:0, scale:1.16 });
+
+    /* ---- 1. 開幕 : the paper lifts, the page is set -------------- */
+    var open = gsap.timeline();
+    open.to("#veil .vmark", { opacity:0, duration:.9, ease:"power1.inOut" }, .45)
+        .to("#veil", { opacity:0, duration:1.1, ease:"power2.inOut",
+                       onComplete:function(){ veil.style.display="none"; } }, .9)
+        .to("#heroline .ch", { opacity:1, y:0, filter:"blur(0px)",
+                               duration:2.0, ease:"power2.out", stagger:.085 }, 1.05)
+        .to("header", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 1.8)
+        .to("#hero .baseline", { opacity:1, y:0, duration:2.2, ease:"power2.out",
+              onStart:function(){ document.getElementById("heroRule").classList.add("in"); } }, 2.2)
+        .to("#hero .sub",  { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 2.8)
+        .to("#hero .foot", { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.2);
+
+    /* ---- 2. light answers the pointer (A1, lerped) -------------- */
+    var lx = gsap.quickTo("#light-i","xPercent",{ duration:2.2, ease:"power3.out" });
+    var ly = gsap.quickTo("#light-i","yPercent",{ duration:2.2, ease:"power3.out" });
+    function onPointer(e){
+      lx((e.clientX / window.innerWidth  - .5) * 7);
+      ly((e.clientY / window.innerHeight - .5) * 7);
+    }
+    window.addEventListener("pointermove", onPointer, { passive:true });
+
+    /* ---- 3. the page changes state as it is read (A1) ----------- */
+    gsap.to("#paper", { backgroundColor:"#ede7da", ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:1.2 }});
+    gsap.to("#grain", { opacity:.08, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:1.2 }});
+    gsap.to("#rail .ink", { scaleY:1, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:.6 }});
+    var stem = document.querySelector("#rail .stem");
+    gsap.to("#rail .dot", {
+      y:function(){ return stem.offsetHeight - 2.5; }, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom",
+                      scrub:.6, invalidateOnRefresh:true }});
+
+    ScrollTrigger.create({
+      trigger:"#hero", start:"bottom 70%",
+      onEnter:function(){ document.querySelector("header").classList.add("lifted"); },
+      onLeaveBack:function(){ document.querySelector("header").classList.remove("lifted"); }
+    });
+
+    /* ---- 4. section reveals : long, settling (A1) --------------- */
+    gsap.utils.toArray(".rv").forEach(function(el){
+      gsap.to(el, {
+        opacity:1, y:0, duration:1.9, ease:"power2.out",
+        scrollTrigger:{ trigger:el, start:"top 88%",
+          onEnter:function(){
+            el.querySelectorAll(".rule-d").forEach(function(r){ r.classList.add("in"); });
+            if (el.classList.contains("rule-d")) el.classList.add("in");
+          }}
+      });
+    });
+    document.querySelectorAll(".sec-head .rule-d").forEach(function(r){
+      ScrollTrigger.create({ trigger:r, start:"top 90%",
+        onEnter:function(){ r.classList.add("in"); } });
+    });
+
+    /* ============================================================
+       5. THE PLATES — A1's motion grammar, applied to photographs.
+          (a) the filet double opens the plate from its centre line
+          (b) the image settles from 1.06 to 1.00 while it opens
+          (c) it then breathes on a slow parallax for as long as it
+              is on screen — slow enough to read as air, not effect
+       ============================================================ */
+    gsap.utils.toArray(".plate").forEach(function(fig){
+      var frame = fig.querySelector(".frame");
+      var shT   = fig.querySelector(".shutter.t");
+      var shB   = fig.querySelector(".shutter.b");
+      var layA  = fig.querySelector(".layer.a");
+
+      /* (a) + (b) — scrubbed, so the reader opens the plate themselves */
+      var tl = gsap.timeline({ scrollTrigger:{
+        trigger: frame, start:"top 92%", end:"top 42%", scrub: 1.1
+      }});
+      tl.fromTo([shT, shB], { scaleY:1 }, { scaleY:0, ease:"none", duration:1 }, 0)
+        .fromTo(layA, { scale:1.06 }, { scale:1.02, ease:"none", duration:1 }, 0);
+
+      /* (c) — breathing parallax on the image only, never on the caption */
+      if (fig.id !== "plate-roast"){
+        gsap.fromTo(frame.querySelectorAll(".layer"),
+          { yPercent:-3.2 }, { yPercent:3.2, ease:"none",
+            scrollTrigger:{ trigger: fig, start:"top bottom", end:"bottom top", scrub:1.6 }});
+      }
+    });
+
+    /* the frontispiece gets one extra degree of settling — it is the
+       first photograph on the page and it should arrive slowest. */
+    gsap.fromTo("#plate-hero .layer.a",
+      { scale:1.08 }, { scale:1.015, ease:"none",
+        scrollTrigger:{ trigger:"#plate-hero", start:"top bottom", end:"bottom 30%", scrub:1.4 }});
+
+    /* ---- 6. beans : rules drawn, rows settled (A1) -------------- */
+    gsap.utils.toArray(".bean").forEach(function(b){
+      gsap.to(b, {
+        opacity:1, y:0, duration:1.6, ease:"power2.out", delay:.35,
+        scrollTrigger:{ trigger:b, start:"top 86%",
+          onEnter:function(){ b.classList.add("ruled"); } }
+      });
+    });
+    var ruleStyle = document.createElement("style");
+    ruleStyle.textContent =
+      ".bean.ruled::before,.bean.ruled:last-of-type::after{" +
+      "transform:scaleX(1);transition:transform 1.5s cubic-bezier(.16,1,.3,1);}" +
+      ".bean:last-of-type.ruled::after{transition-delay:.25s;}";
+    document.head.appendChild(ruleStyle);
+
+    /* reading one row dims the others; the plate CROSS-DISSOLVES ---
+       two stacked layers, 2.6s power2.inOut, never a cut, never a slide. */
+    var list  = document.getElementById("beanlist");
+    var beans = list.querySelectorAll(".bean");
+    var frontIsA = true;
+    var current  = "1";
+    beans.forEach(function(b){
+      var focus = function(){
+        var i = b.getAttribute("data-i");
+        beans.forEach(function(x){ x.classList.remove("is-on"); });
+        b.classList.add("is-on");
+        list.setAttribute("data-focused","true");
+        if (i === current) return;
+        current = i;
+        var incoming = frontIsA ? fieldB : fieldA;
+        var inLayer  = frontIsA ? document.getElementById("beanB") : document.getElementById("beanA");
+        var outLayer = frontIsA ? document.getElementById("beanA") : document.getElementById("beanB");
+        incoming.style.background = BEAN_FIELDS[i];
+        gsap.killTweensOf([inLayer, outLayer]);
+        gsap.fromTo(inLayer,  { opacity:0, scale:1.045 },
+          { opacity:1, scale:1.02, duration:2.6, ease:"power2.inOut", overwrite:true });
+        gsap.to(outLayer, { opacity:0, duration:2.6, ease:"power2.inOut", overwrite:true });
+        frontIsA = !frontIsA;
+      };
+      b.addEventListener("mouseenter", focus);
+      b.addEventListener("focusin", focus);
+      b.setAttribute("tabindex","0");
+    });
+    list.addEventListener("mouseleave", function(){
+      list.setAttribute("data-focused","false");
+      beans.forEach(function(x){ x.classList.remove("is-on"); });
+    });
+
+    /* ---- 7. season : the letter is read, the seal is pressed ---- */
+    gsap.to(".lc", {
+      opacity:1, ease:"none", stagger:{ amount:.9 },
+      scrollTrigger:{ trigger:"#season", start:"top 74%", end:"top 10%", scrub:.9 }});
+    gsap.to("#cachet", { opacity:.9, scale:1, duration:1.4, ease:"power3.out",
+      scrollTrigger:{ trigger:"#season", start:"top 28%" }});
+
+    /* ---- 8. brew : numerals bloom, the spiral is poured --------- */
+    gsap.utils.toArray(".step").forEach(function(s){
+      var tl = gsap.timeline({ scrollTrigger:{ trigger:s, start:"top 84%" } });
+      tl.to(s.querySelector(".num"), { opacity:1, filter:"blur(0px)", duration:2.2, ease:"power2.out" })
+        .to(s.querySelectorAll(".numrule,.t,.d"),
+            { opacity:1, y:0, duration:1.6, ease:"power2.out", stagger:.14 }, .5);
+    });
+    if (spiral){
+      gsap.to(spiral, { strokeDashoffset:0, ease:"none",
+        scrollTrigger:{ trigger:".pourfig", start:"top 92%", end:"top 42%", scrub:1 }});
+    }
+
+    /* ---- 9. the CTA rule is drawn from the centre outward ------- */
+    ScrollTrigger.create({
+      trigger:"#buy", start:"top 62%",
+      onEnter:function(){
+        gsap.delayedCall(.8, function(){ document.getElementById("cta").classList.add("drawn"); });
+      }
+    });
+
+    /* ---- 10. cleanup ------------------------------------------- */
+    return function(){
+      window.removeEventListener("pointermove", onPointer);
+      ruleStyle.remove();
+    };
+  });
+
+  /* ---- roast : pinned on wide screens, scrubbed everywhere ------ */
+  var roastCommon = {
+    onUpdate:function(self){ renderRoast(self.progress); },
+    onRefresh:function(self){ renderRoast(self.progress); }
+  };
+
+  mm.add("(prefers-reduced-motion: no-preference) and (min-width: 881px) and (min-height: 680px)", function(){
+    ScrollTrigger.create(Object.assign({
+      trigger:"#roastStage", start:"center center", end:"+=180%",
+      pin:"#roastStage", pinSpacing:true, scrub:1, invalidateOnRefresh:true
+    }, roastCommon));
+
+    gsap.timeline({ scrollTrigger:{
+        trigger:"#roastStage", start:"center center", end:"+=180%", scrub:1 }})
+      .fromTo("#roast .statement", { letterSpacing:"0.28em" },
+                                   { letterSpacing:"0.36em", duration:1, ease:"none" }, 0);
+  });
+
+  mm.add("(prefers-reduced-motion: no-preference) and (max-width: 880px), (prefers-reduced-motion: no-preference) and (max-height: 679px)", function(){
+    /* narrow or short: no pin, same scrub, tied to the curve passing */
+    ScrollTrigger.create(Object.assign({
+      trigger:"#roastline", start:"top 88%", end:"top 26%", scrub:1
+    }, roastCommon));
+  });
+
+  /* keep pinned geometry and reserved media boxes honest ---------- */
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ ScrollTrigger.refresh(); });
+  }
+  var rt;
+  window.addEventListener("resize", function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){ ScrollTrigger.refresh(); }, 220);
+  }, { passive:true });
+  window.addEventListener("orientationchange", function(){
+    setTimeout(function(){ ScrollTrigger.refresh(); }, 260);
+  }, { passive:true });
+})();
+</script>
