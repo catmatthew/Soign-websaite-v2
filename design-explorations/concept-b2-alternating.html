@@ -952,3 +952,1220 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
   <!-- ─── 転換 : 白 → 勝色 ─── -->
   <div class="turn" data-to="dark" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+
+  <!-- ═══ 章三 · 火 ═══ 勝色 = 観る。ページで最も強い映像。 ═════════ -->
+  <section class="chapter" id="ch-roast" data-ground="dark" aria-labelledby="roast-h2">
+    <div class="ch-body wrap">
+      <div class="stage" id="roast-stage">
+        <div class="sec-head axis" style="margin-bottom:clamp(32px,6vh,68px)">
+          <p class="kicker">章三 · 火</p>
+          <h2 id="roast-h2">焙煎</h2>
+        </div>
+
+        <h3 class="statement">火を、待つ。</h3>
+
+        <!-- ─────────────────────────────────────────────────────────
+             MEDIA SLOT B2-02 · roast-scrub · 16:9 · スクラブ区間
+             A12の推奨方式をそのまま引き継ぎます：<video> の currentTime
+             ではなく、連番フレームを <canvas> に描きます。
+
+             1. currentTime シークはキーフレーム依存で、滑らかに送るには
+                GOP=1 の再エンコードが要り、通常の3〜5倍の容量になります。
+                その時点で連番フレームの方が軽くなります。
+             2. iOS Safari はシークを非同期に間引き、逆方向スクラブが
+                引っかかります。待機すべき確実なイベントがありません。
+             3. 連番は読み込み進捗を描画でき、メモリ上限も決定論的です。
+             4. prefers-reduced-motion では1枚だけ描いて止まります。
+
+             SPEC: 60 frames, 1280×720, AVIF q50 (~20 KB each, ~1.2 MB),
+             WebP fallback. 区間が2画面以内に入った時のみ取得します。
+
+             単一ファイルを選ぶ場合の <video> 形はこちら（ピンも読み出しも
+             同じ。配信方式だけが変わります）:
+
+             <video id="v-roast"
+                    data-media="roast-scrub-18min"
+                    muted playsinline webkit-playsinline
+                    preload="auto"
+                    disablepictureinpicture disableremoteplayback
+                    poster="/media/poster/roast-1280.avif"
+                    aria-hidden="true" tabindex="-1"
+                    style="width:100%;height:100%;object-fit:cover">
+               <source src="/media/roast-gop1-1280.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+               <source src="/media/roast-gop1-1280.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+             </video>
+
+             …with NO autoplay, NO loop, and
+             v.currentTime = progress * v.duration inside onUpdate.
+             ───────────────────────────────────────────────────────── -->
+        <figure class="slot" id="roast-slot" data-media="roast-scrub-18min">
+          <div class="frame">
+            <canvas id="roastCanvas" aria-hidden="true"></canvas>
+            <div id="seqbar" aria-hidden="true"><span id="seqfill"></span></div>
+          </div>
+          <figcaption class="cap">B2-02 · <b>Scrub sequence 16:9 · 60 frames · 1280×720 AVIF ≈ 1.2 MB</b> · silent · scroll-driven, never autoplayed</figcaption>
+        </figure>
+
+        <p class="body">十八分。生豆の水分が抜け、香りが立ちのぼるまでの時間です。焙煎士にできるのは、その時間を急かさないことだけ。数字は記録しますが、最後に信じるのはドラムの音と、立ちのぼる香りの変わり目です。この区間だけは、読む速さをあなたに預けます。スクロールが、火の進み方です。</p>
+
+        <div class="readout">
+          <span class="rd"><span class="k">時間</span><span class="v" id="rTime">00:00</span></span>
+          <span class="rd"><span class="k">ドラム</span><span class="v" id="rTemp">22°C</span></span>
+          <span class="rd"><span class="k">段階</span><span class="v" id="rStage">生豆</span></span>
+        </div>
+
+        <div class="echelle" id="echelle">
+          <div class="track"><span class="fill"></span><span class="seed"></span></div>
+          <div class="ticks"><span data-k="0">生豆</span><span data-k="1">乾燥</span><span data-k="2">一ハゼ</span><span data-k="3">焙煎止め</span></div>
+          <p class="label" style="text-align:center;margin-top:2px">焙煎曲線 — 18 min</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 転換 : 勝色 → 白 ─── -->
+  <div class="turn" data-to="light" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+
+  <!-- ═══ 章四 · 読みもの ═══ 白 = 読む。ページで一番長い滞在。 ═════
+       文章は映像より安く、書き手は焙煎士本人です。撮影と撮影の
+       あいだ、このページを生かしておくのはここです。 ═══════════════ -->
+  <section class="chapter" id="ch-journal" data-ground="light" aria-labelledby="journal-h2">
+    <div class="ch-body wrap">
+      <div class="sec-head axis">
+        <p class="kicker">章四 · 読みもの</p>
+        <h2 id="journal-h2">読みもの</h2>
+        <p class="sub">焙煎日誌、生産者のこと、道具のこと、淹れ方のこと。月に二、三本。<br>書いているのは焙煎士本人です。</p>
+      </div>
+
+      <div class="axis">
+        <div class="j-index">
+          <article class="j-row">
+            <p class="date">2026.10.02</p>
+            <h3 class="t"><a href="#piece-oct">十月の火のこと</a></h3>
+            <p class="cat">焙煎日誌</p>
+            <p class="ex">室温が十一度下がると、同じ設定でも豆は別の日を過ごします。今月の調整の記録。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.09.18</p>
+            <h3 class="t"><a href="#ch-journal">コンガ村の水洗工程を見に行った</a></h3>
+            <p class="cat">生産者</p>
+            <p class="ex">発酵槽の水を替える時間を、誰がどう決めているのか。現地で聞いてきました。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.09.04</p>
+            <h3 class="t"><a href="#ch-journal">十年使っている手網のこと</a></h3>
+            <p class="cat">道具</p>
+            <p class="ex">サンプルローストは今も手網です。買い替えない理由を、正直に書きます。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.08.21</p>
+            <h3 class="t"><a href="#ch-journal">湯温を二度下げると何が起きるか</a></h3>
+            <p class="cat">淹れ方</p>
+            <p class="ex">九十四度と九十二度を、同じ豆・同じ挽き目で二十杯ずつ比べた記録です。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.08.07</p>
+            <h3 class="t"><a href="#ch-journal">水曜を定休にした理由</a></h3>
+            <p class="cat">店のこと</p>
+            <p class="ex">開けている日を減らしたら、焙煎の精度が上がりました。その話を。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.07.24</p>
+            <h3 class="t"><a href="#ch-journal">夏のあいだ、中浅煎りを棚から外していた</a></h3>
+            <p class="cat">焙煎日誌</p>
+            <p class="ex">冷たい水で淹れる人が増える季節に、何を置いておくべきかという問い。</p>
+          </article>
+        </div>
+
+        <!-- 最新の一本を、全文で。索引だけの「読みもの」は読まれません。 -->
+        <article class="piece" id="piece-oct" aria-labelledby="piece-oct-h">
+          <div class="hd">
+            <p class="kicker">焙煎日誌 — 最新</p>
+            <h3 id="piece-oct-h">十月の火のこと</h3>
+            <p class="by">2026.10.02 ／ 焙煎士 中村 佳乃 ／ 読了 約6分</p>
+          </div>
+
+          <div class="prose">
+            <p class="lead">十月に入って、窯の立ち上がりが二分ほど早くなりました。同じ設定、同じ豆量で火を入れているのに、予熱の到達が早い。理由ははっきりしていて、焙煎室の気温が下がったからです。夏のあいだ三十二度あった室温が、今朝は二十一度でした。</p>
+
+            <p>十一度の差は、豆にとっては別の日と言っていい差です。数字だけを見ていると、これは「早くなった」という話に見えます。けれど実際に起きているのは、豆が水分を手放していく速さが変わった、ということです。早く温まるということは、外側だけが先に乾くということでもある。同じ十八分で止めても、中身は同じ状態になっていません。</p>
+
+            <p>だから十月の最初の一週間は、いつも設定をつくり直す週になります。去年の記録を引っぱり出して、去年の十月にどう直したかを見る。けれど去年と同じにはしません。豆が違い、水分値が違い、外の湿度も違います。記録は答えではなく、どこから考えはじめるかの目印です。</p>
+
+            <h4>一ハゼまでの四分をどう使うか</h4>
+            <p>この季節にいちばん神経を使うのは、一ハゼに入る前の四分です。ここで火を強く当てると、豆の表面だけが先に進み、香りが早く立ちます。立つのですが、長く続きません。カップに落としたときに、最初の一口だけが良くて、冷めていく途中で痩せてしまう。そういう焙煎になります。</p>
+
+            <p>逆に弱くしすぎると、今度は水分が抜けきる前に時間が過ぎます。豆の中に湿った芯が残ったまま外側が焦げはじめる。これは飲めばすぐに分かります。舌の奥に、紙のような後味が残ります。</p>
+
+            <p>結局のところ、この四分は待つ時間です。ドラムの音がわずかに重くなり、排気から抜けてくる匂いが、草の匂いからパンの匂いに変わる。その変わり目を待つ。温度計は、その変わり目が来たことを後から確認するために見ています。先に見るものではありません。</p>
+
+            <blockquote>
+              <p>数字を疑うのではなく、数字より先に鼻と耳が動いてしまうというだけのことです。十年やっていても、そこは変わりませんでした。</p>
+            </blockquote>
+
+            <h4>今月の調整</h4>
+            <p>ニエリのカリンダは、九月に入った新しいロットから、投入温度を四度下げました。前のロットより粒が大きく、密度が高い。同じ温度で入れると表面が先に走ってしまうので、ゆっくり立ち上げて、一ハゼを三十秒遅らせています。結果として、酸が穏やかになり、蜜の印象が前に出ました。前のロットを気に入ってくださっていた方には、少し違って感じられるはずです。</p>
+
+            <p>イルガチェフェはほとんど触っていません。この豆は室温に対して驚くほど鈍感で、毎年十月になっても同じ焙煎で同じ味が出ます。理由は分かりません。分からないまま、十年続けています。</p>
+
+            <p>ブレンドだけは、十月から配合を変えました。夜に飲む一杯という前提でつくっているので、気温が下がるとブラジルの比率を少し上げます。重さが欲しくなる季節です。</p>
+
+            <h4>書いておきたいこと</h4>
+            <p>焙煎の記録をこうして公開しはじめて二年になります。書いていて気づいたのは、読んでくださる方が知りたいのは「正解」ではないらしい、ということでした。むしろ、迷ったところ、直したところ、去年と変えたところを書いたときのほうが、返事をいただきます。</p>
+
+            <p>豆の説明だけなら、袋の裏に書いてあります。ここに書くのは、袋の裏に入りきらなかったことです。来月もまた、窯の前で考えたことを書きます。</p>
+          </div>
+
+          <div class="end">
+            <p class="label">この記事で触れた豆はオンラインストアにあります</p>
+            <a class="store-min ext" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=journal&amp;utm_campaign=always_on&amp;utm_content=post_202610_hi" target="_blank" rel="noopener noreferrer">ニエリ／カリンダ AA を見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          </div>
+        </article>
+
+        <p class="j-more label">過去の記事は月別に一覧できます（本番では /journal/ 以下に静的生成）</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 転換 : 白 → 勝色 ─── -->
+  <div class="turn" data-to="dark" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+
+  <!-- ═══ 章五 · 手 ═══ 勝色 = 観る。二本のループと、縦組み一箇所。 ══ -->
+  <section class="chapter" id="ch-hands" data-ground="dark" aria-labelledby="hands-h2">
+    <div class="ch-body wrap">
+      <div class="sec-head axis">
+        <p class="kicker">章五 · 手</p>
+        <h2 id="hands-h2">手のこと</h2>
+      </div>
+
+      <!-- ─────────────────────────────────────────────────────────
+           MEDIA SLOTS B2-03 / B2-04 · 1:1 square, silent, fixed tripod.
+           どちらも被写体は手と道具だけです。ロットも季節も写りません。
+           B2-04 は法人向けページでも同じファイルを使い回します。
+
+           PRODUCTION MARKUP — one per slot, replacing each .ph:
+
+           <video id="v-pour"
+                  class="media"
+                  data-media="pour"
+                  muted playsinline webkit-playsinline loop
+                  preload="none"
+                  disablepictureinpicture disableremoteplayback
+                  poster="/media/poster/pour-720.avif"
+                  aria-hidden="true" tabindex="-1"
+                  style="width:100%;height:100%;object-fit:cover">
+             <source src="/media/pour-720.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+             <source src="/media/pour-720.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+           </video>
+
+           · preload="none" — nothing here costs a byte until the reader
+             actually arrives.
+           · An IntersectionObserver plays on entry and pauses on exit;
+             visibilitychange pauses both.
+           · 720×720 is deliberate: the box never renders larger than
+             ~420 CSS px, so 720 is already 2x on a retina screen.
+           ───────────────────────────────────────────────────────── -->
+      <div class="hands axis">
+        <div>
+          <figure class="slot" id="slot-pour" data-media="pour">
+            <div class="frame">
+              <div class="ph">
+                <div class="ph-field"></div>
+                <div class="ph-rake" style="animation-duration:31s"></div>
+                <svg viewBox="0 0 300 300" aria-hidden="true">
+                  <g fill="none" stroke="rgba(226,233,248,.30)" stroke-width="1.3" stroke-linecap="round">
+                    <path d="M62 70 C 92 74, 112 90, 126 112"/>
+                    <path d="M126 112 C 140 128, 146 140, 148 156"/>
+                  </g>
+                  <path d="M148 158 C 148 186, 146 202, 146 214" fill="none" stroke="rgba(226,233,248,.44)" stroke-width="1.6" stroke-linecap="round"/>
+                  <ellipse cx="146" cy="220" rx="52" ry="10" fill="none" stroke="rgba(226,233,248,.26)" stroke-width="1"/>
+                  <ellipse cx="146" cy="220" rx="52" ry="10" fill="rgba(192,135,60,.16)"/>
+                  <ellipse cx="146" cy="220" rx="26" ry="5" fill="rgba(192,135,60,.26)"/>
+                </svg>
+                <div class="ph-steam"><i style="left:44%;height:28%;animation-delay:-1.8s"></i><i style="left:51%;height:21%;animation-delay:-6.9s"></i></div>
+              </div>
+            </div>
+            <figcaption class="cap">B2-03 · <b>注ぐ手 · 1:1 · 6 s loop · silent</b></figcaption>
+          </figure>
+          <p class="t">湯を落ち着かせる</p>
+          <p class="d">沸かしたら火を止め、九十二度まで待ちます。粉は二十グラム、中細挽き。中心から小さく円を描いて、合計三百グラム。二分三十秒で落としきります。</p>
+        </div>
+
+        <div>
+          <figure class="slot" id="slot-weigh" data-media="weigh">
+            <div class="frame">
+              <div class="ph">
+                <div class="ph-field" style="filter:brightness(.94)"></div>
+                <div class="ph-rake" style="animation-duration:26s"></div>
+                <svg viewBox="0 0 300 300" aria-hidden="true">
+                  <g fill="none" stroke="rgba(226,233,248,.26)" stroke-width="1">
+                    <path d="M104 118 L196 118 L206 236 L94 236 Z"/>
+                    <path d="M104 118 C 118 100, 182 100, 196 118"/>
+                    <path d="M112 152 L188 152"/>
+                  </g>
+                  <path d="M94 236 L206 236" stroke="rgba(226,233,248,.4)" stroke-width="1.4"/>
+                  <ellipse cx="150" cy="184" rx="34" ry="22" fill="rgba(192,135,60,.20)"/>
+                  <g fill="none" stroke="rgba(226,233,248,.30)" stroke-width="1.3" stroke-linecap="round">
+                    <path d="M216 96 C 240 110, 244 132, 236 148"/>
+                    <path d="M236 148 C 226 162, 210 166, 200 160"/>
+                  </g>
+                  <path d="M60 262 L240 262" stroke="rgba(226,233,248,.14)" stroke-width="1"/>
+                </svg>
+              </div>
+            </div>
+            <figcaption class="cap">B2-04 · <b>量る手・袋詰め · 1:1 · 6 s loop · silent</b> · 法人向けページと共用</figcaption>
+          </figure>
+          <p class="t">量って、詰める</p>
+          <p class="d">焙煎日から二日以内に発送します。二百グラムも、業務用の一キロ袋も、詰めているのは同じ二つの手です。</p>
+        </div>
+      </div>
+
+      <!-- ページ中で縦組みを使うのは、ここ一箇所だけです。 -->
+      <div class="tategaki">
+        <div class="sig-v">焙煎士　中村 佳乃</div>
+        <p class="vert" id="vert-letter">週に一度しか火を入れないのは、<span class="mk">待てる量</span>しか焼かないと決めたからです。急いで焼いた豆は、急いで飲まれてしまう。</p>
+        <h3 class="vert title">火の量</h3>
+      </div>
+
+      <div class="goutte" aria-hidden="true"></div>
+      <p class="label" style="text-align:center;margin-top:20px">2 min 30 s</p>
+    </div>
+  </section>
+
+  <!-- ─── 転換 : 勝色 → 白 ─── -->
+  <div class="turn" data-to="light" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+
+  <!-- ═══ 章六 · 購う ═══ 白 = 読む。ここに買い物かごはありません。 ══ -->
+  <section class="chapter" id="ch-buy" data-ground="light" aria-labelledby="buy-h2">
+    <div class="ch-body wrap">
+      <div class="sec-head axis">
+        <p class="kicker">章六 · 購う</p>
+        <h2 id="buy-h2">買う場所について</h2>
+        <p class="sub">ご購入は Square オンラインビジネスの当店ストアで承っています。<br>このページは豆を紹介する場所で、決済は行いません。</p>
+      </div>
+
+      <div class="axis">
+        <dl class="facts">
+          <div class="fact"><dt>発送</dt><dd>焙煎日から二日以内に発送します。焙煎日は毎週火曜と金曜です。</dd></div>
+          <div class="fact"><dt>送料</dt><dd>全国一律 ¥520。¥5,000 以上のお買い上げで無料。ネコポス対応。</dd></div>
+          <div class="fact"><dt>定期便</dt><dd>月に一度、二種類をお選びいただけます。ストア内で設定・停止ができます。</dd></div>
+        </dl>
+
+        <div class="act">
+          <!-- 主導線。外部リンクであることを、見た目・挙動・読み上げの
+               三つで示します。target/rel、↗、そして視覚的に隠した一文。 -->
+          <a class="store-cta ext drawn" id="cta-main"
+             href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=cta&amp;utm_campaign=always_on&amp;utm_content=ch6_primary"
+             target="_blank" rel="noopener noreferrer">
+            オンラインストアへ<span class="arw" aria-hidden="true">↗</span>
+            <span class="note">Square オンラインビジネス · 別タブで開きます</span>
+            <span class="vh">（外部サイト・新しいタブで開きます）</span>
+          </a>
+          <a class="store-min ext"
+             href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=cta&amp;utm_campaign=always_on&amp;utm_content=ch6_tasting_set"
+             target="_blank" rel="noopener noreferrer">100g×3種 テイスティングセット ¥2,860（送料込）<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          <a class="b2b-btn" href="#/wholesale" data-route="#/wholesale">法人向けはこちら — 卸販売のご案内</a>
+        </div>
+
+        <p class="fine">カフェ・飲食店・ホテル・オフィス・小売店さまへの卸販売は、上の法人向けページをご覧ください。個人のお客さまと同じストアからのご注文も可能ですが、月間5kg以上をお使いの場合は卸価格のほうがお安くなります。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 転換 : 白 → 勝色（幕が下りる） ─── -->
+  <div class="turn" data-to="dark" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+</main>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     VIEW 2 — #/wholesale  法人向け卸販売
+     同じヘッダ、同じフッタ、同じ地色、同じ書体。語り口だけが変わります。
+     読み物ではなく、調達担当者が三十秒で判断するための文書です。
+     ══════════════════════════════════════════════════════════════════ -->
+<main id="main-wholesale" data-view="wholesale" tabindex="-1" hidden>
+
+  <!-- ═══ 勝色 = 観る。B2-01 を帯で使い回します。新規撮影はゼロ。 ═══ -->
+  <section class="chapter" id="w-hero" data-ground="dark" aria-labelledby="w-h1">
+    <!-- MEDIA SLOT B2-01（再利用） · roastery-room · 16:9 を 21:9 に切って帯で使用。
+         PRODUCTION MARKUP は章一と同一のファイル・同一の <video>。
+         object-position を 50% 42% にするだけで、別アセットは作りません。 -->
+    <div id="w-hero-media" data-media="roastery-room" aria-hidden="true">
+      <div class="ph">
+        <div class="ph-field"></div>
+        <div class="ph-rake" style="animation-duration:34s"></div>
+        <svg viewBox="0 0 1600 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <g fill="none" stroke="rgba(226,233,248,.18)" stroke-width="1">
+            <rect x="180" y="150" width="420" height="250" rx="12"/>
+            <circle cx="390" cy="275" r="76"/>
+            <rect x="1000" y="60" width="380" height="330"/>
+            <path d="M1190 60 L1190 390"/>
+          </g>
+          <ellipse cx="390" cy="275" rx="46" ry="46" fill="rgba(192,135,60,.34)"/>
+          <path d="M100 400 L1500 400" stroke="rgba(226,233,248,.14)" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
+    <div class="ch-body wrap">
+      <div class="axis">
+        <p class="kicker">法人のお客さまへ</p>
+        <h1 id="w-h1">卸販売のご案内</h1>
+        <p class="lede">カフェ・喫茶店、レストラン、ホテル・旅館、オフィス、小売店さま向けに、焙煎した豆を卸価格でお納めしています。焙煎日から二日以内の発送、少量からの定期納品、抽出のご相談まで一貫して対応します。</p>
+        <dl class="w-keys">
+          <div><dt>最低ロット</dt><dd>2kg／回<small>単一銘柄でも、複数銘柄の合計でも構いません。</small></dd></div>
+          <div><dt>納期</dt><dd>中2営業日<small>定期便は曜日固定。スポットは受注から中2営業日で出荷。</small></dd></div>
+          <div><dt>提供形態</dt><dd>豆・挽き・1kg袋<small>ドリップバッグ、OEM小分けも承ります。</small></dd></div>
+        </dl>
+        <p class="label" style="margin-top:28px">B2-01（再利用）· Roastery room · 21:9 crop · silent · 追加撮影なし</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="turn" data-to="light" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+
+  <!-- ═══ 白 = 読む。事実、数字、手順。 ═════════════════════════════ -->
+  <section class="chapter" id="w-detail" data-ground="light" aria-labelledby="w-flow-h">
+    <div class="ch-body wrap">
+      <div class="axis">
+
+        <section class="w-sec">
+          <h3 id="w-flow-h">取引の流れ</h3>
+          <p>初回のご相談から初回納品まで、通常10営業日ほどです。サンプルの送付までは無償で承ります。</p>
+          <ol class="flow">
+            <li><span class="st">お問い合わせ</span><span class="dt">ページ下部のフォーム、またはお電話で。ご業態、想定使用量、抽出方法をお知らせください。</span></li>
+            <li><span class="st">サンプル送付</span><span class="dt">ご相談の内容に合わせて2〜3種類を200gずつ無償でお送りします（送料も当店負担）。</span></li>
+            <li><span class="st">試飲・ご選定</span><span class="dt">ご希望があれば焙煎士が訪問し、実際の器具で抽出しながらお選びいただきます（東京23区内は無償）。</span></li>
+            <li><span class="st">お見積り・お取引条件</span><span class="dt">銘柄、月間使用量、納品頻度、提供形態を確定し、単価と支払条件を書面でご提示します。</span></li>
+            <li><span class="st">初回納品・定期開始</span><span class="dt">初回納品後、納品曜日を固定します。銘柄・数量の変更は納品日の3営業日前まで随時。</span></li>
+          </ol>
+        </section>
+
+        <section class="w-sec">
+          <h3>最低ロットと価格帯の考え方</h3>
+          <p>卸価格は月間の合計使用量で決まります。銘柄ごとではなく合計で判断しますので、複数銘柄を少量ずつお使いいただいても条件は変わりません。</p>
+          <p>下表は目安です。生豆相場・為替・輸送費の変動により、年に1〜2回改定することがあります。改定は必ず2か月前にご連絡します。</p>
+          <div class="tbl-scroll">
+            <table class="tbl">
+              <caption>卸価格帯の目安（税抜・100gあたり／2026年9月現在）</caption>
+              <thead><tr><th scope="col">月間使用量</th><th scope="col">スタンダード</th><th scope="col">シングルオリジン</th><th scope="col">最低ロット</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">2〜5kg</th><td class="num">¥520</td><td class="num">¥690〜¥840</td><td class="num">2kg／回</td></tr>
+                <tr><th scope="row">5〜20kg</th><td class="num">¥480</td><td class="num">¥640〜¥780</td><td class="num">2kg／回</td></tr>
+                <tr><th scope="row">20〜50kg</th><td class="num">¥440</td><td class="num">¥590〜¥720</td><td class="num">5kg／回</td></tr>
+                <tr><th scope="row">50kg以上</th><td class="num">個別見積</td><td class="num">個別見積</td><td class="num">10kg／回</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>シングルオリジンは銘柄ごとに原価が異なるため幅があります。ブレンドはご要望に応じて専用配合の設計も承ります（月間10kg以上、設計料なし）。</p>
+        </section>
+
+        <section class="w-sec">
+          <h3>納期と配送</h3>
+          <div class="tbl-scroll">
+            <table class="tbl">
+              <caption>納期・配送条件</caption>
+              <thead><tr><th scope="col">項目</th><th scope="col">条件</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">焙煎日</th><td>毎週火曜・金曜。定期便は納品曜日から逆算して割り当てます。</td></tr>
+                <tr><th scope="row">出荷</th><td>焙煎の翌営業日。受注から中2営業日で出荷します。</td></tr>
+                <tr><th scope="row">配送</th><td>宅配便（常温）。東京23区内は10kg以上で当店配送も可（追加費用なし）。</td></tr>
+                <tr><th scope="row">送料</th><td>月間20kg以上は無償。20kg未満は実費（1回あたり¥900〜¥1,500）。</td></tr>
+                <tr><th scope="row">変更・追加</th><td>納品日の3営業日前17時まで。それ以降はスポット出荷として承ります。</td></tr>
+                <tr><th scope="row">支払</th><td>月末締め翌月末払い（銀行振込）。初回3回までは前払いをお願いしています。</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="w-sec">
+          <h3>導入形態の例</h3>
+          <ul class="cases">
+            <li><span class="who">カフェ（席数20）</span><span class="how">シングルオリジン2種＋ブレンド1種。週1回・計6kg納品。ブレンドはエスプレッソ用に専用配合。抽出レシピを四半期ごとに見直し。</span></li>
+            <li><span class="who">ホテル（客室80）</span><span class="how">客室用ドリップバッグ月5,000袋＋ラウンジ用1kg袋を月12kg。包材は客室備品に合わせて無地／名入れを選択。</span></li>
+            <li><span class="who">オフィス（在籍60名）</span><span class="how">中煎りブレンド1kg袋を月8kg、隔週納品。豆のまま納品し、設置のグラインダーで都度挽いていただく形。</span></li>
+            <li><span class="who">小売・物販</span><span class="how">200g袋を掛率で。棚札・POP用の原稿と写真データを無償提供。委託ではなく買取です。</span></li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="turn" data-to="dark" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+
+  <!-- ═══ 勝色 = 観る。提供形態だけは、見たほうが早い。 ═══════════ -->
+  <section class="chapter" id="w-forms" data-ground="dark" aria-labelledby="w-forms-h">
+    <div class="ch-body wrap">
+      <div class="axis">
+        <p class="kicker">提供形態</p>
+        <h2 id="w-forms-h" style="margin-top:14px;font-size:clamp(1.3rem,3.2vw,2rem);letter-spacing:.2em;line-height:2;">豆・挽き・業務用1kg袋</h2>
+        <div class="hands" style="margin-top:clamp(40px,7vh,80px)">
+          <!-- MEDIA SLOT B2-04（再利用）· weigh · 1:1。章五と同一ファイル。 -->
+          <figure class="slot" id="w-slot-weigh" data-media="weigh">
+            <div class="frame">
+              <div class="ph">
+                <div class="ph-field" style="filter:brightness(.94)"></div>
+                <div class="ph-rake" style="animation-duration:28s"></div>
+                <svg viewBox="0 0 300 300" aria-hidden="true">
+                  <g fill="none" stroke="rgba(226,233,248,.26)" stroke-width="1">
+                    <path d="M104 118 L196 118 L206 236 L94 236 Z"/>
+                    <path d="M104 118 C 118 100, 182 100, 196 118"/>
+                    <path d="M112 152 L188 152"/>
+                  </g>
+                  <path d="M94 236 L206 236" stroke="rgba(226,233,248,.4)" stroke-width="1.4"/>
+                  <ellipse cx="150" cy="184" rx="34" ry="22" fill="rgba(192,135,60,.20)"/>
+                  <path d="M60 262 L240 262" stroke="rgba(226,233,248,.14)" stroke-width="1"/>
+                </svg>
+              </div>
+            </div>
+            <figcaption class="cap">B2-04（再利用）· <b>量る手・袋詰め · 1:1 · 6 s loop · silent</b></figcaption>
+          </figure>
+          <div>
+            <div class="tbl-scroll">
+              <table class="tbl">
+                <caption>包装・形態</caption>
+                <thead><tr><th scope="col">形態</th><th scope="col">単位</th><th scope="col">備考</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">業務用1kg袋</th><td class="num">1kg</td><td>バルブ付アルミ袋。豆のまま／挽き指定可。</td></tr>
+                  <tr><th scope="row">小売用200g袋</th><td class="num">200g</td><td>店頭販売用。無地・名入れいずれも。</td></tr>
+                  <tr><th scope="row">挽き納品</th><td class="num">—</td><td>粗さ5段階。納品直前に挽きます。</td></tr>
+                  <tr><th scope="row">ドリップバッグ</th><td class="num">100袋〜</td><td>1袋10g。名入れは500袋から。</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="d" style="margin-top:22px">挽いた状態での納品は香りが早く落ちます。可能な限り豆のままお納めし、店舗側で挽いていただくことをお勧めしています。グラインダーの選定もご相談ください。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="turn" data-to="light" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+
+  <!-- ═══ 白 = 読む。支援・FAQ・お問い合わせ。 ═════════════════════ -->
+  <section class="chapter" id="w-contact" data-ground="light" aria-labelledby="w-sup-h">
+    <div class="ch-body wrap">
+      <div class="axis">
+
+        <section class="w-sec">
+          <h3 id="w-sup-h">抽出サポートと研修</h3>
+          <p>豆をお納めするだけでは、同じ味はお店に届きません。導入時と、その後も必要に応じて、抽出の設計をご一緒します。いずれも豆のお取引がある期間は無償です。</p>
+          <ul class="cases">
+            <li><span class="who">導入時レシピ設計</span><span class="how">実際の器具・水・グラインダーで抽出し、粉量・湯温・時間を書面に落とします。所要2〜3時間。</span></li>
+            <li><span class="who">スタッフ研修</span><span class="how">2時間×1回。抽出の手順と、味がぶれたときの原因の切り分け方。最大8名まで。</span></li>
+            <li><span class="who">四半期の見直し</span><span class="how">ロットが替わった際のレシピ調整。訪問または動画・電話で。</span></li>
+            <li><span class="who">器具の選定相談</span><span class="how">グラインダー、ドリッパー、サーバー、給湯設備。販売はしていないため、中立に選べます。</span></li>
+          </ul>
+        </section>
+
+        <section class="w-sec">
+          <h3>よくあるご質問</h3>
+          <div class="faq">
+            <details><summary>最低ロットの2kgは、1銘柄あたりですか。</summary><p class="a">合計です。500gずつ4銘柄でも構いません。ただし1銘柄あたり500g未満のご注文は、焙煎の精度が落ちるためお受けしていません。</p></details>
+            <details><summary>スポットで少量だけ試したいのですが。</summary><p class="a">サンプルとして2〜3種類を200gずつ無償でお送りします。送料も当店負担です。まずはフォームからご相談ください。</p></details>
+            <details><summary>個人向けのオンラインストアと価格が違うのはなぜですか。</summary><p class="a">包材・小分け・出荷回数が異なるためです。月間5kg未満であれば、オンラインストアからのご購入のほうがお安くなる場合もあります。その場合は正直にそうお伝えします。</p></details>
+            <details><summary>専用ブレンドの設計は有料ですか。</summary><p class="a">月間10kg以上のお取引であれば設計料はいただきません。3回程度の試作を経て確定します。レシピは貴店に帰属します。</p></details>
+            <details><summary>納品が間に合わなくなった場合は。</summary><p class="a">焙煎設備の不調など当店起因の遅延が生じた場合、代替銘柄のご提案と、当日中のご連絡を必ず行います。過去2年の納期遵守率は99.4%です。</p></details>
+            <details><summary>取引開始にあたって必要な書類はありますか。</summary><p class="a">初回にお取引条件確認書を1通取り交わします。与信の都合で、初回3回までは前払いをお願いしています。</p></details>
+          </div>
+        </section>
+
+        <section class="w-sec">
+          <h3>お問い合わせ</h3>
+          <p>2営業日以内に、焙煎士または担当者からご返信します。お急ぎの場合は 03-0000-0000（平日 11:00–18:00）へ。</p>
+
+          <!-- ─────────────────────────────────────────────────────────
+               本番配線について（このプロトタイプにバックエンドはありません）
+
+               1. <form method="post" action="/api/wholesale-inquiry"> とし、
+                  JS が無効でもサーバへ届く形を先に成立させます。JSは
+                  submit を preventDefault して fetch する上乗せだけです。
+               2. サーバ側（例：Cloudflare Workers / Vercel Functions）で
+                  a) 入力をサーバでも再検証（クライアント検証は補助です）
+                  b) Turnstile など不可視のボット対策トークンを検証
+                  c) 送信元IP単位で 5件/時 のレート制限
+                  d) 本文をサニタイズして info@ へ SMTP 送信（SPF/DKIM/DMARC
+                     設定済みの独立ドメインから）
+                  e) 同内容をスプレッドシートまたはCRMへ追記
+                  f) 送信者へ自動返信（内容の控え＋返信目安）
+               3. 応答は 303 リダイレクトで /wholesale/thanks へ。JS経路では
+                  #form-status に結果を書き、role="status" で読み上げます。
+               4. 保持期間は24か月。フォーム直下にプライバシーポリシーへの
+                  導線を置きます。
+               5. honeypot は name="company_url" の非表示テキスト欄。値が
+                  入っていれば静かに破棄します（下に実装済み）。
+               ───────────────────────────────────────────────────────── -->
+          <form class="form" id="w-form" novalidate>
+            <div class="fld" aria-hidden="true" style="position:absolute;left:-9999px">
+              <label for="company_url">この欄は入力しないでください</label>
+              <input type="text" id="company_url" name="company_url" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="fld" id="fld-org">
+              <label for="f-org">会社名・店舗名<span class="req">必須</span></label>
+              <input type="text" id="f-org" name="organization" autocomplete="organization" required aria-describedby="err-org">
+              <p class="err" id="err-org">会社名・店舗名をご入力ください。</p>
+            </div>
+
+            <div class="fld" id="fld-name">
+              <label for="f-name">ご担当者名<span class="req">必須</span></label>
+              <input type="text" id="f-name" name="name" autocomplete="name" required aria-describedby="err-name">
+              <p class="err" id="err-name">ご担当者名をご入力ください。</p>
+            </div>
+
+            <div class="fld" id="fld-mail">
+              <label for="f-mail">メールアドレス<span class="req">必須</span></label>
+              <input type="email" id="f-mail" name="email" autocomplete="email" inputmode="email" required aria-describedby="err-mail hint-mail">
+              <p class="err" id="err-mail">メールアドレスの形式をご確認ください。</p>
+              <p class="hint" id="hint-mail">こちらのアドレスへ、控えと見積りをお送りします。</p>
+            </div>
+
+            <div class="fld" id="fld-tel">
+              <label for="f-tel">電話番号<span class="opt">任意</span></label>
+              <input type="tel" id="f-tel" name="tel" autocomplete="tel" inputmode="tel" aria-describedby="err-tel">
+              <p class="err" id="err-tel">電話番号の形式をご確認ください。</p>
+            </div>
+
+            <div class="fld" id="fld-type">
+              <label for="f-type">ご業態<span class="req">必須</span></label>
+              <select id="f-type" name="business_type" required aria-describedby="err-type">
+                <option value="">選択してください</option>
+                <option>カフェ・喫茶店</option>
+                <option>レストラン・バー</option>
+                <option>ホテル・旅館</option>
+                <option>オフィス・社内利用</option>
+                <option>小売・物販</option>
+                <option>その他</option>
+              </select>
+              <p class="err" id="err-type">ご業態をお選びください。</p>
+            </div>
+
+            <div class="fld" id="fld-vol">
+              <label for="f-vol">月間のおおよその使用量<span class="req">必須</span></label>
+              <select id="f-vol" name="monthly_volume" required aria-describedby="err-vol">
+                <option value="">選択してください</option>
+                <option>〜2kg</option>
+                <option>2〜5kg</option>
+                <option>5〜20kg</option>
+                <option>20〜50kg</option>
+                <option>50kg以上</option>
+                <option>未定・相談したい</option>
+              </select>
+              <p class="err" id="err-vol">おおよそで構いませんのでお選びください。</p>
+            </div>
+
+            <fieldset class="fset">
+              <legend>ご希望の提供形態<span class="opt">任意・複数可</span></legend>
+              <div class="checks">
+                <label><input type="checkbox" name="form_type" value="beans">豆のまま</label>
+                <label><input type="checkbox" name="form_type" value="ground">挽き</label>
+                <label><input type="checkbox" name="form_type" value="bag1kg">業務用1kg袋</label>
+                <label><input type="checkbox" name="form_type" value="retail200g">小売用200g袋</label>
+                <label><input type="checkbox" name="form_type" value="drip">ドリップバッグ</label>
+              </div>
+            </fieldset>
+
+            <div class="fld" id="fld-msg">
+              <label for="f-msg">ご要望・ご質問<span class="opt">任意</span></label>
+              <textarea id="f-msg" name="message" autocomplete="off" aria-describedby="hint-msg"></textarea>
+              <p class="hint" id="hint-msg">抽出方法（ハンドドリップ／エスプレッソ／バッチブリュー等）、現在お使いの豆、開始希望時期をお書きいただけると、初回のご提案が具体的になります。</p>
+            </div>
+
+            <div class="fld agree" id="fld-agree">
+              <label for="f-agree"><input type="checkbox" id="f-agree" name="agree" required aria-describedby="err-agree">個人情報の取り扱いに同意します<span class="req">必須</span></label>
+              <p class="err" id="err-agree">送信には同意が必要です。</p>
+            </div>
+
+            <button type="submit" class="submit">ご相談内容を送信</button>
+            <p id="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="turn" data-to="dark" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+</main>
+
+<!-- ══ FOOTER ══ 勝色。両方の view で共有します。幕が下りるところ。 ══ -->
+<footer id="site-footer" class="wrap" data-ground="dark">
+  <div class="ch-body f-grid">
+    <div>
+      <p class="fmark">Soigné</p>
+      <p style="margin-top:12px;">ソワニエ コーヒーロースタリー<br>東京都目黒区青葉台 1-2-3<br>11:00–18:00 ／ 水曜定休<br>03-0000-0000</p>
+    </div>
+    <ul>
+      <li><a href="#ch-beans">今、棚にある豆</a></li>
+      <li><a href="#ch-journal">読みもの</a></li>
+      <li><a href="#ch-roast">焙煎について</a></li>
+      <li><a href="#ch-buy">買う場所について</a></li>
+    </ul>
+    <ul>
+      <li><a href="#/wholesale" data-route="#/wholesale">法人向け卸販売</a></li>
+      <li><a href="#ch-buy">特定商取引法に基づく表記</a></li>
+      <li><a href="#ch-buy">プライバシーポリシー</a></li>
+      <li><a class="ext" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=footer&amp;utm_campaign=always_on&amp;utm_content=footer_store" target="_blank" rel="noopener noreferrer">オンラインストア<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a></li>
+    </ul>
+    <div>
+      <a class="b2b-btn" href="#/wholesale" data-route="#/wholesale" id="b2b-footer">法人向けはこちら</a>
+    </div>
+  </div>
+  <p class="legal">© 2026 Soigné Coffee Roastery — Roasted in Tokyo · 決済は Square オンラインビジネス</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     0. 文字分割 — A12の開幕をそのまま。ワードマークと和文一行。
+     ========================================================= */
+  function split(el, cls){
+    var t = el.getAttribute("data-t") || "";
+    el.textContent = "";
+    for (var i = 0; i < t.length; i++){
+      var s = document.createElement("span");
+      s.className = cls; s.textContent = t[i];
+      el.appendChild(s);
+    }
+  }
+  var wm = document.getElementById("wordmark");
+  if (wm) split(wm, "ch");
+  [].forEach.call(document.querySelectorAll("#hero-h1 .ln"), function(ln){ split(ln, "ch"); });
+
+  /* =========================================================
+     1. 回線と設定のゲート
+     Save-Data と 2g/slow-2g は prefers-reduced-motion と同じ
+     静止ページに着きます。章の地色はCSSが直接塗り、転換帯は
+     二色のグラデーション一枚になります。
+     ========================================================= */
+  var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  var saveData = !!(conn && (conn.saveData === true || /^(slow-)?2g$/.test(conn.effectiveType || "")));
+  var reduceQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+  var STILL = saveData || reduceQ.matches;
+  if (STILL) document.body.classList.add("still");
+
+  var docEl = document.documentElement;
+  function setHeaderGround(g){
+    if (docEl.getAttribute("data-ground") !== g) docEl.setAttribute("data-ground", g);
+  }
+  setHeaderGround("dark");
+
+  /* =========================================================
+     2. 焙煎の版面。プロトタイプでは単一の 0→1 値から決定的に
+        一枚を描きます。本番では同じ値で連番フレームを描きます：
+            paintRoast(t) → ctx.drawImage(frames[idx],0,0,cw,ch)
+        スクロール側の配線は本番と同一です。
+        地が勝色になったので、窯の内部も勝色から起こします。
+     ========================================================= */
+  var cvs = document.getElementById("roastCanvas");
+  var ctx = cvs ? cvs.getContext("2d", { alpha:false }) : null;
+  var cw = 0, ch = 0;
+
+  function sizeCanvas(){
+    if (!cvs || !ctx) return;
+    var r = cvs.getBoundingClientRect();
+    if (!r.width) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cw = Math.round(r.width); ch = Math.round(r.height);
+    cvs.width = Math.round(cw*dpr); cvs.height = Math.round(ch*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  var stops = [[168,176,150],[196,174,130],[150,102,66],[74,50,38]];
+  function mix(t){
+    var p = Math.min(0.999, Math.max(0,t)) * (stops.length-1);
+    var i = Math.floor(p), f = p - i;
+    var a = stops[i], b = stops[Math.min(i+1, stops.length-1)];
+    return [Math.round(a[0]+(b[0]-a[0])*f), Math.round(a[1]+(b[1]-a[1])*f), Math.round(a[2]+(b[2]-a[2])*f)];
+  }
+  var BEANS = (function(){
+    var out = [], s = 20260914;
+    function rnd(){ s = (s*1103515245 + 12345) % 2147483648; return s/2147483648; }
+    for (var i=0;i<110;i++) out.push({ x:rnd(), y:rnd(), r:.018+rnd()*.016, a:rnd()*Math.PI, sp:.6+rnd()*.9 });
+    return out;
+  })();
+
+  function paintRoast(t){
+    if (!ctx || !cw) return;
+    t = Math.min(1, Math.max(0,t));
+    /* --- PRODUCTION: this whole body is replaced by two lines ---
+       var idx = Math.min(FRAMES-1, Math.round(t*(FRAMES-1)));
+       if (frames[idx] && frames[idx].complete) ctx.drawImage(frames[idx],0,0,cw,ch);
+       ----------------------------------------------------------- */
+    var g = ctx.createRadialGradient(cw*.5, ch*.56, ch*.04, cw*.5, ch*.56, ch*1.06);
+    g.addColorStop(0, "rgb(" + Math.round(38+t*26) + "," + Math.round(42+t*18) + "," + Math.round(78-t*22) + ")");
+    g.addColorStop(1, "rgb(" + Math.round(12+t*4) + "," + Math.round(15+t*2) + "," + Math.round(34-t*10) + ")");
+    ctx.fillStyle = g; ctx.fillRect(0,0,cw,ch);
+
+    /* 火。勝色の上でだけ成立する差し色＝琥珀。 */
+    var heat = Math.max(0, Math.sin(Math.min(1,t/0.88)*Math.PI))*.62 + t*.2;
+    var hg = ctx.createRadialGradient(cw*.5, ch*.62, 0, cw*.5, ch*.62, cw*.48);
+    hg.addColorStop(0, "rgba(192,135,60," + (heat*.5).toFixed(3) + ")");
+    hg.addColorStop(.55, "rgba(192,135,60," + (heat*.16).toFixed(3) + ")");
+    hg.addColorStop(1, "rgba(192,135,60,0)");
+    ctx.fillStyle = hg; ctx.fillRect(0,0,cw,ch);
+
+    var rot = t*Math.PI*2.4;
+    ctx.save(); ctx.translate(cw*.5, ch*.56); ctx.rotate(rot*.16);
+    var c = mix(t), col = "rgb("+c[0]+","+c[1]+","+c[2]+")";
+    for (var i=0;i<BEANS.length;i++){
+      var b = BEANS[i], a = b.a + rot*b.sp, rad = (0.10 + b.y*0.30)*ch;
+      var x = Math.cos(a)*rad*1.9, y = Math.sin(a)*rad*0.62 + (b.x-.5)*ch*.10;
+      ctx.save(); ctx.translate(x,y); ctx.rotate(a*.5);
+      ctx.fillStyle = col; ctx.globalAlpha = .70 + (b.y*.28);
+      ctx.beginPath(); ctx.ellipse(0,0,b.r*ch*1.35,b.r*ch*.82,0,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha = .3; ctx.strokeStyle = "rgba(10,12,26,.8)"; ctx.lineWidth = .8;
+      ctx.beginPath(); ctx.moveTo(-b.r*ch,0); ctx.lineTo(b.r*ch,0); ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+
+    if (t > .42){
+      ctx.globalAlpha = Math.min(.20, (t-.42)*.55);
+      var sg = ctx.createLinearGradient(0,0,0,ch);
+      sg.addColorStop(0,"rgba(198,212,242,.85)"); sg.addColorStop(1,"rgba(198,212,242,0)");
+      ctx.fillStyle = sg; ctx.fillRect(0,0,cw,ch*.72); ctx.globalAlpha = 1;
+    }
+    var vg = ctx.createRadialGradient(cw*.5,ch*.5,ch*.30,cw*.5,ch*.5,cw*.74);
+    vg.addColorStop(0,"rgba(0,0,0,0)"); vg.addColorStop(1,"rgba(6,8,18,.52)");
+    ctx.fillStyle = vg; ctx.fillRect(0,0,cw,ch);
+  }
+
+  var rTime = document.getElementById("rTime");
+  var rTemp = document.getElementById("rTemp");
+  var rStage = document.getElementById("rStage");
+  var stageNames = ["生豆","乾燥","一ハゼ","焙煎止め"];
+  var ech = document.getElementById("echelle");
+  var track = ech.querySelector(".track"), fill = ech.querySelector(".fill"), seed = ech.querySelector(".seed");
+  var ticks = ech.querySelectorAll(".ticks span");
+  function pad(n){ return (n<10?"0":"")+n; }
+
+  function renderRoast(t){
+    t = Math.min(1, Math.max(0,t));
+    paintRoast(t);
+    if (window.gsap){
+      gsap.set(fill, { scaleX:t });
+      gsap.set(seed, { x: track.offsetWidth*t, backgroundColor:"rgb("+mix(t).join(",")+")" });
+    } else {
+      fill.style.transform = "scaleX("+t+")";
+      seed.style.transform = "translateX("+(track.offsetWidth*t)+"px) rotate(45deg)";
+    }
+    var secs = Math.round(t*18*60);
+    rTime.textContent = pad(Math.floor(secs/60))+":"+pad(secs%60);
+    rTemp.textContent = Math.round(22 + t*190) + "°C";
+    var idx = Math.min(3, Math.floor(t*3.999));
+    rStage.textContent = stageNames[idx];
+    for (var k=0;k<ticks.length;k++) ticks[k].classList.toggle("on", k<=idx && t>.02);
+  }
+  var seqfill = document.getElementById("seqfill");
+  function seqProgress(p){ if (seqfill) seqfill.style.transform = "scaleX("+p+")"; }
+
+  /* =========================================================
+     3. メディアの生死 — 画面外・非表示タブでは何も動きません。
+        プレースホルダに対して、本番の <video> と同じ配線です。
+     ========================================================= */
+  var playable = [].slice.call(document.querySelectorAll("[data-media]"));
+  var inView = new WeakSet();
+  function setPlaying(el,on){
+    el.classList.toggle("is-playing", on);
+    /* PRODUCTION:
+       var v = el.matches("video") ? el : el.querySelector("video");
+       if (!v) return;
+       if (on && !STILL) { v.play().catch(function(){}); } else { v.pause(); } */
+  }
+  if ("IntersectionObserver" in window){
+    var mio = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if (en.isIntersecting) inView.add(en.target); else inView.delete(en.target);
+        setPlaying(en.target, en.isIntersecting && !document.hidden);
+      });
+    }, { rootMargin:"120px 0px" });
+    playable.forEach(function(el){ mio.observe(el); });
+  }
+  /* タブが隠れたら、CSSループも GSAP の ticker も止めます。
+     このページは自前の rAF を回していません — canvas は
+     ScrollTrigger の ticker からしか描かれないためです。 */
+  document.addEventListener("visibilitychange", function(){
+    document.body.classList.toggle("tab-hidden", document.hidden);
+    if (window.gsap){ document.hidden ? gsap.ticker.sleep() : gsap.ticker.wake(); }
+    playable.forEach(function(el){ setPlaying(el, !document.hidden && inView.has(el)); });
+  });
+
+  /* =========================================================
+     4. 音 — 既定Off、毎回Off、保存しない。音楽は一度も鳴りません。
+     ========================================================= */
+  var son = document.getElementById("son");
+  if (son){
+    son.addEventListener("click", function(){
+      var on = son.getAttribute("aria-pressed") === "true";
+      son.setAttribute("aria-pressed", on ? "false" : "true");
+      son.textContent = on ? "音 · Off" : "音 · On";
+      /* PRODUCTION: B2-01 に既に入っている環境音のミュートを外すだけです。
+           var v = document.getElementById("v-room");
+           if (v){ v.muted = on; if (!on) v.volume = 0.32; }
+         状態は意図的に保存しません。毎回、無音で始まります。 */
+    });
+  }
+
+  /* =========================================================
+     5. ルーティング — #/ と #/wholesale の二つの view。
+        同じヘッダ・同じフッタ・同じデザインシステムを共有します。
+        戻る／進む、直リンク、焦点の移動、スクロール位置を扱います。
+     ========================================================= */
+  var views = {
+    home: document.getElementById("main-home"),
+    wholesale: document.getElementById("main-wholesale")
+  };
+  var ROUTE = { "#/":"home", "#/wholesale":"wholesale" };
+  var TITLE = {
+    home: "Soigné — 明暗 / 勝色と白の章",
+    wholesale: "法人向け卸販売 — Soigné Coffee Roastery"
+  };
+  var ANNOUNCE = { home:"トップページに戻りました。", wholesale:"法人向け卸販売のページに移動しました。" };
+  /* 直リンクで法人向けページに着いた読者に、トップの開幕演出は要りません。
+     最初の経路をここで確定し、7c の開幕タイムラインを分岐させます。 */
+  var INITIAL = null;
+  var live = document.getElementById("route-live");
+  var current = "home";
+  var savedScroll = { home:0, wholesale:0 };
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+  function routeOf(hash){
+    if (!hash || hash === "#") return "home";
+    if (ROUTE[hash]) return ROUTE[hash];
+    if (hash === "#/wholesale/" ) return "wholesale";
+    return null;            /* not a route — an in-page anchor */
+  }
+
+  INITIAL = routeOf(location.hash) || "home";
+
+  function setView(name, opts){
+    opts = opts || {};
+    if (!views[name]) name = "home";
+    if (name === current && !opts.force) return;
+    savedScroll[current] = window.scrollY;
+
+    var from = views[current], to = views[name];
+    from.hidden = true;
+    to.hidden = false;
+    current = name;
+
+    document.title = TITLE[name];
+    [].forEach.call(document.querySelectorAll('[data-route]'), function(a){
+      var isB2B = a.getAttribute("data-route") === "#/wholesale";
+      if (a.classList.contains("b2b-btn")){
+        if (isB2B && name === "wholesale") a.setAttribute("aria-current","page");
+        else a.removeAttribute("aria-current");
+      }
+    });
+
+    /* 地色を先頭の章に戻し、ヘッダの色を合わせてから描画します */
+    setHeaderGround("dark");
+    if (window.gsap && !STILL){
+      gsap.set("#ground-b", { opacity:0 });
+      gsap.set("#grain-m", { opacity:0 });
+      gsap.set("#grain-s", { opacity:.085 });
+      gsap.set("#lite-w", { opacity:0 });
+      gsap.set("#lite-c", { opacity:1 });
+    }
+
+    var y = opts.restore ? (savedScroll[name] || 0) : 0;
+    window.scrollTo(0, y);
+
+    rebuildGround();
+
+    /* 焦点は必ず新しい view の先頭へ。捕らえず、失わず。 */
+    to.focus({ preventScroll:true });
+    if (live) live.textContent = ANNOUNCE[name] || "";
+
+    if (opts.anchor){
+      var el = document.getElementById(opts.anchor);
+      if (el) requestAnimationFrame(function(){ el.scrollIntoView({ block:"start" }); });
+    }
+  }
+
+  function readHash(initial){
+    var h = location.hash;
+    var r = routeOf(h);
+    if (r){ setView(r, { force: !!initial, restore: !initial }); return; }
+    /* 章内アンカー。相手側の view にある場合だけ、先に切り替えます。 */
+    var id = h.replace(/^#/, "");
+    var el = id ? document.getElementById(id) : null;
+    if (!el) return;
+    var owner = el.closest('[data-view]');
+    var ownerName = owner ? owner.getAttribute("data-view") : current;
+    if (ownerName !== current){ setView(ownerName, { anchor:id }); }
+    else { el.scrollIntoView({ block:"start" }); }
+  }
+
+  window.addEventListener("hashchange", function(){ readHash(false); });
+
+  /* =========================================================
+     6. お問い合わせフォーム — バックエンドはありません。
+        検証と焦点移動とエラー表示だけが本番と同じ形です。
+        本番配線はフォーム直上のコメントに書いてあります。
+     ========================================================= */
+  var wform = document.getElementById("w-form");
+  if (wform){
+    var status = document.getElementById("form-status");
+    function mark(fld, bad, node){
+      fld.classList.toggle("bad", bad);
+      if (node){ node.setAttribute("aria-invalid", bad ? "true" : "false"); }
+    }
+    wform.addEventListener("submit", function(e){
+      e.preventDefault();
+      if (document.getElementById("company_url").value){ return; }   /* honeypot */
+      var bad = [];
+      function check(id, fldId, test){
+        var n = document.getElementById(id), f = document.getElementById(fldId);
+        var ok = test(n);
+        mark(f, !ok, n);
+        if (!ok) bad.push(n);
+      }
+      check("f-org","fld-org", function(n){ return n.value.trim().length > 0; });
+      check("f-name","fld-name", function(n){ return n.value.trim().length > 0; });
+      check("f-mail","fld-mail", function(n){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(n.value.trim()); });
+      check("f-tel","fld-tel", function(n){ return n.value.trim() === "" || /^[0-9+\-() ]{9,}$/.test(n.value.trim()); });
+      check("f-type","fld-type", function(n){ return n.value !== ""; });
+      check("f-vol","fld-vol", function(n){ return n.value !== ""; });
+      check("f-agree","fld-agree", function(n){ return n.checked; });
+
+      if (bad.length){
+        status.setAttribute("data-state","bad");
+        status.textContent = bad.length + "件、ご確認をお願いします。最初の項目に移動しました。";
+        bad[0].focus();
+        return;
+      }
+      status.setAttribute("data-state","ok");
+      status.textContent = "送信しました。2営業日以内にご返信します。（このプロトタイプでは送信先がないため、実際には送信されていません）";
+      /* PRODUCTION:
+         fetch("/api/wholesale-inquiry", { method:"POST", body:new FormData(wform) })
+           .then(function(r){ return r.ok ? r.json() : Promise.reject(r); })
+           .then(function(){ status.textContent = "送信しました。控えをメールでお送りしました。"; wform.reset(); })
+           .catch(function(){ status.setAttribute("data-state","bad");
+             status.textContent = "送信できませんでした。お手数ですが 03-0000-0000 へご連絡ください。"; }); */
+    });
+  }
+
+  /* =========================================================
+     7. モーション
+     ========================================================= */
+  var veil = document.getElementById("veil");
+  var groundTriggers = [];
+
+  function killGround(){
+    groundTriggers.forEach(function(t){ if (t && t.kill) t.kill(true); });
+    groundTriggers = [];
+    if (window.gsap) gsap.set(".chapter > .ch-body, #site-footer > .ch-body", { clearProps:"opacity,filter" });
+  }
+
+  /* ---------------------------------------------------------
+     転換 — この案の中心。
+     一本のスクラブ済みタイムラインが、順に三つのことをします。
+       0.00–0.30  出ていく章の本文が沈む（部屋の明かりが落ちる）
+       0.28–0.72  地色が入れ替わる（白の層の不透明度だけが動く）
+       0.70–1.00  入ってくる章の本文が上がる（明かりが戻る）
+     地平線の細罫はその真ん中で左右に引かれ、最後に消えます。
+     ヘッダは 0.5 を越えた瞬間に色を替えるので、地色が変わりきる
+     前に文字が読めなくなる瞬間がありません。
+     --------------------------------------------------------- */
+  function buildGround(view){
+    if (!window.gsap || !window.ScrollTrigger || STILL) return;
+    var turns = view.querySelectorAll(".turn");
+    [].forEach.call(turns, function(turn){
+      var to = turn.getAttribute("data-to");
+      var from = (to === "light") ? "dark" : "light";
+      var prev = turn.previousElementSibling;
+      var next = turn.nextElementSibling || document.getElementById("site-footer");
+      var prevBody = prev ? prev.querySelector(".ch-body") : null;
+      var nextBody = next ? next.querySelector(".ch-body") : null;
+      var hz = turn.querySelector(".horizon i");
+      var lz = turn.querySelector(".horizon b");
+      var L = (to === "light") ? 1 : 0;
+
+      var st = { trigger:turn, start:"top 70%", end:"bottom 36%", scrub:.9, invalidateOnRefresh:true };
+      var tl = gsap.timeline({ scrollTrigger:st });
+      if (prevBody) tl.to(prevBody, { opacity:0, filter:"blur(2px)", duration:.30, ease:"none" }, 0);
+      tl.to("#ground-b", { opacity:L,            duration:.44, ease:"none" }, .28)
+        .to("#grain-m",  { opacity:L ? .055 : 0, duration:.44, ease:"none" }, .28)
+        .to("#grain-s",  { opacity:L ? 0 : .085, duration:.44, ease:"none" }, .28)
+        .to("#lite-w",   { opacity:L,            duration:.44, ease:"none" }, .28)
+        .to("#lite-c",   { opacity:L ? 0 : 1,    duration:.44, ease:"none" }, .28);
+      if (hz) tl.fromTo(hz, { scaleX:0 }, { scaleX:1, duration:.52, ease:"none" }, .16)
+                .to(hz, { opacity:0, duration:.24, ease:"none" }, .78);
+      if (lz) tl.fromTo(lz, { opacity:0 }, { opacity:.9, duration:.24, ease:"none" }, .38)
+                .to(lz, { opacity:0, duration:.2, ease:"none" }, .74);
+      if (nextBody) tl.fromTo(nextBody, { opacity:0, filter:"blur(2px)" },
+                                        { opacity:1, filter:"blur(0px)", duration:.30, ease:"none" }, .70);
+      groundTriggers.push(tl.scrollTrigger);
+
+      /* ヘッダだけは連続値ではなく、真ん中で一度だけ切り替えます */
+      groundTriggers.push(ScrollTrigger.create({
+        trigger:turn, start:st.start, end:st.end, invalidateOnRefresh:true,
+        onUpdate:function(self){ setHeaderGround(self.progress > .5 ? to : from); }
+      }));
+    });
+  }
+
+  function rebuildGround(){
+    if (!window.gsap || !window.ScrollTrigger) return;
+    killGround();
+    buildGround(views[current]);
+    requestAnimationFrame(function(){ sizeCanvas(); ScrollTrigger.refresh(); });
+  }
+
+  /* ---- 7a. GSAPが来なかった場合 : 読める完成形で止まります ---- */
+  if (!window.gsap || !window.ScrollTrigger){
+    document.body.classList.add("still");
+    veil.style.display = "none";
+    sizeCanvas(); renderRoast(.62); seqProgress(1);
+    [].forEach.call(document.querySelectorAll(".rule-c"), function(r){ r.style.transform = "scaleX(1)"; });
+    readHash(true);
+    return;
+  }
+  gsap.registerPlugin(ScrollTrigger);
+  var mm = gsap.matchMedia();
+  var roastCommon = {
+    onUpdate:function(self){ renderRoast(self.progress); },
+    onRefresh:function(self){ sizeCanvas(); renderRoast(self.progress); }
+  };
+
+  /* ---- 7b. 静止 : 本当に完成したページ ---------------------- */
+  mm.add("(prefers-reduced-motion: reduce)", function(){
+    veil.style.display = "none";
+    gsap.set("#wordmark .ch, #hero-h1 .ch", { clearProps:"all", opacity:1 });
+    [].forEach.call(document.querySelectorAll(".rule-c"), function(r){ r.style.transform = "scaleX(1)"; });
+    document.getElementById("cta-main").classList.add("drawn");
+    sizeCanvas(); renderRoast(.62); seqProgress(1);
+    return function(){};
+  });
+
+  /* ---- 7c. 通常 ------------------------------------------- */
+  mm.add("(prefers-reduced-motion: no-preference)", function(){
+    if (saveData){
+      veil.style.display = "none";
+      sizeCanvas(); renderRoast(.62); seqProgress(1);
+      return function(){};
+    }
+
+    var OPENS = (INITIAL === "home");
+    if (!OPENS){
+      /* #/wholesale への直リンク。幕は最初から無く、章一は完成状態です。 */
+      veil.style.display = "none";
+      gsap.set("#wordmark .ch, #hero-h1 .ch", { opacity:1, y:0, filter:"blur(0px)" });
+      gsap.set(["header", "#hero-rule-wrap", "#ch-hero .lede", "#hero-foot", "#hero-cap"], { opacity:1, y:0 });
+      gsap.set("#hero-media", { opacity:1, scale:1 });
+      gsap.set("#hero-rule", { scaleX:1 });
+    } else {
+      gsap.set("#wordmark .ch", { opacity:0, y:".10em", filter:"blur(4px)" });
+      gsap.set("#hero-h1 .ch", { opacity:0, y:".16em", filter:"blur(4px)" });
+      gsap.set(["header", "#hero-rule-wrap", "#ch-hero .lede", "#hero-foot", "#hero-cap"], { opacity:0, y:12 });
+      gsap.set("#hero-media", { opacity:0, scale:1.04 });
+    }
+
+    /* 開幕 — 幕は上がるのではなく、引きます。映像はその下で既に
+       動いています。暗転から現れるのではなく、最初から其処にある。 */
+    if (OPENS) gsap.timeline()
+      .to("#hero-media", { opacity:1, scale:1, duration:4.4, ease:"power2.out" }, .2)
+      .to("#veil .vmark", { opacity:0, duration:.9, ease:"power1.inOut" }, .5)
+      .to("#veil", { opacity:0, duration:1.3, ease:"power2.inOut",
+                     onComplete:function(){ veil.style.display="none"; } }, .95)
+      .to("#wordmark .ch", { opacity:1, y:0, filter:"blur(0px)", duration:2.2, ease:"power2.out", stagger:.1 }, 1.1)
+      .to("#hero-rule-wrap", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 2.2)
+      .to("#hero-rule", { scaleX:1, duration:2.6, ease:"power2.inOut" }, 2.4)
+      .to("#hero-h1 .ch", { opacity:1, y:0, filter:"blur(0px)", duration:2.0, ease:"power2.out", stagger:.07 }, 2.6)
+      .to("header", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 3.0)
+      .to("#ch-hero .lede", { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.4)
+      .to(["#hero-foot", "#hero-cap"], { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.8);
+
+    /* ヒーローの映像は、画面にあるあいだずっと極緩やかに寄り続けます */
+    gsap.to("#hero-media .ph", { scale:1.07, yPercent:-2.5, ease:"none",
+      scrollTrigger:{ trigger:"#ch-hero", start:"top top", end:"bottom top", scrub:1.4 } });
+    gsap.to("#hero-media", { opacity:.24, ease:"none",
+      scrollTrigger:{ trigger:"#ch-hero", start:"top top", end:"bottom 30%", scrub:1.2 } });
+
+    /* 光がポインタに追従する。二層とも同じ量だけ動きます。 */
+    var lx = gsap.quickTo("#light", "xPercent", { duration:2.2, ease:"power3.out" });
+    var ly = gsap.quickTo("#light", "yPercent", { duration:2.2, ease:"power3.out" });
+    function onPointer(e){
+      lx((e.clientX/window.innerWidth - .5)*5);
+      ly((e.clientY/window.innerHeight - .5)*5);
+    }
+    window.addEventListener("pointermove", onPointer, { passive:true });
+
+    /* 読みの罫 */
+    gsap.to("#rail .ink", { scaleY:1, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:.6 } });
+    var stem = document.querySelector("#rail .stem");
+    gsap.to("#rail .dot", { y:function(){ return stem.offsetHeight-2.5; }, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:.6, invalidateOnRefresh:true } });
+
+    var hdr = document.querySelector("header");
+    ScrollTrigger.create({ trigger:document.body, start:"top -40",
+      onEnter:function(){ hdr.classList.add("lifted"); },
+      onLeaveBack:function(){ hdr.classList.remove("lifted"); } });
+
+    /* 節の定位 — 長く、沈む方向へ。滑らせません。 */
+    var revealSel = ".sec-head, .bean, .shelf, .j-row, .piece .hd, .piece .prose, .piece .end, " +
+                    ".hands > div, .tategaki, .facts, #ch-buy .act, #ch-buy .fine, " +
+                    ".w-keys, .w-sec, .form, #site-footer .f-grid > *";
+    gsap.utils.toArray(revealSel).forEach(function(el){
+      gsap.fromTo(el, { opacity:0, y:14 },
+        { opacity:1, y:0, duration:1.8, ease:"power2.out",
+          scrollTrigger:{ trigger:el, start:"top 90%" } });
+    });
+    gsap.utils.toArray(".rule-c").forEach(function(r){
+      if (r.id === "hero-rule") return;
+      gsap.to(r, { scaleX:1, duration:2.4, ease:"power2.inOut", scrollTrigger:{ trigger:r, start:"top 92%" } });
+    });
+
+    ScrollTrigger.create({ trigger:"#ch-buy", start:"top 62%",
+      onEnter:function(){ gsap.delayedCall(.8, function(){ document.getElementById("cta-main").classList.add("drawn"); }); } });
+
+    return function(){ window.removeEventListener("pointermove", onPointer); };
+  });
+
+  /* ---- 7d. 焙煎スクラブ : 余地のある画面ではピン留め ---------- */
+  mm.add("(prefers-reduced-motion: no-preference) and (min-width: 900px) and (min-height: 720px)", function(){
+    ScrollTrigger.create(Object.assign({
+      trigger:"#roast-stage", start:"center center", end:"+=200%",
+      pin:"#roast-stage", pinSpacing:true, scrub:1, invalidateOnRefresh:true
+    }, roastCommon));
+    gsap.timeline({ scrollTrigger:{ trigger:"#roast-stage", start:"center center", end:"+=200%", scrub:1 }})
+      .fromTo("#roast-stage .statement", { letterSpacing:"0.30em" }, { letterSpacing:"0.38em", duration:1, ease:"none" }, 0);
+    return function(){};
+  });
+
+  /* 狭い・低い画面ではピンを外し、同じスクラブを版面の通過に繋ぎます */
+  mm.add("(prefers-reduced-motion: no-preference) and (max-width: 899px), (prefers-reduced-motion: no-preference) and (max-height: 719px)", function(){
+    ScrollTrigger.create(Object.assign({
+      trigger:"#roast-slot", start:"top 84%", end:"bottom 22%", scrub:1, invalidateOnRefresh:true
+    }, roastCommon));
+    return function(){};
+  });
+
+  /* =========================================================
+     8. 幾何の衛生
+     ========================================================= */
+  sizeCanvas();
+  renderRoast(STILL ? .62 : 0);
+  seqProgress(1);   /* PRODUCTION: 連番フレームのデコード数で駆動します */
+
+  readHash(true);
+  rebuildGround();
+
+  var rt = null;
+  window.addEventListener("resize", function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){ sizeCanvas(); ScrollTrigger.refresh(); }, 180);
+  }, { passive:true });
+  window.addEventListener("orientationchange", function(){
+    setTimeout(function(){ sizeCanvas(); ScrollTrigger.refresh(); }, 260);
+  }, { passive:true });
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ sizeCanvas(); ScrollTrigger.refresh(); });
+  }
+})();
+</script>

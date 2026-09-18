@@ -198,6 +198,9 @@ header nav a:hover{ color:var(--ink); }
 header nav a[aria-current="true"]{ color:var(--ink); border-bottom:1px solid var(--ink); padding-bottom:2px; }
 @media (max-width:860px){ header nav a.hide-m{ display:none; } }
 @media (max-width:620px){ header nav a.hide-s{ display:none; } }
+/* 400px 帯では、頭に残すのは商標と法人導線だけにする。節内リンクは
+   本文とフッタから辿れるので、ここで無理に詰めない。 */
+@media (max-width:520px){ header nav a[data-nav]{ display:none; } header .mark{ font-size:17px; } }
 
 /* 法人向け導線。頭と脚の両方に置く。囲みではなく、二重の髪罫。 */
 .b2b-btn{
@@ -1315,3 +1318,1384 @@ body.tab-hidden *,body.tab-hidden *::before,body.tab-hidden *::after{ animation-
     <div class="goutte" aria-hidden="true"></div>
     <p class="latin rv" style="text-align:center;margin-top:22px">2 min 30 s</p>
   </section>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       読みもの ── この頁でいちばん広い場所。
+       撮影と撮影のあいだ、このページを生かしておくのは言葉である。
+       維持するのは焙煎士自身。月に二本を目安に、写真も動画も使わず、
+       文字だけで公開できる。索引と、全文一本。
+       ══════════════════════════════════════════════════════════════ -->
+  <section id="journal" class="wrap">
+    <div class="sec-head rv">
+      <p class="lbl">Journal</p>
+      <h2>読みもの</h2>
+      <div class="rule-c" style="margin-top:26px;"></div>
+      <p class="latin" style="margin-top:22px">月に二本ほど · 焙煎士 中村 佳乃</p>
+    </div>
+
+    <article class="jr-feature rv" aria-labelledby="jr-title">
+      <div>
+        <div class="jr-meta">
+          <span class="no">第十二号</span>
+          <span>2026年9月12日</span>
+          <span>焙煎士 中村 佳乃</span>
+          <span>読了目安 約6分</span>
+        </div>
+
+        <h3 class="jr-hz-title" id="jr-title-h">火を待つ十八分のあいだに、考えていること</h3>
+
+        <div class="jr-body">
+          <p>焙煎機の前に立っている時間のほとんどは、何もしていません。豆を入れて、温度を合わせて、あとは待つ。十八分という時間は、待つには長く、何かを始めるには短い。その中途半端さが、この仕事のいちばん正直なところだと思っています。</p>
+
+          <p>開業したばかりの頃は、この十八分が怖くてたまりませんでした。何もしていないのに結果だけは確実に変わっていく。温度計の数字を見ては手を出し、風量をいじっては後悔する。焙煎の記録には、そういう余計な操作の跡がいくつも残っています。いま読み返すと、豆のことより自分の不安のことばかり書いてあります。</p>
+
+          <h3>音が変わる場所</h3>
+
+          <p>変わったきっかけは、数字を見るのをやめた日でした。温度計が壊れて、修理の部品が届くまでの二週間、音と匂いだけで焙煎するしかなくなったのです。最初の三日はひどいものでした。四日目から、豆が乾いていくときの、乾いた葉を踏むような音が聞き分けられるようになりました。一週間目には、一ハゼの二十秒前に空気の匂いが変わることに気づきました。</p>
+
+          <blockquote>数字は記録するためのもので、判断するためのものではない。判断は、いつも耳と鼻がしています。</blockquote>
+
+          <p>部品が届いて温度計が戻ってきたとき、わたしはそれを焙煎機の横ではなく、少し離れた壁に掛けました。見ようと思えば見えるけれど、立っている位置からは首を回さないと見えない場所です。それ以来、焙煎の記録には操作の回数がほとんど書かれなくなりました。書いてあるのは、いつ音が変わったか、いつ匂いが変わったか、それだけです。</p>
+
+          <h3>待つことは、何もしないことではない</h3>
+
+          <p>待つというのは、受け身の行為だと思われがちです。けれど実際には、待っているあいだじゅう、こちらは全部聞いています。ドラムが回る低い音の下に、豆どうしが当たる乾いた音が重なってくる。その重なり方が一定になったとき、水分が抜けきったことがわかります。そこから先は、一秒ごとに違う豆になっていきます。</p>
+
+          <p>だから、焙煎を止める瞬間というのは、決断というより、聞き終わることに近い。もう聞くべきことは全部聞いた、という感じがして、手が勝手にレバーを引いています。うまくいった日は、いつもそうです。迷った日は、たいてい何かを聞き逃しています。</p>
+
+          <p>お店に立っていると、「どうやって焙煎度を決めているんですか」と聞かれることがあります。正直に答えると、決めていません。豆のほうに決まる瞬間があって、こちらはそれを聞き取るだけです。そう言うと、たいてい少し困った顔をされます。もっと技術的な答えを期待されていたのだと思います。でも、十八分間ずっと立っていて、わたしが実際にしていることは、本当にそれだけなのです。</p>
+
+          <p>いま棚にある三種類は、どれも先週の火曜に焼いたものです。イルガチェフェは一ハゼの直後で止めました。あの日は雨で、音がいつもより湿って聞こえて、三十秒ほど早く手が動きました。結果としては、いままででいちばん良い焼き上がりになりました。雨の日の音の聞こえ方については、まだうまく言葉にできていません。次の号で、もう少し書けたらと思っています。</p>
+
+          <p class="note">この連載は、焙煎所での記録をそのまま文章にしたものです。毎月上旬と下旬に更新しています。読んだ感想や、こういうことが知りたいというご希望があれば、お問い合わせからお送りください。返事は遅いですが、全部読んでいます。</p>
+        </div>
+      </div>
+
+      <!-- 本ページ中ただ一箇所の縦組み。特集記事の柱。
+           A12では「季節の便り」が縦組みだったが、B1ではそれを短い
+           横組みの注記に戻し、縦組みはこの標題一箇所に移した。
+           理由：季節の便りは頻繁に書き替わる文字であり、縦組みの
+           固定高に依存させると更新のたびに組みが崩れる。 -->
+      <p class="jr-vert" id="jr-title" aria-hidden="true">
+        <span class="jr-vert-t" data-t="火を待つ十八分のあいだに、考えていること"></span>
+        <span class="d">第十二号　二〇二六年九月十二日</span>
+      </p>
+    </article>
+
+    <div class="jr-index rv">
+      <h3>既刊</h3>
+
+      <div class="jr-row">
+        <p class="n">第十一号</p>
+        <div>
+          <a href="#/journal"><p class="t">水の硬度をひと月ぶん、書き留めてみた</p></a>
+          <p class="x">同じ豆を、東京の水道水・軟水のミネラルウォーター・浄水器の三種で三十日淹れ続けた記録。結論は思っていたより地味でした。</p>
+        </div>
+        <p class="k">2026.08.28 · 抽出</p>
+      </div>
+
+      <div class="jr-row">
+        <p class="n">第十号</p>
+        <div>
+          <a href="#/journal"><p class="t">生産者からの手紙を、訳さずに読んでいる話</p></a>
+          <p class="x">イルガチェフェの農協から年に二度届く便り。うまく訳せないまま棚に並べている理由について。</p>
+        </div>
+        <p class="k">2026.08.11 · 産地</p>
+      </div>
+
+      <div class="jr-row">
+        <p class="n">第九号</p>
+        <div>
+          <a href="#/journal"><p class="t">豆を挽く音で、その日の湿度がわかる</p></a>
+          <p class="x">グラインダーの音の変化と梅雨。道具の話のようでいて、ほとんど天気の話です。</p>
+        </div>
+        <p class="k">2026.07.24 · 焙煎所</p>
+      </div>
+
+      <div class="jr-row">
+        <p class="n">第八号</p>
+        <div>
+          <a href="#/journal"><p class="t">閉店後の一杯だけは、雑に淹れる</p></a>
+          <p class="x">計量もせず、時間も計らず、ただ湯を注ぐ。十年続けているこの習慣について。</p>
+        </div>
+        <p class="k">2026.07.06 · 日々</p>
+      </div>
+
+      <div class="jr-row">
+        <p class="n">第七号</p>
+        <div>
+          <a href="#/journal"><p class="t">値上げのお知らせを書くのに、二週間かかった</p></a>
+          <p class="x">生豆価格の推移と、それを言葉にするまでの逡巡。数字と、数字にできないこと。</p>
+        </div>
+        <p class="k">2026.06.19 · 店のこと</p>
+      </div>
+
+      <div class="jr-row">
+        <p class="n">第六号</p>
+        <div>
+          <a href="#/journal"><p class="t">浅煎りが苦手だという人と、三十分話した</p></a>
+          <p class="x">酸味という言葉が指しているものが、人によってまるで違うということに気づいた日の記録。</p>
+        </div>
+        <p class="k">2026.06.02 · 味のこと</p>
+      </div>
+
+      <p class="ops-note">
+        運用メモ ／ 読みものは文章だけで成立します。撮影も画像加工も不要で、書いた日に公開できます。
+        映像の差し替えが年一回で足りるのは、頁を生かし続ける役目をこの節が引き受けているからです。
+      </p>
+    </div>
+  </section>
+
+  <!-- ══ 今月の一杯 ══ 映像なし。ここで頁は沈黙する。 ═══════════ -->
+  <section id="note" class="wrap">
+    <div class="sec-head rv" style="margin-bottom:0">
+      <p class="lbl">Ce mois-ci</p>
+      <h2>今月の一杯</h2>
+    </div>
+    <p class="n-body rv">
+      九月。朝の空気が澄みはじめると、豆の香りの立ち方が静かに変わります。
+      夏のあいだ遠ざけていた中浅煎りを、今月から少しずつ棚に戻しました。
+      余韻の長い一杯を、窓辺でどうぞ。
+    </p>
+    <p class="sig rv">
+      焙煎士　中村 佳乃<br>
+      <span class="cachet" id="cachet" aria-hidden="true">ソ</span>
+    </p>
+    <p class="latin rv" style="margin-top:26px">Septembre 2026 — 映像なし／文字のみ・毎月書き替え</p>
+  </section>
+
+  <!-- ══ 購入 ══ 購入はこの頁では起こらない。必ず外に出る。 ══════ -->
+  <section id="buy" class="wrap">
+    <p class="lbl rv">Commander</p>
+    <h2 class="rv">はじめての方へ、<br>三種の飲み比べを。</h2>
+
+    <div class="actions rv">
+      <!-- 唯一の購入導線。Square オンラインビジネスの店舗へ出る。
+           href は仮置き（https://example.square.site/）。本番では
+           クライアントの Square Online のドメインに差し替える。
+           カート・数量・価格の状態はこの頁が一切持たない。 -->
+      <a class="ext ext-lead" id="cta"
+         href="https://example.square.site/?utm_source=soigne_lp&utm_medium=owned&utm_campaign=lp_2026&utm_content=commander_primary"
+         target="_blank" rel="noopener noreferrer">
+        オンラインストアへ
+        <svg class="arrow" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M4.2 1.2H10.8V7.8M10.8 1.2L5.4 6.6M9 7.6V10.8H1.2V3H4.4"/>
+        </svg>
+        <span class="sr-only">（Square オンラインストア・新しいタブで開きます）</span>
+      </a>
+      <a class="ext ext-sm"
+         href="https://example.square.site/?utm_source=soigne_lp&utm_medium=owned&utm_campaign=lp_2026&utm_content=abonnement"
+         target="_blank" rel="noopener noreferrer">
+        定期便について
+        <svg class="arrow" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M4.2 1.2H10.8V7.8M10.8 1.2L5.4 6.6M9 7.6V10.8H1.2V3H4.4"/>
+        </svg>
+        <span class="sr-only">（Square オンラインストア・新しいタブで開きます）</span>
+      </a>
+      <p class="ext-note">
+        ご注文とお支払いは Square オンラインビジネスの店舗で承ります。<br>
+        リンクは新しいタブで開きます。この頁に買い物かごはありません。
+      </p>
+    </div>
+
+    <p class="note rv">
+      焙煎日から二日以内に発送。¥5,000 以上のお買い上げで送料無料。<br>
+      100g×3種のテイスティングセット ¥2,860（送料込）。
+    </p>
+
+    <div class="b2b-inline rv">
+      <p>カフェ・飲食店・宿泊施設・オフィス・小売店さまへの卸販売も承っています。</p>
+      <a class="b2b-btn" href="#/wholesale">法人向けはこちら — 卸販売のご案内</a>
+    </div>
+  </section>
+
+</div><!-- /#view-home -->
+
+<!-- ══════════════════════════════════════════════════════════════════
+     画面 2 ／ #/wholesale — 法人向け卸販売
+     同じヘッダ、同じフッタ、同じ書体、同じ配色、同じ罫。
+     変えるのは語り口だけ。読む頁ではなく、調べる頁。
+     一字ずつの定位もスクラブも縦組みも使わない。図版は一枚だけ。
+     ══════════════════════════════════════════════════════════════════ -->
+<div class="view" id="view-wholesale" data-route="wholesale" tabindex="-1" aria-label="法人向け卸販売" hidden>
+
+  <section id="wholesale-top" class="wrap">
+    <div class="wh-lead">
+      <div>
+        <p class="lbl">Vente en gros — 法人のお客さま</p>
+        <h1 id="wh-h1">卸販売のご案内</h1>
+        <div class="d">
+          <p>カフェ・レストラン・宿泊施設・オフィス・小売店さまへ、自家焙煎の珈琲豆を卸しています。週に一度、火曜に焙煎し、焼き上がりから二営業日以内に出荷します。</p>
+          <p>小規模の焙煎所です。大量供給には向きませんが、豆の選定から抽出レシピの設計、スタッフの方への研修までを、焙煎士が直接ご一緒します。まずは無償のサンプル（100g×2種）をお送りするところから始めてください。</p>
+        </div>
+
+        <div class="wh-facts">
+          <div><span class="k">最低ロット</span><span class="v">1kg（500g×2袋）から。初回は 2kg 以上を推奨</span></div>
+          <div><span class="k">価格帯</span><span class="v">1kg あたり ¥4,200 〜 ¥7,600（税別・数量により逓減）</span></div>
+          <div><span class="k">納期</span><span class="v">ご発注から 3〜5 営業日（定期便は指定曜日に固定）</span></div>
+          <div><span class="k">支払</span><span class="v">初回は前払い、二回目以降は月末締め翌月末払い</span></div>
+          <div><span class="k">サンプル</span><span class="v">100g×2種まで無償（送料当方負担・法人さま限定）</span></div>
+        </div>
+
+        <p style="margin-top:clamp(28px,4vh,44px)">
+          <a class="b2b-btn" href="#/wholesale/contact">お問い合わせフォームへ</a>
+        </p>
+      </div>
+
+      <!-- ─────────────────────────────────────────────────────────────
+           図版 4 ／ MEDIA SLOT V-04 · hands-packing-loop · 3:2 · 10 秒
+           卸の頁に置く唯一の図版。同じ素材を消費者側の将来の増補にも
+           使い回せるよう、比率だけ 3:2 にしてある。
+
+           PRODUCTION MARKUP — .ph を削除してこれを入れる：
+
+           <video id="v-pack"
+                  class="media"
+                  data-media="hands-packing-loop"
+                  muted playsinline webkit-playsinline loop
+                  preload="metadata"
+                  disablepictureinpicture disableremoteplayback
+                  poster="/media/poster/pack-1280.avif"
+                  aria-hidden="true" tabindex="-1"
+                  style="width:100%;height:100%;object-fit:cover">
+             <source src="/media/pack-1280.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+             <source src="/media/pack-1280.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+           </video>
+
+           · 業務用の 1kg 袋に豆を移し、秤に載せ、口を折る手元。
+             ロゴも品名も写さない。したがって商品が替わっても撮り直さない。
+           · 常緑素材。差し替えは年1回。
+           ───────────────────────────────────────────────────────────── -->
+      <figure class="plate" id="wh-plate" data-media="hands-packing-loop">
+        <div class="frame">
+          <div class="ph">
+            <div class="ph-field" style="filter:saturate(.88) brightness(.99)"></div>
+            <div class="ph-rake" style="animation-duration:34s"></div>
+            <svg viewBox="0 0 900 600" aria-hidden="true">
+              <!-- 秤 -->
+              <rect x="96" y="386" width="260" height="14" fill="rgba(24,27,57,.12)" stroke="rgba(24,27,57,.26)" stroke-width="1"/>
+              <rect x="150" y="400" width="152" height="52" fill="none" stroke="rgba(24,27,57,.20)" stroke-width="1"/>
+              <path d="M186 424 H266" stroke="rgba(24,27,57,.26)" stroke-width="1"/>
+              <!-- 1kg の袋 -->
+              <path d="M420 208 H700 L686 452 H434 Z" fill="rgba(24,27,57,.07)" stroke="rgba(24,27,57,.28)" stroke-width="1.2"/>
+              <path d="M420 208 L444 168 H676 L700 208" fill="rgba(24,27,57,.04)" stroke="rgba(24,27,57,.24)" stroke-width="1.2"/>
+              <path d="M444 168 H676" stroke="rgba(24,27,57,.18)" stroke-width="1"/>
+              <rect x="486" y="286" width="148" height="86" fill="none" stroke="rgba(24,27,57,.18)" stroke-width="1"/>
+              <path d="M510 316 H610 M510 338 H586" stroke="rgba(24,27,57,.16)" stroke-width="1"/>
+              <!-- 手とスクープ -->
+              <path d="M760 240 C 700 258, 676 296, 682 336" fill="none" stroke="rgba(24,27,57,.26)" stroke-width="1.6" stroke-linecap="round"/>
+              <ellipse cx="672" cy="352" rx="44" ry="20" fill="rgba(150,80,31,.15)" stroke="rgba(24,27,57,.22)" stroke-width="1"/>
+              <!-- 作業台 -->
+              <path d="M60 452 H840" stroke="rgba(24,27,57,.20)" stroke-width="1"/>
+              <ellipse cx="450" cy="492" rx="330" ry="18" fill="rgba(24,27,57,.04)"/>
+            </svg>
+          </div>
+        </div>
+        <figcaption class="cap">
+          <span class="fig">図 4</span>
+          <span>V-04 · <b>Hands / packing · 3:2 · 10 s loop</b> · 固定・無音 · 常緑素材（差し替え 年1回）</span>
+          <span>AV1 0.8 MB ／ H.264 1.4 MB</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="wh-sec wrap" id="flow">
+    <h2>取引の流れ<span class="en">Processus</span></h2>
+    <p class="lead">お問い合わせから初回納品まで、通常は 2〜3 週間です。急ぎの場合はその旨をフォームにお書きください。</p>
+    <ol class="flow">
+      <li>
+        <span class="step-n"></span>
+        <span class="step-t">お問い合わせ</span>
+        <span><span class="step-d">下のフォーム、またはお電話で。業態・想定使用量・抽出器具をお知らせください。</span><span class="step-when">当日〜翌営業日に返信</span></span>
+      </li>
+      <li>
+        <span class="step-n"></span>
+        <span class="step-t">サンプル送付</span>
+        <span><span class="step-d">ご要望に近い豆を 100g×2種、無償でお送りします。焙煎度違いの比較も承ります。</span><span class="step-when">3営業日以内に発送</span></span>
+      </li>
+      <li>
+        <span class="step-n"></span>
+        <span class="step-t">試飲とご相談</span>
+        <span><span class="step-d">お使いの器具・水・グラインダーに合わせて、抽出レシピをこちらで組み直します。ご来店・訪問・オンラインのいずれでも。</span><span class="step-when">約1週間</span></span>
+      </li>
+      <li>
+        <span class="step-n"></span>
+        <span class="step-t">お見積りと条件のご確認</span>
+        <span><span class="step-d">数量・焙煎度・挽き・包装形態・配送曜日・支払条件を書面でお出しします。</span><span class="step-when">2営業日以内</span></span>
+      </li>
+      <li>
+        <span class="step-n"></span>
+        <span class="step-t">初回ご発注・お取引開始</span>
+        <span><span class="step-d">初回のみ前払い。二回目以降は月末締め翌月末払いに切り替わります。</span><span class="step-when">発注から3〜5営業日で納品</span></span>
+      </li>
+      <li>
+        <span class="step-n"></span>
+        <span class="step-t">定期便への移行（任意）</span>
+        <span><span class="step-d">数量と曜日が固まった段階で、毎週・隔週の自動発注に切り替えられます。数量変更は前週水曜まで受付。</span><span class="step-when">随時</span></span>
+      </li>
+    </ol>
+  </section>
+
+  <section class="wh-sec wrap" id="formats">
+    <h2>提供形態<span class="en">Formats</span></h2>
+    <p class="lead">同じ豆を、用途に合わせた形でお出しします。挽きの指定は無償です。</p>
+    <div class="wh-cols three">
+      <div class="wh-col">
+        <span class="k">01</span>
+        <h3>業務用 1kg 袋（豆）</h3>
+        <p>脱気バルブ付きのクラフト袋。最も一般的な形態で、価格も最も抑えられます。開封後は密閉容器へ。</p>
+        <ul>
+          <li>焙煎日を袋に直接記載</li>
+          <li>1kg / 500g の二種</li>
+        </ul>
+      </div>
+      <div class="wh-col">
+        <span class="k">02</span>
+        <h3>業務用 1kg 袋（挽き）</h3>
+        <p>エスプレッソ・ペーパードリップ・フレンチプレス・コーヒーメーカー用に、挽き目を指定いただけます。</p>
+        <ul>
+          <li>挽き目の指定は無償</li>
+          <li>香りの持ちを考え、500g 袋を推奨</li>
+        </ul>
+      </div>
+      <div class="wh-col">
+        <span class="k">03</span>
+        <h3>小売用 200g 袋</h3>
+        <p>店頭で販売される場合の形態。ラベルは当店のもの、または共同名義のものをお選びいただけます。</p>
+        <ul>
+          <li>掛け率は別途ご相談</li>
+          <li>共同名義ラベルは最低 60 袋から</li>
+        </ul>
+      </div>
+      <div class="wh-col">
+        <span class="k">04</span>
+        <h3>ドリップバッグ</h3>
+        <p>客室・会議室・物販用。窒素充填の個包装で、賞味期限は製造から 8 か月です。</p>
+        <ul>
+          <li>最低 200 個から</li>
+          <li>名入れ可（別途 2 週間）</li>
+        </ul>
+      </div>
+      <div class="wh-col">
+        <span class="k">05</span>
+        <h3>オフィス向け定期便</h3>
+        <p>豆または挽きを月 2 回お届けし、グラインダーの貸出も行っています。</p>
+        <ul>
+          <li>月 4kg 以上でグラインダー無償貸与</li>
+          <li>請求は月まとめ</li>
+        </ul>
+      </div>
+      <div class="wh-col">
+        <span class="k">06</span>
+        <h3>オリジナルブレンド</h3>
+        <p>ご提供のメニューに合わせて配合を設計します。継続前提のご依頼に限ります。</p>
+        <ul>
+          <li>設計費 無償（月 8kg 以上の継続が条件）</li>
+          <li>設計期間 約 4 週間</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="wh-sec wrap" id="price">
+    <h2>最低ロットと価格帯の考え方<span class="en">Lots et tarifs</span></h2>
+    <p class="lead">
+      価格は生豆の仕入値に連動するため、固定の卸価格表は設けていません。下表は目安です。
+      正式なお見積りは、豆・数量・形態・配送頻度を伺ったうえで書面でお出しします。
+    </p>
+    <div class="table-scroll">
+      <table class="wh-table">
+        <caption>月間使用量の目安と 1kg あたりの価格帯（税別・2026年9月時点）</caption>
+        <thead>
+          <tr>
+            <th scope="col">月間使用量</th>
+            <th scope="col">1kg あたり</th>
+            <th scope="col">最低発注</th>
+            <th scope="col">配送</th>
+            <th scope="col">支払条件</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">〜 5kg</th>
+            <td class="num">¥6,800 〜 ¥7,600</td>
+            <td class="num">1kg</td>
+            <td>宅配便・実費</td>
+            <td>前払い</td>
+          </tr>
+          <tr>
+            <th scope="row">5 〜 20kg</th>
+            <td class="num">¥5,600 〜 ¥6,800</td>
+            <td class="num">2kg</td>
+            <td>月 4kg 以上で送料無料</td>
+            <td>月末締め翌月末</td>
+          </tr>
+          <tr>
+            <th scope="row">20 〜 50kg</th>
+            <td class="num">¥4,800 〜 ¥5,600</td>
+            <td class="num">5kg</td>
+            <td>送料無料</td>
+            <td>月末締め翌月末</td>
+          </tr>
+          <tr>
+            <th scope="row">50kg 〜</th>
+            <td class="num">¥4,200 〜 ¥4,800</td>
+            <td class="num">10kg</td>
+            <td>送料無料・都内は自社配送も可</td>
+            <td>月末締め翌月末</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="wh-cols" style="margin-top:clamp(28px,4vh,44px)">
+      <div class="wh-col">
+        <span class="k">価格が動くとき</span>
+        <h3>年 2 回の見直し</h3>
+        <p>生豆の相場と為替を踏まえ、4 月と 10 月に見直します。改定する場合は、適用の 6 週間前までに書面でお知らせします。期中の一方的な改定は行いません。</p>
+      </div>
+      <div class="wh-col">
+        <span class="k">下限を設けている理由</span>
+        <h3>1kg から承る理由</h3>
+        <p>週に一度しか火を入れないため、1kg 未満の焙煎は焼き上がりが安定しません。開業前・少量からのお取引は、まず 1kg でお試しください。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wh-sec wrap" id="delivery">
+    <h2>納期と配送<span class="en">Livraison</span></h2>
+    <div class="wh-cols three">
+      <div class="wh-col">
+        <span class="k">焙煎日</span>
+        <h3>毎週火曜</h3>
+        <p>前週金曜 17:00 までのご発注分を、火曜に焙煎します。それ以降のご発注は翌週の火曜分となります。</p>
+      </div>
+      <div class="wh-col">
+        <span class="k">出荷</span>
+        <h3>焙煎から 2 営業日以内</h3>
+        <p>ガス抜きのため、焙煎当日の出荷は行いません。水曜または木曜に発送し、関東圏は翌日、その他の地域は翌々日に着きます。</p>
+      </div>
+      <div class="wh-col">
+        <span class="k">自社配送</span>
+        <h3>都内 23 区・水曜</h3>
+        <p>月 20kg 以上のお取引先には、水曜午前に焙煎士が直接お届けしています。そのまま試飲と調整を行うことも多いです。</p>
+      </div>
+      <div class="wh-col">
+        <span class="k">緊急時</span>
+        <h3>在庫の融通</h3>
+        <p>切らしてしまった場合は、店頭在庫から当日中にお回しできることがあります。まずお電話ください。</p>
+      </div>
+      <div class="wh-col">
+        <span class="k">長期休業</span>
+        <h3>年末年始・8 月中旬</h3>
+        <p>年 2 回、それぞれ 1 週間ほど焙煎を止めます。前後 2 週間分をまとめてお届けする形で調整します。</p>
+      </div>
+      <div class="wh-col">
+        <span class="k">返品</span>
+        <h3>品質に起因する場合</h3>
+        <p>異物・焙煎不良・配送中の破損は、着荷から 7 日以内のご連絡で全量交換します。それ以外の返品は承っていません。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wh-sec wrap" id="support">
+    <h2>抽出サポートと研修<span class="en">Formation</span></h2>
+    <p class="lead">
+      豆をお渡しして終わりにはしません。同じ豆でも、器具と水と手順が変われば別のものになります。
+      以下はすべて、卸のお取引に含まれる無償の範囲です（交通費実費のみ申し受けます）。
+    </p>
+    <div class="wh-cols">
+      <div class="wh-col">
+        <span class="k">導入時</span>
+        <h3>レシピ設計（約 2 時間）</h3>
+        <p>お使いのグラインダー・抽出器具・水で実際に淹れ、粉量・湯温・時間・挽き目を決めます。決めた数値は 1 枚の紙にまとめてお渡しし、厨房に貼っていただく形にしています。</p>
+      </div>
+      <div class="wh-col">
+        <span class="k">導入後</span>
+        <h3>スタッフ研修（約 3 時間・随時）</h3>
+        <p>新しく入られた方向けに、焙煎所または貴店で実施します。味の言葉の揃え方、器具の手入れ、粉の保管まで。年に何度でも構いません。</p>
+      </div>
+      <div class="wh-col">
+        <span class="k">継続</span>
+        <h3>季節ごとの再調整</h3>
+        <p>湿度と水温が変わると、同じレシピでも味は動きます。年 2 回、こちらから連絡して数値を見直します。</p>
+      </div>
+      <div class="wh-col">
+        <span class="k">販促</span>
+        <h3>産地資料・POP の提供</h3>
+        <p>産地・精製・生産者の情報を、そのまま掲示できる体裁でお渡しします。メニュー原稿の下書きもお手伝いします。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wh-sec wrap" id="cases">
+    <h2>導入形態の例<span class="en">Exemples</span></h2>
+    <p class="lead">実際のお取引に近い、代表的な三つの形です。金額は 2026 年 9 月時点の目安です。</p>
+    <div class="wh-cols three">
+      <div class="wh-col">
+        <span class="k">カフェ（客席 18 席・都内）</span>
+        <h3>月 12kg ／ 週 1 回納品</h3>
+        <p>エスプレッソ用ブレンド 8kg と、シングルオリジン 2 種を各 2kg。挽きは店内で。導入時にレシピ設計、半年後にスタッフ研修を実施。</p>
+        <ul>
+          <li>1kg 袋・豆のまま</li>
+          <li>月額 目安 ¥72,000（税別）</li>
+        </ul>
+      </div>
+      <div class="wh-col">
+        <span class="k">宿泊施設（客室 32 室）</span>
+        <h3>月 1,200 個 ／ 月 2 回納品</h3>
+        <p>客室備品としてのドリップバッグ。館内の朝食用に豆 6kg を併せて納品。名入れパッケージ。</p>
+        <ul>
+          <li>ドリップバッグ＋1kg 袋</li>
+          <li>月額 目安 ¥138,000（税別）</li>
+        </ul>
+      </div>
+      <div class="wh-col">
+        <span class="k">オフィス（在籍 60 名）</span>
+        <h3>月 8kg ／ 月 2 回納品</h3>
+        <p>執務フロアのグラインダー付きマシン向け。豆のまま納品し、グラインダーは無償貸与。請求は月まとめ。</p>
+        <ul>
+          <li>500g 袋・豆のまま</li>
+          <li>月額 目安 ¥49,000（税別）</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="wh-sec wrap" id="faq">
+    <h2>よくあるご質問<span class="en">Questions fréquentes</span></h2>
+    <div class="faq">
+      <details>
+        <summary>個人事業主でも取引できますか。</summary>
+        <div class="a"><p>できます。開業前のご相談も承っています。その場合は初回から数回、前払いでお願いすることがあります。</p></div>
+      </details>
+      <details>
+        <summary>他社の豆と併用しても構いませんか。</summary>
+        <div class="a"><p>構いません。専売のお願いはしていません。むしろ、うちの豆が向かない用途については正直にお伝えします。</p></div>
+      </details>
+      <details>
+        <summary>焙煎度は指定できますか。</summary>
+        <div class="a"><p>できます。ただし浅煎りと深煎りでは同じ豆でも適性が異なるため、まずサンプルで二種を比べていただくようお願いしています。</p></div>
+      </details>
+      <details>
+        <summary>急に数量が増えた場合、対応できますか。</summary>
+        <div class="a"><p>週の焙煎能力に上限があるため、前週金曜までのご連絡であれば概ね対応できます。それ以降は店頭在庫からの融通になります。継続的に増える見込みがある場合は、早めにご相談ください。</p></div>
+      </details>
+      <details>
+        <summary>納品書・請求書の形式を指定できますか。</summary>
+        <div class="a"><p>適格請求書発行事業者です。登録番号は請求書に記載しています。指定の書式がある場合はお送りください。電子帳簿保存法に対応した PDF での発行も可能です。</p></div>
+      </details>
+      <details>
+        <summary>契約書は必要ですか。</summary>
+        <div class="a"><p>通常は発注書と請書のみで、基本契約書は締結していません。貴社の規定で必要な場合は、ご用意いただいた書式を確認のうえ締結します。</p></div>
+      </details>
+      <details>
+        <summary>取引先として名前を出してもらえますか。</summary>
+        <div class="a"><p>ご希望があれば、読みもののなかでご紹介することがあります。無断では掲載しません。逆に、当店の名前を貴店のメニューに出していただくことも歓迎です。</p></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="wh-sec wrap" id="contact">
+    <h2>お問い合わせ<span class="en">Nous contacter</span></h2>
+    <p class="lead">
+      ご返信は当日〜翌営業日（水曜定休）です。お急ぎの場合はお電話が確実です。
+      <br>電話 03-0000-0000（11:00–18:00 ／ 水曜定休）　メール wholesale@example.com
+    </p>
+
+    <div class="form-wrap">
+      <!-- 失敗時の要約。送信に失敗したときだけ現れ、そこへ焦点が移る。
+           各項目の直下にある個別のエラー文は消さない（要約は補助であって
+           置き換えではない）。 -->
+      <div class="errsum" id="errSummary" role="alert" tabindex="-1" aria-labelledby="errSummaryTitle" hidden>
+        <h3 id="errSummaryTitle">入力内容をご確認ください</h3>
+        <ul id="errSummaryList"></ul>
+      </div>
+
+      <!-- この試作に送信先はない。本番での接続方法は .md に記載。
+           novalidate を付けているのは、ブラウザ既定の吹き出しではなく
+           項目の直下に日本語のエラーを出すため。検証自体は行う。 -->
+      <form id="whForm" novalidate>
+
+        <div class="field">
+          <label for="f-company">会社名・店舗名<span class="req">必須</span></label>
+          <input type="text" id="f-company" name="company" autocomplete="organization"
+                 required aria-describedby="e-company">
+          <span class="err" id="e-company"></span>
+        </div>
+
+        <div class="field">
+          <label for="f-name">ご担当者名<span class="req">必須</span></label>
+          <input type="text" id="f-name" name="name" autocomplete="name"
+                 required aria-describedby="e-name">
+          <span class="err" id="e-name"></span>
+        </div>
+
+        <div class="field">
+          <label for="f-email">メールアドレス<span class="req">必須</span></label>
+          <input type="email" id="f-email" name="email" autocomplete="email"
+                 inputmode="email" required aria-describedby="e-email">
+          <span class="err" id="e-email"></span>
+        </div>
+
+        <div class="field">
+          <label for="f-tel">電話番号</label>
+          <p class="hint" id="h-tel">日中つながる番号をお書きいただけると早く進みます。</p>
+          <input type="tel" id="f-tel" name="tel" autocomplete="tel"
+                 inputmode="tel" aria-describedby="h-tel e-tel">
+          <span class="err" id="e-tel"></span>
+        </div>
+
+        <div class="field">
+          <label for="f-type">業態<span class="req">必須</span></label>
+          <select id="f-type" name="type" required aria-describedby="e-type">
+            <option value="">選択してください</option>
+            <option>カフェ・喫茶</option>
+            <option>レストラン・バー</option>
+            <option>ホテル・宿泊施設</option>
+            <option>オフィス・企業内利用</option>
+            <option>小売・物販</option>
+            <option>菓子製造・加工</option>
+            <option>開業準備中</option>
+            <option>その他</option>
+          </select>
+          <span class="err" id="e-type"></span>
+        </div>
+
+        <div class="field">
+          <label for="f-volume">想定月間使用量<span class="req">必須</span></label>
+          <select id="f-volume" name="volume" required aria-describedby="e-volume">
+            <option value="">選択してください</option>
+            <option>〜 5kg</option>
+            <option>5 〜 20kg</option>
+            <option>20 〜 50kg</option>
+            <option>50kg 以上</option>
+            <option>まだ分からない</option>
+          </select>
+          <span class="err" id="e-volume"></span>
+        </div>
+
+        <div class="field">
+          <label for="f-start">導入希望時期</label>
+          <input type="month" id="f-start" name="start" aria-describedby="e-start">
+          <span class="err" id="e-start"></span>
+        </div>
+
+        <div class="field">
+          <label for="f-body">ご相談内容<span class="req">必須</span></label>
+          <p class="hint" id="h-body">お使いの抽出器具・グラインダー、現在お使いの豆、ご予算の目安など、分かる範囲でお書きください。</p>
+          <textarea id="f-body" name="body" required aria-describedby="h-body e-body"></textarea>
+          <span class="err" id="e-body"></span>
+        </div>
+
+        <div class="field check">
+          <input type="checkbox" id="f-sample" name="sample" value="yes">
+          <label for="f-sample">サンプル（100g×2種・無償）の送付を希望する</label>
+        </div>
+
+        <div class="field check">
+          <input type="checkbox" id="f-agree" name="agree" value="yes" required aria-describedby="e-agree">
+          <label for="f-agree">個人情報の取り扱いに同意する（ご連絡とお見積りの目的にのみ使用し、第三者には提供しません）<span class="req">必須</span></label>
+          <span class="err" id="e-agree" style="flex:0 0 100%;margin-left:28px;"></span>
+        </div>
+
+        <!-- 迷惑投稿対策の空欄。人には見えず、スクリーンリーダーにも読まれない。 -->
+        <div aria-hidden="true" style="position:absolute;left:-9999px" hidden>
+          <label for="f-hp">この欄は入力しないでください</label>
+          <input type="text" id="f-hp" name="company_url" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="submit" type="submit">送信する</button>
+        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      </form>
+
+      <p class="proto-note">
+        Prototype note ／ この試作に送信先はありません。本番での接続方法（検証・保存・通知・迷惑投稿対策・
+        個人情報の取り扱い）は concept-b1-light.md の「法人向けページ」節に記載しています。
+      </p>
+    </div>
+  </section>
+
+</div><!-- /#view-wholesale -->
+
+</main>
+
+<footer class="wrap">
+  <div class="f-grid">
+    <div>
+      <p class="fmark">Soigné</p>
+      <p style="margin-top:12px;">ソワニエ コーヒーロースタリー<br>東京都目黒区青葉台 1-2-3<br>11:00–18:00 ／ 水曜定休</p>
+    </div>
+    <ul>
+      <li><a href="#/beans">取扱いの豆</a></li>
+      <li><a href="#/roast">焙煎について</a></li>
+      <li><a href="#/journal">読みもの</a></li>
+      <li><a href="#/note">今月の一杯</a></li>
+    </ul>
+    <ul>
+      <li>
+        <a class="ext ext-sm"
+           href="https://example.square.site/?utm_source=soigne_lp&utm_medium=owned&utm_campaign=lp_2026&utm_content=footer_store"
+           target="_blank" rel="noopener noreferrer">
+          オンラインストア
+          <svg class="arrow" viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M4.2 1.2H10.8V7.8M10.8 1.2L5.4 6.6M9 7.6V10.8H1.2V3H4.4"/>
+          </svg>
+          <span class="sr-only">（Square オンラインストア・新しいタブで開きます）</span>
+        </a>
+      </li>
+      <li><a href="#/wholesale">法人向け卸販売</a></li>
+      <li><a href="#/wholesale/contact">お問い合わせ</a></li>
+      <li><a href="#/">特定商取引法に基づく表記</a></li>
+      <li><a href="#/">プライバシーポリシー</a></li>
+    </ul>
+    <div>
+      <a class="b2b-btn" href="#/wholesale">法人向けはこちら</a>
+    </div>
+  </div>
+  <p class="legal">© 2026 Soigné Coffee Roastery — Torréfié à Tokyo · 決済は Square オンラインビジネスで行われます</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     0. 一字ずつに割る（ヒーローの標題と、縦組みの柱）
+     ========================================================= */
+  function split(el, cls){
+    if (!el) return;
+    var t = el.getAttribute("data-t") || "";
+    el.textContent = "";
+    for (var i = 0; i < t.length; i++){
+      var s = document.createElement("span");
+      s.className = cls; s.textContent = t[i];
+      el.appendChild(s);
+    }
+  }
+  split(document.getElementById("wordmark"), "ch");
+  document.querySelectorAll("#heroline .ln").forEach(function(ln){ split(ln, "ch"); });
+  split(document.querySelector(".jr-vert-t"), "ch");
+
+  /* =========================================================
+     1. 回線と設定の関門
+        Save-Data と 2g/slow-2g は prefers-reduced-motion と
+        まったく同じ地点に着く：ポスター、ループなし、取得なし。
+     ========================================================= */
+  var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  var saveData = !!(conn && (conn.saveData === true ||
+                    /^(slow-)?2g$/.test(conn.effectiveType || "")));
+  var reduceQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (saveData) document.body.classList.add("still");
+  var STILL = saveData || reduceQ.matches;
+
+  /* =========================================================
+     2. ルータ — #/ と #/wholesale
+        規則は一つだけ：ハッシュの第一区画が "wholesale" なら卸の画面、
+        それ以外は家の画面。第二区画（家では第一区画）は節の id。
+          #/                    家・先頭
+          #/beans               家・「取扱いの豆」へ
+          #/wholesale           卸・先頭
+          #/wholesale/contact   卸・「お問い合わせ」へ
+        戻る／進む、直リンク、焦点、スクロール位置をすべて扱う。
+     ========================================================= */
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+  var views = {
+    home:      document.getElementById("view-home"),
+    wholesale: document.getElementById("view-wholesale")
+  };
+  var routeNames = { home:"ソワニエ コーヒーロースタリー", wholesale:"法人向け卸販売" };
+  var routeStatus = document.getElementById("routeStatus");
+  var b2bBtn = document.getElementById("b2bBtn");
+  var railEl = document.getElementById("rail");
+  var scrollMem = { home:0, wholesale:0 };
+  var current = null;
+  var resetNext = null;   /* クリック経由で「先頭から」入るときに立つ */
+  var first = true;       /* 読み込み直後の一回目かどうか */
+
+  function parseHash(){
+    var raw = (location.hash || "").replace(/^#\/?/, "");
+    var seg = raw.split("/").filter(Boolean);
+    if (seg[0] === "wholesale") return { route:"wholesale", target: seg[1] || null };
+    return { route:"home", target: seg[0] || null };
+  }
+
+  function headerOffset(){
+    var h = document.querySelector("header");
+    return (h ? h.offsetHeight : 64) + 14;
+  }
+
+  function scrollToId(id){
+    var el = id && document.getElementById(id);
+    if (!el) return false;
+    var y = el.getBoundingClientRect().top + window.scrollY - headerOffset();
+    window.scrollTo(0, Math.max(0, y));
+    return true;
+  }
+
+  function syncNav(route){
+    document.querySelectorAll("header nav a[data-nav]").forEach(function(a){
+      a.hidden = (a.getAttribute("data-nav") !== route);
+    });
+    if (route === "wholesale"){
+      b2bBtn.textContent = "個人のお客さまへ";
+      b2bBtn.setAttribute("href", "#/");
+      b2bBtn.setAttribute("aria-current", "false");
+      if (railEl) railEl.style.visibility = "hidden";
+    } else {
+      b2bBtn.textContent = "法人向けはこちら";
+      b2bBtn.setAttribute("href", "#/wholesale");
+      b2bBtn.removeAttribute("aria-current");
+      if (railEl) railEl.style.visibility = "";
+    }
+  }
+
+  function applyRoute(){
+    var r = parseHash();
+    var changed = (r.route !== current);
+
+    if (changed){
+      if (current){ scrollMem[current] = window.scrollY; }
+      Object.keys(views).forEach(function(k){
+        var v = views[k], on = (k === r.route);
+        v.hidden = !on;
+        v.setAttribute("aria-hidden", on ? "false" : "true");
+      });
+      syncNav(r.route);
+      current = r.route;
+
+      /* 焦点は画面の容れ物へ移す。閉じ込めない。スクロールは別に決める。
+         初回表示（読み込み直後）では焦点を奪わない。奪うのは、
+         人が画面を切り替えたときだけ。 */
+      if (first){
+        first = false;
+      } else {
+        try { views[r.route].focus({ preventScroll:true }); }
+        catch(e){ views[r.route].focus(); }
+        if (routeStatus) routeStatus.textContent = routeNames[r.route] + "の画面を表示しました。";
+      }
+
+      if (resetNext === r.route){ scrollMem[r.route] = 0; }
+      resetNext = null;
+
+      /* 節が指定されていればそこへ。無ければ、その画面で前にいた位置へ。
+         初回は 0（先頭）。戻る／進むで往復しても読んでいた場所に返る。 */
+      if (!(r.target && scrollToId(r.target))){
+        window.scrollTo(0, scrollMem[r.route] || 0);
+      }
+
+      /* 版面の寸法が総入れ替えになる。二度測り直す（描画後に一度）。 */
+      if (window.ScrollTrigger){
+        ScrollTrigger.refresh();
+        requestAnimationFrame(function(){ ScrollTrigger.refresh(); });
+        setTimeout(function(){ ScrollTrigger.refresh(); }, 260);
+      }
+    } else if (r.target){
+      scrollToId(r.target);
+    }
+  }
+
+  /* 同じ画面のままの節内リンクでも、別画面へ渡るリンクでも、
+     「先頭から入るべきクリック」だけは記憶位置を捨てる。
+     戻る／進む（hashchange のみ）は記憶位置を保つ。 */
+  document.addEventListener("click", function(e){
+    var a = e.target.closest ? e.target.closest('a[href^="#/"]') : null;
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    var raw = href.replace(/^#\/?/, "");
+    var seg = raw.split("/").filter(Boolean);
+    var route = (seg[0] === "wholesale") ? "wholesale" : "home";
+    var target = (route === "wholesale") ? seg[1] : seg[0];
+    if (!target && route !== current) resetNext = route;
+    /* 同じハッシュを押し直したときも反応させる */
+    if (href === location.hash){ e.preventDefault(); applyRoute(); }
+  }, true);
+
+  window.addEventListener("hashchange", applyRoute);
+  if (!location.hash) { try { history.replaceState(null, "", "#/"); } catch(e){} }
+  applyRoute();
+
+  /* =========================================================
+     3. 焙煎の版（図版 2）
+        試作では canvas が 0→1 の単一の値から決定論的に一コマを
+        描く。本番の連番フレームとまったく同じ読み出しで、
+            paintRoast(t) → ctx.drawImage(frames[idx], 0, 0, w, h)
+        に置き換わるだけ。スクロールの配線はこのまま本番で使える。
+
+        白地での作法：t=0 では版面は紙にほぼ等しい淡さで始まり、
+        焙煎が進むほど沈む。白い頁で最も効く「動き」は明滅ではなく、
+        図版がゆっくり重くなっていくことである。
+     ========================================================= */
+  var cvs = document.getElementById("roastCanvas");
+  var ctx = cvs ? cvs.getContext("2d", { alpha:false }) : null;
+  var cw = 0, chh = 0;
+
+  function sizeCanvas(){
+    if (!cvs || !ctx) return;
+    var r = cvs.getBoundingClientRect();
+    if (!r.width) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cw = Math.round(r.width); chh = Math.round(r.height);
+    cvs.width  = Math.round(cw * dpr);
+    cvs.height = Math.round(chh * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  /* 生豆 → 乾燥 → 一ハゼ → 焙煎止め、実際の豆の色から採った四点 */
+  var stops = [[178,186,166],[188,172,134],[146,100,64],[66,48,40]];
+  function mix(t){
+    var p = Math.min(0.999, Math.max(0,t)) * (stops.length - 1);
+    var i = Math.floor(p), f = p - i;
+    var a = stops[i], b = stops[Math.min(i+1, stops.length-1)];
+    return [Math.round(a[0]+(b[0]-a[0])*f),
+            Math.round(a[1]+(b[1]-a[1])*f),
+            Math.round(a[2]+(b[2]-a[2])*f)];
+  }
+
+  /* 豆床は一度だけ生成する。毎コマ乱数を引かない。 */
+  var BEANS = (function(){
+    var out = [], s = 20260918;
+    function rnd(){ s = (s * 1103515245 + 12345) % 2147483648; return s / 2147483648; }
+    for (var i = 0; i < 110; i++){
+      out.push({ x:rnd(), y:rnd(), r:.018 + rnd()*.016, a:rnd()*Math.PI, sp:.6 + rnd()*.9 });
+    }
+    return out;
+  })();
+
+  function paintRoast(t){
+    if (!ctx || !cw) return;
+    t = Math.min(1, Math.max(0, t));
+    /* --- 本番：この本体まるごとが二行に置き換わる ---
+       var idx = Math.min(FRAMES-1, Math.round(t * (FRAMES-1)));
+       if (frames[idx] && frames[idx].complete) ctx.drawImage(frames[idx],0,0,cw,chh);
+       ------------------------------------------------ */
+    var c = mix(t);
+    var g = ctx.createRadialGradient(cw*.5, chh*.52, chh*.05, cw*.5, chh*.52, chh*1.05);
+    g.addColorStop(0, "rgb(" + Math.round(238 - t*168) + "," + Math.round(240 - t*184) + "," + Math.round(245 - t*188) + ")");
+    g.addColorStop(1, "rgb(" + Math.round(214 - t*176) + "," + Math.round(218 - t*186) + "," + Math.round(226 - t*186) + ")");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, cw, chh);
+
+    /* 火。一ハゼで膨らみ、以降ゆるやかに引く。差し色 #96501F を使う */
+    var heat = Math.max(0, Math.sin(Math.min(1,t/0.88) * Math.PI)) * .5 + t*.16;
+    var hg = ctx.createRadialGradient(cw*.5, chh*.58, 0, cw*.5, chh*.58, cw*.46);
+    hg.addColorStop(0, "rgba(150,80,31," + (heat*.40).toFixed(3) + ")");
+    hg.addColorStop(1, "rgba(150,80,31,0)");
+    ctx.fillStyle = hg; ctx.fillRect(0, 0, cw, chh);
+
+    /* ドラムは「勝手に回る」のではなく、スクラブと一緒に回る */
+    var rot = t * Math.PI * 2.4;
+    ctx.save();
+    ctx.translate(cw*.5, chh*.56);
+    ctx.rotate(rot * .16);
+    var col = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+    for (var i = 0; i < BEANS.length; i++){
+      var b = BEANS[i];
+      var a = b.a + rot * b.sp;
+      var rad = (0.10 + b.y * 0.30) * chh;
+      var x = Math.cos(a) * rad * 1.9;
+      var y = Math.sin(a) * rad * 0.62 + (b.x - .5) * chh * .10;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(a * .5);
+      ctx.fillStyle = col;
+      ctx.globalAlpha = .62 + (b.y * .3);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, b.r * chh * 1.35, b.r * chh * .82, 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha = .26;
+      ctx.strokeStyle = "rgba(18,16,26,.7)"; ctx.lineWidth = .8;
+      ctx.beginPath(); ctx.moveTo(-b.r*chh*1.0, 0); ctx.lineTo(b.r*chh*1.0, 0); ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+
+    /* 煙は、実際に立ちはじめてから */
+    if (t > .42){
+      ctx.globalAlpha = Math.min(.24, (t - .42) * .62);
+      var sg = ctx.createLinearGradient(0, 0, 0, chh);
+      sg.addColorStop(0, "rgba(226,230,238,.92)");
+      sg.addColorStop(1, "rgba(226,230,238,0)");
+      ctx.fillStyle = sg; ctx.fillRect(0, 0, cw, chh*.72);
+      ctx.globalAlpha = 1;
+    }
+    var vg = ctx.createRadialGradient(cw*.5, chh*.5, chh*.32, cw*.5, chh*.5, cw*.72);
+    vg.addColorStop(0, "rgba(0,0,0,0)");
+    vg.addColorStop(1, "rgba(18,18,32," + (0.10 + t*0.22).toFixed(3) + ")");
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, cw, chh);
+  }
+
+  var rTime = document.getElementById("rTime");
+  var rTemp = document.getElementById("rTemp");
+  var rStage = document.getElementById("rStage");
+  var stageNames = ["生豆","乾燥","一ハゼ","焙煎止め"];
+  var sc    = document.getElementById("scale");
+  var track = sc.querySelector(".track");
+  var fill  = sc.querySelector(".fill");
+  var seed  = sc.querySelector(".seed");
+  var ticks = sc.querySelectorAll(".ticks span");
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+
+  function renderRoast(t){
+    t = Math.min(1, Math.max(0, t));
+    paintRoast(t);
+    if (window.gsap){
+      gsap.set(fill, { scaleX:t });
+      gsap.set(seed, { x: track.offsetWidth * t, backgroundColor:"rgb(" + mix(t).join(",") + ")" });
+    } else {
+      fill.style.transform = "scaleX(" + t + ")";
+      seed.style.transform = "translateX(" + (track.offsetWidth * t) + "px) rotate(45deg)";
+    }
+    var secs = Math.round(t * 18 * 60);
+    rTime.textContent = pad(Math.floor(secs/60)) + ":" + pad(secs % 60);
+    rTemp.textContent = Math.round(22 + t * 190) + "°C";
+    var idx = Math.min(3, Math.floor(t * 3.999));
+    rStage.textContent = stageNames[idx];
+    for (var k = 0; k < ticks.length; k++){
+      ticks[k].classList.toggle("on", k <= idx && t > .02);
+    }
+  }
+
+  var seqfill = document.getElementById("seqfill");
+  function seqProgress(p){ if (seqfill) seqfill.style.transform = "scaleX(" + p + ")"; }
+
+  /* =========================================================
+     4. 映像の生死 — 画面外でも、隠れたタブでも、何も再生しない。
+        試作では placeholder に、本番では <video> にそのまま効く。
+     ========================================================= */
+  var playable = [].slice.call(document.querySelectorAll("[data-media]"));
+  var inView = new WeakSet();
+  function setPlaying(el, on){
+    el.classList.toggle("is-playing", on);
+    /* 本番：
+       var v = el.matches("video") ? el : el.querySelector("video");
+       if (!v) return;
+       if (on && !STILL) { v.play().catch(function(){}); } else { v.pause(); }   */
+  }
+  if ("IntersectionObserver" in window){
+    var mio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) inView.add(en.target); else inView.delete(en.target);
+        setPlaying(en.target, en.isIntersecting && !document.hidden);
+      });
+    }, { rootMargin:"120px 0px" });
+    playable.forEach(function(el){ mio.observe(el); });
+  }
+  document.addEventListener("visibilitychange", function(){
+    document.body.classList.toggle("tab-hidden", document.hidden);
+    playable.forEach(function(el){ setPlaying(el, !document.hidden && inView.has(el)); });
+    /* rAF ループはこの頁に一つも無い。canvas は ScrollTrigger の
+       onUpdate からしか描かれず、斜光と湯気は CSS アニメーション。
+       隠れたタブでは body.tab-hidden が明示的に止める。 */
+  });
+
+  /* =========================================================
+     5. 音 — 既定オフ。再読込みでもオフ。音楽は存在しない。
+     ========================================================= */
+  var son = document.getElementById("son");
+  if (son){
+    son.addEventListener("click", function(){
+      var on = son.getAttribute("aria-pressed") === "true";
+      son.setAttribute("aria-pressed", on ? "false" : "true");
+      son.textContent = on ? "Son · Off" : "Son · On";
+      /* 本番：図1（V-01）にもともと入っている室内の環境音の消音を外す。
+           var v = document.getElementById("v-room");
+           if (v) { v.muted = on; if (!on) v.volume = 0.30; }
+         第二の音声ファイルは決して読み込まない。状態は保存しない。 */
+    });
+  }
+
+  /* =========================================================
+     6. 法人向けフォームの検証
+        ・エラーは必ず当該項目の直下に日本語で出す（aria-describedby）。
+        ・加えて、先頭に焦点の当たる要約を出す（role="alert"）。
+          要約は個別のエラーを置き換えない。補助である。
+        ・blur のたびに焦点を動かさない。再検証は送信を一度試みた
+          あとだけ、その項目に限って行う。
+        本番での接続方法は .md に記載。
+     ========================================================= */
+  var whForm = document.getElementById("whForm");
+  if (whForm){
+    var sum     = document.getElementById("errSummary");
+    var sumList = document.getElementById("errSummaryList");
+    var status  = document.getElementById("formStatus");
+    var tried   = false;
+
+    var rules = [
+      { id:"f-company", err:"e-company", label:"会社名・店舗名", msg:"会社名または店舗名をご記入ください。" },
+      { id:"f-name",    err:"e-name",    label:"ご担当者名",     msg:"ご担当者名をご記入ください。" },
+      { id:"f-email",   err:"e-email",   label:"メールアドレス", msg:"メールアドレスをご記入ください。",
+        check:function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); },
+        msg2:"メールアドレスの形式をご確認ください（例 order@example.com）。" },
+      { id:"f-tel",     err:"e-tel",     label:"電話番号", optional:true,
+        check:function(v){ return /^[0-9+\-() ]{9,20}$/.test(v); },
+        msg2:"電話番号は数字とハイフンでご記入ください。" },
+      { id:"f-type",    err:"e-type",    label:"業態",           msg:"業態をお選びください。" },
+      { id:"f-volume",  err:"e-volume",  label:"想定月間使用量", msg:"想定の月間使用量をお選びください。" },
+      { id:"f-body",    err:"e-body",    label:"ご相談内容",     msg:"ご相談内容をご記入ください。" },
+      { id:"f-agree",   err:"e-agree",   label:"個人情報の取り扱いへの同意",
+        msg:"個人情報の取り扱いにご同意ください。", isCheck:true }
+    ];
+
+    function validateOne(r){
+      var el = document.getElementById(r.id);
+      var out = document.getElementById(r.err);
+      var v = r.isCheck ? (el.checked ? "yes" : "") : (el.value || "").trim();
+      var message = "";
+      if (!v){
+        if (!r.optional) message = r.msg;
+      } else if (r.check && !r.check(v)){
+        message = r.msg2;
+      }
+      out.textContent = message;
+      if (message){ el.setAttribute("aria-invalid","true"); }
+      else { el.removeAttribute("aria-invalid"); }
+      return message;
+    }
+
+    rules.forEach(function(r){
+      var el = document.getElementById(r.id);
+      el.addEventListener("blur", function(){ if (tried) validateOne(r); });
+      el.addEventListener("change", function(){ if (tried) validateOne(r); });
+    });
+
+    whForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      tried = true;
+      status.textContent = "";
+      var bad = [];
+      rules.forEach(function(r){
+        var m = validateOne(r);
+        if (m) bad.push({ id:r.id, label:r.label, msg:m });
+      });
+
+      if (bad.length){
+        sumList.innerHTML = "";
+        bad.forEach(function(b){
+          var li = document.createElement("li");
+          var a  = document.createElement("a");
+          a.href = "#" + b.id;
+          a.textContent = b.label + " — " + b.msg;
+          a.addEventListener("click", function(ev){
+            ev.preventDefault();
+            var t = document.getElementById(b.id);
+            t.focus();
+          });
+          li.appendChild(a); sumList.appendChild(li);
+        });
+        sum.hidden = false;
+        sum.focus();
+        return;
+      }
+
+      sum.hidden = true;
+      /* 迷惑投稿対策の空欄に入力があれば、黙って受け付けたふりをする。 */
+      var hp = document.getElementById("f-hp");
+      if (hp && hp.value){ status.textContent = "送信しました。"; return; }
+      status.textContent =
+        "この試作に送信先はありません。本番では入力内容を検証のうえ、" +
+        "卸担当宛の通知と、ご担当者さま宛の自動返信の二通を送ります。";
+      status.scrollIntoView({ block:"nearest" });
+    });
+  }
+
+  /* =========================================================
+     7. モーション
+        量は多く、速度は上げない。何一つ跳ねない。
+     ========================================================= */
+  var veil = document.getElementById("veil");
+
+  if (!window.gsap || !window.ScrollTrigger){
+    veil.style.display = "none";
+    sizeCanvas(); renderRoast(1); seqProgress(1);
+    document.querySelectorAll(".rule-c").forEach(function(r){ r.style.transform = "scaleX(1)"; });
+    return;
+  }
+  gsap.registerPlugin(ScrollTrigger);
+  var mm = gsap.matchMedia();
+
+  var roastCommon = {
+    onUpdate:function(self){ renderRoast(self.progress); },
+    onRefresh:function(self){ sizeCanvas(); renderRoast(self.progress); }
+  };
+
+  /* ---- 7a. 静止：欠けるものが一つもない頁 -------------------- */
+  mm.add("(prefers-reduced-motion: reduce)", function(){
+    veil.style.display = "none";
+    gsap.set(".rv, #wordmark .ch, #heroline .ch, .jr-vert .ch, .bean", { clearProps:"all", opacity:1 });
+    document.querySelectorAll(".rule-c").forEach(function(r){ r.style.transform = "scaleX(1)"; });
+    document.querySelectorAll(".bean").forEach(function(b){ b.classList.add("ruled"); });
+    if (railEl) railEl.style.display = "none";
+    sizeCanvas();
+    /* スクラブの版は焙煎中盤の一コマで止まる。読める図版として完成する。 */
+    renderRoast(.62); seqProgress(1);
+    return function(){};
+  });
+
+  /* ---- 7b. 全モーション ------------------------------------- */
+  mm.add("(prefers-reduced-motion: no-preference)", function(){
+
+    gsap.set("#wordmark .ch", { opacity:0, y:".10em", filter:"blur(4px)" });
+    gsap.set("#heroline .ch", { opacity:0, y:".16em", filter:"blur(4px)" });
+    gsap.set([".rv", "#heroRuleWrap"], { opacity:0, y:12 });
+    gsap.set("#hero-plate", { opacity:0, y:20 });
+    gsap.set(".bean", { opacity:0, y:12 });
+    gsap.set(".jr-vert .ch", { opacity:0, y:".14em" });
+
+    /* 開幕の帳。地と同じ白が退くだけで、暗転は一度も起こらない。 */
+    var open = gsap.timeline();
+    open.to("#veil .vmark", { opacity:0, duration:.9, ease:"power1.inOut" }, .45)
+        .to("#veil", { opacity:0, duration:1.2, ease:"power2.inOut",
+                       onComplete:function(){ veil.style.display = "none"; } }, .9)
+        .to("#wordmark .ch", { opacity:1, y:0, filter:"blur(0px)",
+                               duration:2.2, ease:"power2.out", stagger:.1 }, 1.0)
+        .to("#heroRuleWrap", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 2.1)
+        .to("#heroRule", { scaleX:1, duration:2.4, ease:"power2.inOut" }, 2.3)
+        .to("#hero-plate", { opacity:1, y:0, duration:2.6, ease:"power2.out" }, 2.4)
+        .to("#heroline .ch", { opacity:1, y:0, filter:"blur(0px)",
+                               duration:2.0, ease:"power2.out", stagger:.07 }, 3.0)
+        .to("#hero .sub", { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.5)
+        .to("#hero .foot", { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.9);
+
+    /* 図版 1 は、画面にあるあいだずっと、ごくゆるやかに寄り続ける。
+       背景ではなく図版なので、沈めない。寄るだけ。 */
+    gsap.to("#hero-plate .ph", {
+      scale:1.06, yPercent:-2, ease:"none",
+      scrollTrigger:{ trigger:"#hero-plate", start:"top bottom", end:"bottom top", scrub:1.4 }
+    });
+
+    /* 光がポインタに追う。白地なので振幅は A12 の半分。 */
+    var lx = gsap.quickTo("#light-i", "xPercent", { duration:2.2, ease:"power3.out" });
+    var ly = gsap.quickTo("#light-i", "yPercent", { duration:2.2, ease:"power3.out" });
+    function onPointer(e){
+      lx((e.clientX / window.innerWidth  - .5) * 3.4);
+      ly((e.clientY / window.innerHeight - .5) * 3.4);
+    }
+    window.addEventListener("pointermove", onPointer, { passive:true });
+
+    /* 地がごくわずかに冷える（#F8F9FA → #F2F4F7）。暗くはならない。 */
+    gsap.to("#ground", { backgroundColor:"#f2f4f7", ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:1.2 } });
+    gsap.to("#grain", { opacity:.055, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:1.2 } });
+
+    /* 読みの罫 */
+    gsap.to("#rail .ink", { scaleY:1, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:.6 } });
+    var stem = document.querySelector("#rail .stem");
+    gsap.to("#rail .dot", {
+      y:function(){ return stem.offsetHeight - 2.5; }, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:.6, invalidateOnRefresh:true }
+    });
+
+    ScrollTrigger.create({
+      trigger:"#hero", start:"bottom 78%",
+      onEnter:function(){ document.querySelector("header").classList.add("lifted"); },
+      onLeaveBack:function(){ document.querySelector("header").classList.remove("lifted"); }
+    });
+
+    /* 節の定位。長く、静まる方向へ。滑らせない。 */
+    gsap.utils.toArray(".rv").forEach(function(el){
+      if (el.id === "hero-plate") return;
+      gsap.to(el, { opacity:1, y:0, duration:1.9, ease:"power2.out",
+        scrollTrigger:{ trigger:el, start:"top 90%" } });
+    });
+    gsap.utils.toArray(".rule-c").forEach(function(r){
+      if (r.id === "heroRule") return;
+      gsap.to(r, { scaleX:1, duration:2.4, ease:"power2.inOut",
+        scrollTrigger:{ trigger:r, start:"top 94%" } });
+    });
+
+    /* 豆の行 */
+    gsap.utils.toArray(".bean").forEach(function(b){
+      gsap.to(b, { opacity:1, y:0, duration:1.6, ease:"power2.out", delay:.3,
+        scrollTrigger:{ trigger:b, start:"top 88%", onEnter:function(){ b.classList.add("ruled"); } } });
+    });
+    var ruleStyle = document.createElement("style");
+    ruleStyle.textContent =
+      ".bean.ruled::before,.bean.ruled:last-of-type::after{transform:scaleX(1);" +
+      "transition:transform 1.5s cubic-bezier(.16,1,.3,1);}" +
+      ".bean:last-of-type.ruled::after{transition-delay:.25s;}";
+    document.head.appendChild(ruleStyle);
+
+    /* 一行を読むと、ほかの行が沈む */
+    var list = document.getElementById("beanlist");
+    var rows = list.querySelectorAll(".bean");
+    rows.forEach(function(b){
+      var focus = function(){
+        rows.forEach(function(x){ x.classList.remove("is-on"); });
+        b.classList.add("is-on");
+        list.setAttribute("data-focused","true");
+      };
+      b.addEventListener("mouseenter", focus);
+      b.addEventListener("focusin", focus);
+    });
+    list.addEventListener("mouseleave", function(){
+      list.setAttribute("data-focused","false");
+      rows.forEach(function(x){ x.classList.remove("is-on"); });
+    });
+
+    /* 読みもの：縦組みの柱が、読まれる速度で一字ずつ立つ */
+    gsap.to(".jr-vert .ch", {
+      opacity:1, y:0, ease:"none", stagger:.9,
+      scrollTrigger:{ trigger:"#journal", start:"top 70%", end:"top 5%", scrub:.9 }
+    });
+
+    /* 落款が捺される */
+    gsap.fromTo("#cachet", { opacity:0, scale:1.16 },
+      { opacity:.92, scale:1, duration:1.4, ease:"power3.out",
+        scrollTrigger:{ trigger:"#note", start:"top 42%" } });
+
+    return function(){
+      window.removeEventListener("pointermove", onPointer);
+      ruleStyle.remove();
+    };
+  });
+
+  /* ---- 7c. スクラブの版：余地のある画面でだけピン留めする ---- */
+  mm.add("(prefers-reduced-motion: no-preference) and (min-width: 900px) and (min-height: 700px)", function(){
+    ScrollTrigger.create(Object.assign({
+      trigger:"#roastStage", start:"center center", end:"+=200%",
+      pin:"#roastStage", pinSpacing:true, scrub:1, invalidateOnRefresh:true
+    }, roastCommon));
+
+    gsap.timeline({ scrollTrigger:{ trigger:"#roastStage", start:"center center", end:"+=200%", scrub:1 }})
+      .fromTo("#roast .statement", { letterSpacing:"0.30em" }, { letterSpacing:"0.38em", duration:1, ease:"none" }, 0);
+    return function(){};
+  });
+
+  /* 狭い画面・低い画面：ピンを外し、同じスクラブを図版の通過に結ぶ */
+  mm.add("(prefers-reduced-motion: no-preference) and (max-width: 899px), (prefers-reduced-motion: no-preference) and (max-height: 699px)", function(){
+    ScrollTrigger.create(Object.assign({
+      trigger:"#roast-plate", start:"top 84%", end:"bottom 24%", scrub:1, invalidateOnRefresh:true
+    }, roastCommon));
+    return function(){};
+  });
+
+  /* =========================================================
+     8. 寸法の衛生
+     ========================================================= */
+  sizeCanvas();
+  renderRoast(STILL ? .62 : 0);
+  seqProgress(1);   /* 本番：連番フレームのデコード数で駆動する */
+
+  var rt = null;
+  window.addEventListener("resize", function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){
+      sizeCanvas();
+      ScrollTrigger.refresh();
+    }, 180);
+  }, { passive:true });
+
+  window.addEventListener("orientationchange", function(){
+    setTimeout(function(){ sizeCanvas(); ScrollTrigger.refresh(); }, 260);
+  }, { passive:true });
+
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ sizeCanvas(); ScrollTrigger.refresh(); });
+  }
+})();
+</script>
