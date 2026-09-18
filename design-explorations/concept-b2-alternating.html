@@ -1,0 +1,954 @@
+<title>Soigné — 明暗 / 勝色と白の章</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap">
+
+<style>
+/* ============================================================
+   案B2 — 明暗 / ALTERNATING CHAPTERS
+   Built on 案A12: same media-slot chassis, same production
+   comments, same GSAP 3.12.5 motion grammar, same silence.
+
+   What changed: the page now has two grounds and they mean
+   two different things.
+     勝色の章 = 観る章 — dark. Footage lives here, full strength.
+     白の章   = 読む章 — near-white. Prose lives here.
+   The rule has no exceptions: if a chapter carries moving
+   image it is 勝色; if it carries text to be read at length
+   it is 白. The transitions between them are the design.
+
+   Cormorant Garamond is gone. A12's French-printed-book layer
+   belonged to the ivory and the bordeaux; katsuiro is cooler
+   and more contemporary and does not want a Garamond on top
+   of it. Three faces now, all doing more work.
+   ============================================================ */
+
+:root{
+  /* ---- the two grounds ---- */
+  --katsu:      #181B39;   /* 勝色 — 観る章の地 */
+  --katsu-deep: #11142B;   /* the plate ground behind media, one step down */
+  --katsu-lift: #1F2346;   /* the only lifted surface, used twice */
+  --white:      #F8F9FA;   /* 白 — 読む章の地 */
+  --white-deep: #EDF0F4;   /* the plate ground inside light chapters */
+
+  /* ---- 差し色 1/2 : 琥珀 (ember). 勝色の章にしか出ません。
+         火のための色で、火は映像の中にしかないためです。
+         #C0873C on #181B39 = 5.49:1 ---- */
+  --ember:      #C0873C;
+  /* ---- 差し色 2/2 : 緋 (alert). 白の章にしか出ません。
+         必須項目とエラーのみ。#B3261E on #F8F9FA = 6.20:1 ---- */
+  --alert:      #B3261E;
+
+  --gutter: clamp(16px, 5.2vw, 96px);
+  --axis: 1000px;
+  --ease: cubic-bezier(.16,1,.3,1);
+
+  --mincho: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --serif:  "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --latin:  "Zen Kaku Gothic New", "Hiragino Sans", "Helvetica Neue", sans-serif;
+}
+
+/* ============================================================
+   PER-CHAPTER TOKENS
+   Every colour a chapter needs is resolved from data-ground.
+   Nothing inside a chapter hard-codes a colour, which is why
+   the same component (a rule, a row, a caption, a link) can
+   sit in either ground without being rewritten.
+
+   Contrast, measured both directions, text levels only:
+     白 on 勝色 : 100% 15.73:1 · 78% 9.95:1 · 62% 6.74:1
+     勝色 on 白 : 100% 15.73:1 · 72% 6.50:1 · 64% 4.98:1
+   Everything below those levels (.20 / .11) is hairline and
+   decoration and never carries a character.
+   ============================================================ */
+[data-ground="dark"]{
+  --on:    #F8F9FA;
+  --on-2:  rgba(248,249,250,.78);
+  --on-3:  rgba(248,249,250,.62);
+  --hair:  rgba(248,249,250,.20);
+  --hair-f:rgba(248,249,250,.11);
+  --plate: var(--katsu-deep);
+  --lift:  var(--katsu-lift);
+  --accent:var(--ember);
+  --focus: var(--ember);
+  /* mincho at 400 goes spindly on a dark field — every weight
+     moves up one step, and the display sizes open their tracking */
+  --w-display:500;
+  --w-body:400;
+  --w-label:400;
+}
+[data-ground="light"]{
+  --on:    #181B39;
+  --on-2:  rgba(24,27,57,.72);
+  --on-3:  rgba(24,27,57,.64);
+  --hair:  rgba(24,27,57,.18);
+  --hair-f:rgba(24,27,57,.10);
+  --plate: var(--white-deep);
+  --lift:  #FFFFFF;
+  --accent:var(--katsu);
+  --focus: var(--katsu);
+  --w-display:400;
+  --w-body:300;
+  --w-label:400;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ overflow-x:clip; scroll-behavior:auto; }
+body{
+  margin:0;
+  background: var(--katsu);      /* the page opens with the lights down */
+  color: var(--on);
+  font-family: var(--serif);
+  font-weight: var(--w-body);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:clip;
+}
+
+/* ============================================================
+   THE GROUND — two fixed layers, never a third.
+   #ground-a is always 勝色. #ground-b is always 白 and only its
+   OPACITY moves: 0 in a dark chapter, 1 in a light one. The
+   whole light/dark system is therefore one composited opacity,
+   not a repainted background-color.
+   ============================================================ */
+#ground-a{ position:fixed; inset:0; z-index:-6; background:var(--katsu); pointer-events:none; }
+#ground-b{ position:fixed; inset:0; z-index:-5; background:var(--white); opacity:0; pointer-events:none; will-change:opacity; }
+
+/* pointer-tracked light — one bloom per ground, crossfaded with it.
+   On 白 it is a warm paper bloom. On 勝色 it is a cool lift, because a
+   warm bloom on indigo turns muddy purple. */
+#light{ position:fixed; inset:-26%; z-index:-4; pointer-events:none; animation:drift 86s ease-in-out infinite alternate; will-change:transform; }
+#light > div{ position:absolute; inset:0; will-change:transform,opacity; }
+#lite-w{
+  opacity:0;
+  background:
+    radial-gradient(56% 44% at 50% 14%, rgba(255,255,255,.95), rgba(255,255,255,0) 66%),
+    radial-gradient(46% 46% at 84% 80%, rgba(24,27,57,.035), rgba(24,27,57,0) 62%);
+}
+#lite-c{
+  opacity:1;
+  background:
+    radial-gradient(52% 42% at 50% 16%, rgba(126,146,196,.20), rgba(126,146,196,0) 66%),
+    radial-gradient(44% 44% at 82% 80%, rgba(192,135,60,.055), rgba(192,135,60,0) 60%);
+}
+@keyframes drift{
+  0%   { transform: translate3d(-2%,-1.4%,0) scale(1.00); }
+  100% { transform: translate3d( 2.4%, 2.2%,0) scale(1.06); }
+}
+
+/* grain — the same noise twice, because it must MULTIPLY into paper and
+   SCREEN out of indigo. Multiplying noise into #181B39 does nothing
+   visible; screening it over #F8F9FA turns the page grey. */
+.grain{
+  position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  will-change:opacity;
+}
+#grain-m{ mix-blend-mode:multiply; opacity:0; }
+#grain-s{ mix-blend-mode:screen;   opacity:.085; }
+
+/* ---------- 開幕 ---------------------------------------------- */
+#veil{
+  position:fixed; inset:0; z-index:60; pointer-events:none;
+  background:var(--katsu); display:grid; place-items:center;
+}
+#veil .vmark{
+  font-family:var(--mincho); font-size:24px; font-weight:500;
+  letter-spacing:.34em; text-indent:.34em; color:rgba(248,249,250,.62);
+}
+
+/* ---------- shared type --------------------------------------- */
+h1,h2,h3,h4{ font-family:var(--mincho); font-weight:var(--w-display); margin:0; }
+p{ margin:0; }
+a{ color:inherit; text-decoration:none; }
+:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; border-radius:1px; }
+.vh{
+  position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+  overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0;
+}
+#skip{
+  position:absolute; left:8px; top:-60px; z-index:80;
+  background:var(--katsu); color:#F8F9FA; padding:10px 16px;
+  font-family:var(--latin); font-size:12px; letter-spacing:.12em;
+  transition:top .2s linear;
+}
+#skip:focus{ top:8px; }
+
+.wrap{ padding-inline:var(--gutter); max-width:calc(var(--axis) + 200px); margin-inline:auto; }
+.axis{ max-width:var(--axis); margin-inline:auto; }
+
+/* Latin / technical small type. Zen Kaku Gothic New now carries every
+   label on the page — A12 had Cormorant doing this and it is gone. */
+.label{
+  font-family:var(--latin); font-weight:var(--w-label); font-size:10px;
+  letter-spacing:.20em; text-transform:uppercase; color:var(--on-3); line-height:2;
+}
+.kicker{
+  font-family:var(--latin); font-weight:500; font-size:clamp(10px,1.1vw,11px);
+  letter-spacing:.26em; text-transform:uppercase; color:var(--on-3);
+}
+.rule{ height:1px; background:var(--hair-f); border:0; margin:0; }
+.rule-c{ height:1px; background:var(--hair); width:min(100%,520px); margin:0 auto; transform:scaleX(0); transform-origin:center; }
+
+.sec-head{ margin-bottom:clamp(46px,9vh,110px); }
+.sec-head h2{
+  margin-top:16px; font-size:clamp(1.5rem,4.2vw,2.5rem);
+  letter-spacing:.24em; text-indent:.24em; line-height:1.9;
+}
+.sec-head .sub{
+  margin-top:18px; font-size:.82rem; line-height:2.5; letter-spacing:.1em;
+  color:var(--on-2); max-width:44ch;
+}
+
+/* ============================================================
+   CHAPTERS AND TURNS
+   A .chapter declares its ground and nothing else. A .turn is an
+   empty band between two chapters — it is where the lights go
+   down and come back up, and it is the only place on the page
+   where the ground is neither one thing nor the other.
+   ============================================================ */
+.chapter{ position:relative; padding-block:clamp(96px,16vh,190px) clamp(110px,22vh,240px); }
+.chapter > .ch-body{ position:relative; will-change:opacity,filter; }
+
+.turn{
+  position:relative; height:clamp(320px,62vh,620px);
+  display:grid; place-items:center; pointer-events:none;
+}
+.turn .horizon{ width:min(76vw, 760px); height:1px; position:relative; }
+.turn .horizon i{
+  position:absolute; inset:0; display:block; transform:scaleX(0); transform-origin:center;
+  background:linear-gradient(90deg,
+    rgba(128,136,170,0) 0%, rgba(128,136,170,.55) 20%,
+    rgba(128,136,170,.55) 80%, rgba(128,136,170,0) 100%);
+}
+.turn .horizon b{
+  position:absolute; left:50%; top:50%; width:5px; height:5px; margin:-2.5px 0 0 -2.5px;
+  background:var(--ember); transform:rotate(45deg); opacity:.0;
+}
+
+/* ---------- 進行 : the reading rail, per-ground ---------------- */
+#rail{
+  position:fixed; left:calc(var(--gutter)*.42); top:50%;
+  transform:translateY(-50%); z-index:15; pointer-events:none; display:none;
+}
+@media (min-width:1240px){ #rail{ display:block; } }
+#rail .stem{ width:1px; height:44vh; position:relative; background:var(--hair-f); }
+#rail .stem .ink{
+  position:absolute; left:0; top:0; width:1px; height:100%;
+  background:var(--hair); transform-origin:top; transform:scaleY(0);
+}
+#rail .dot{
+  position:absolute; left:-2px; top:0; width:5px; height:5px; border-radius:50%;
+  background:var(--on-3); transform:translateY(-2.5px);
+  transition:background-color .9s var(--ease);
+}
+#rail .tick{ position:absolute; left:-4px; width:9px; height:1px; background:var(--hair); opacity:.6; }
+#rail .tick.d{ background:var(--hair); }
+
+/* ---------- 01 header : crosses both grounds ------------------- */
+/* The header takes its tokens from html[data-ground], which is flipped at
+   the exact midpoint of each turn — so it never sits half-legible. The
+   colour change is a 0.75s transition, slower than the eye notices as a
+   switch and faster than the scrub, so it lands inside the crossing. */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:30;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:16px var(--gutter);
+  transition:background-color .75s var(--ease), border-color .75s var(--ease);
+  border-bottom:1px solid transparent;
+}
+html[data-ground="dark"] header{ background:linear-gradient(rgba(24,27,57,.94) 62%, rgba(24,27,57,0)); }
+html[data-ground="light"] header{ background:linear-gradient(rgba(248,249,250,.94) 62%, rgba(248,249,250,0)); }
+header.lifted{ border-bottom-color:var(--hair-f); }
+html[data-ground="dark"] header.lifted{ background:rgba(24,27,57,.97); }
+html[data-ground="light"] header.lifted{ background:rgba(248,249,250,.97); }
+
+header .mark{
+  font-family:var(--mincho); font-weight:var(--w-display);
+  font-size:19px; letter-spacing:.2em; color:var(--on);
+  transition:color .75s var(--ease);
+}
+header nav{ display:flex; align-items:center; gap:clamp(10px,2vw,26px); }
+header nav a, header nav button{
+  font-family:var(--latin); font-size:10.5px; font-weight:var(--w-label);
+  letter-spacing:.16em; color:var(--on-3); background:none; border:0; padding:0;
+  cursor:pointer; transition:color .6s var(--ease);
+}
+header nav a:hover, header nav button:hover{ color:var(--on); }
+@media (max-width:900px){ header nav a.hide-m{ display:none; } }
+@media (max-width:560px){ header .mark{ font-size:17px; } header nav{ gap:12px; } }
+
+/* 法人向けはこちら — a bordered route button, in the header AND the footer.
+   Header because a purchasing manager arrives from a search result and
+   must not have to scroll a consumer page to find the trade route.
+   Footer because a café owner who came in as a reader gets there last. */
+.b2b-btn{
+  font-family:var(--latin); font-size:10.5px; font-weight:500; letter-spacing:.14em;
+  color:var(--on); background:none; cursor:pointer;
+  border:1px solid var(--hair); padding:9px 13px; line-height:1;
+  transition:border-color .6s var(--ease), background-color .6s var(--ease), color .6s var(--ease);
+}
+.b2b-btn:hover{ border-color:var(--on-3); }
+.b2b-btn[aria-current="page"]{ border-color:var(--on-3); color:var(--on); }
+@media (max-width:420px){ .b2b-btn{ padding:8px 10px; font-size:10px; letter-spacing:.08em; } }
+
+/* ---------- external links : Square オンラインストア ------------- */
+/* Checkout does not happen here. Every buying action is an outbound link
+   to the Square store, and it is built to look and behave like one:
+   target=_blank, rel=noopener noreferrer, a visible ↗ and a visually
+   hidden phrase so it is announced, not merely drawn. */
+.ext{ white-space:nowrap; }
+.ext .arw{
+  display:inline-block; margin-left:.5em; font-family:var(--latin);
+  font-size:.82em; transform:translateY(-.08em); color:var(--accent);
+  transition:transform .6s var(--ease);
+}
+a.ext:hover .arw{ transform:translate(.14em,-.22em); }
+
+.store-cta{
+  display:inline-block; position:relative; padding-bottom:14px;
+  font-family:var(--mincho); font-weight:var(--w-display);
+  font-size:clamp(1.1rem,2.6vw,1.5rem); letter-spacing:.22em; text-indent:.22em;
+  color:var(--on);
+}
+.store-cta::after{
+  content:""; position:absolute; left:0; bottom:0; height:1px; width:100%;
+  background:var(--on); transform:scaleX(0); transform-origin:center;
+  transition:transform 1.5s var(--ease), background-color .7s var(--ease);
+}
+.store-cta.drawn::after{ transform:scaleX(1); }
+.store-cta:hover::after{ background:var(--accent); }
+.store-cta .note{
+  display:block; margin-top:12px; font-family:var(--latin); font-weight:400;
+  font-size:.66rem; letter-spacing:.16em; text-indent:0; color:var(--on-3);
+}
+.store-min{
+  font-family:var(--latin); font-size:11px; font-weight:500; letter-spacing:.12em;
+  color:var(--on-2); border-bottom:1px solid var(--hair-f); padding-bottom:5px;
+  transition:color .6s var(--ease), border-color .6s var(--ease);
+}
+.store-min:hover{ color:var(--on); border-color:var(--on-3); }
+
+/* ============================================================
+   MEDIA SLOTS — the A12 chassis, re-grounded.
+   Every slot reserves its box with aspect-ratio before a byte of
+   footage arrives, carries a stable id and data-media, has its
+   production markup written immediately above it, and shows a
+   visible production caption.
+
+   All four assets live in 勝色 chapters. That is the rule, and it
+   is also why the placeholders below are built dark-first: a
+   luminous subject on a deep field, never a grey box.
+   ============================================================ */
+.slot{ position:relative; margin:0; }
+.slot .frame{
+  position:relative; width:100%; overflow:hidden;
+  background:var(--plate); border:1px solid var(--hair-f);
+}
+.slot .cap{
+  display:block; margin-top:11px;
+  font-family:var(--latin); font-size:9.5px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--on-3); line-height:1.95;
+}
+.slot .cap b{ font-weight:500; color:var(--on-2); }
+.ph{ position:absolute; inset:0; }
+.ph svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+/* the deep field every clip is graded onto : indigo interior, one warm
+   source low in frame. This is the look the footage is shot for. */
+.ph-field{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(52% 40% at 46% 62%, rgba(192,135,60,.26), rgba(192,135,60,0) 66%),
+    radial-gradient(64% 52% at 52% 26%, rgba(126,146,196,.16), rgba(126,146,196,0) 70%),
+    linear-gradient(168deg, #1B1F42 0%, #141731 54%, #0C0F22 100%);
+}
+.ph-rake{
+  position:absolute; inset:-30%;
+  background:radial-gradient(38% 30% at 30% 20%, rgba(214,226,255,.22), rgba(214,226,255,0) 68%);
+  animation: rake 29s ease-in-out infinite alternate; will-change:transform,opacity;
+}
+@keyframes rake{
+  0%{ transform:translate3d(-3%,-2%,0) scale(1); opacity:.6; }
+  100%{ transform:translate3d(4%,3%,0) scale(1.12); opacity:1; }
+}
+/* 湯気 — on a dark ground steam is LIGHT, not dark. A12's dark steam
+   strokes were a paper-ground decision and do not survive the move. */
+.ph-steam i{
+  position:absolute; bottom:9%; width:1px; height:44%;
+  background:linear-gradient(to top, rgba(226,233,248,.42), rgba(226,233,248,0));
+  transform-origin:bottom; animation: rise 11s ease-in-out infinite;
+}
+@keyframes rise{
+  0%{   transform:translateY(16px) scaleY(.5) skewX(0deg); opacity:0; }
+  26%{  opacity:.9; }
+  72%{  opacity:.45; }
+  100%{ transform:translateY(-26px) scaleY(1.1) skewX(6deg); opacity:0; }
+}
+
+/* ============================================================
+   章一 · 序景 — 勝色 / 観る
+   ============================================================ */
+#ch-hero{ min-height:100svh; display:grid; grid-template-rows:1fr auto; padding-top:clamp(108px,18vh,200px); padding-bottom:26px; }
+#hero-media{ position:absolute; inset:0; z-index:-2; overflow:hidden; pointer-events:none; }
+#hero-media .ph{ inset:-2%; }
+/* the scrim keeps the type in front of the footage. On a dark ground it is
+   an indigo scrim, not a paper one: it darkens instead of washing out, and
+   the footage keeps its blacks. */
+#hero-media::after{
+  content:""; position:absolute; inset:0;
+  background:
+    linear-gradient(180deg, rgba(24,27,57,.86) 0%, rgba(24,27,57,.46) 44%, rgba(24,27,57,.92) 100%),
+    radial-gradient(70% 58% at 50% 46%, rgba(24,27,57,0), rgba(24,27,57,.55) 100%);
+}
+#hero-inner{ display:grid; align-content:center; text-align:center; }
+#wordmark{
+  font-family:var(--mincho); font-weight:600;
+  font-size:clamp(2.9rem,11vw,7rem); line-height:1.04;
+  letter-spacing:.12em; text-indent:.12em;
+}
+#wordmark .ch{ display:inline-block; will-change:transform,opacity; }
+#ch-hero h1{
+  margin-top:clamp(26px,5.5vh,56px);
+  font-size:clamp(1rem,2.4vw,1.42rem); font-weight:500;
+  line-height:2.6; letter-spacing:.34em; text-indent:.34em;
+}
+#ch-hero h1 .ln{ display:block; }
+#ch-hero .lede{
+  margin:clamp(26px,5vh,52px) auto 0; max-width:34ch;
+  font-size:clamp(.8rem,1.4vw,.9rem); line-height:2.6; letter-spacing:.12em; color:var(--on-2);
+}
+#hero-foot{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:16px; text-align:left;
+}
+#hero-foot .mid{ text-align:center; }
+#hero-foot .right{ text-align:right; }
+.cue{ display:inline-flex; flex-direction:column; align-items:center; gap:10px; }
+.cue .line{ display:block; width:1px; height:44px; background:var(--hair-f); position:relative; overflow:hidden; }
+.cue .line::after{
+  content:""; position:absolute; left:0; top:0; width:1px; height:34%;
+  background:var(--on-3); animation:fall 5.2s cubic-bezier(.45,0,.2,1) infinite;
+}
+@keyframes fall{ 0%{transform:translateY(-120%);opacity:0} 22%{opacity:1} 78%{opacity:1} 100%{transform:translateY(300%);opacity:0} }
+/* 音 — off on every visit, never remembered, never music. */
+#son{
+  font-family:var(--latin); font-size:9.5px; font-weight:400; letter-spacing:.16em;
+  color:var(--on-3); background:none; border:0; border-bottom:1px solid var(--hair-f);
+  padding:0 0 5px; cursor:pointer; transition:color .7s var(--ease), border-color .7s var(--ease);
+}
+#son:hover{ color:var(--on-2); border-color:var(--hair); }
+#son[aria-pressed="true"]{ color:var(--on); border-color:var(--on-3); }
+#hero-cap{
+  margin-top:20px; text-align:center; font-family:var(--latin); font-size:8.5px;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--on-3);
+}
+@media (max-width:680px){
+  #hero-foot{ display:block; text-align:center; }
+  #hero-foot .left{ display:none; }
+  #hero-foot .right{ text-align:center; margin-top:16px; }
+}
+
+/* ============================================================
+   章二 · 珈琲 — 白 / 読む。ここに映像はありません。
+   在庫も季節も文字が運びます。撮り直しの要らない領域です。
+   ============================================================ */
+.bean{ display:block; position:relative; padding-block:clamp(26px,4vh,42px); border-top:1px solid var(--hair-f); }
+.bean:last-of-type{ border-bottom:1px solid var(--hair-f); }
+.bean .top{ display:flex; align-items:baseline; gap:clamp(12px,2.2vw,24px); }
+.bean .no{
+  font-family:var(--latin); font-weight:500; font-size:11px; letter-spacing:.2em;
+  color:var(--on-3); flex:0 0 auto; padding-top:.45em;
+}
+.bean h3{ font-size:clamp(1rem,2.1vw,1.38rem); letter-spacing:.14em; line-height:2; }
+.bean .orig{
+  margin-top:8px; margin-left:calc(11px + clamp(12px,2.2vw,24px));
+  font-family:var(--latin); font-size:.72rem; letter-spacing:.14em; color:var(--on-3);
+}
+.bean .meta{
+  margin-top:14px; margin-left:calc(11px + clamp(12px,2.2vw,24px));
+  display:flex; flex-wrap:wrap; gap:4px 22px;
+  font-size:.77rem; letter-spacing:.1em; line-height:2.3; color:var(--on-2);
+}
+.bean .meta .price{ color:var(--on); }
+.bean .go{ margin-top:16px; margin-left:calc(11px + clamp(12px,2.2vw,24px)); display:inline-block; }
+@media (max-width:540px){ .bean .orig,.bean .meta,.bean .go{ margin-left:0; } }
+
+/* 今週の棚 — the block the roaster edits weekly. Text, never footage. */
+.shelf{
+  margin-top:clamp(52px,9vh,104px); padding:clamp(22px,4vw,38px) 0;
+  border-top:1px solid var(--hair); border-bottom:1px solid var(--hair);
+  display:grid; gap:clamp(18px,3vw,34px);
+}
+@media (min-width:860px){ .shelf{ grid-template-columns:.42fr 1fr; align-items:start; } }
+.shelf .when{ font-family:var(--latin); font-size:10.5px; letter-spacing:.18em; color:var(--on-3); }
+.shelf h3{ font-size:1.02rem; letter-spacing:.2em; line-height:2; }
+.shelf p{ margin-top:14px; font-size:.82rem; line-height:2.5; letter-spacing:.08em; color:var(--on-2); max-width:46ch; }
+.shelf ul{ margin:18px 0 0; padding:0; list-style:none; font-size:.78rem; line-height:2.4; letter-spacing:.08em; color:var(--on-2); }
+.shelf li{ display:flex; justify-content:space-between; gap:16px; max-width:34em; border-bottom:1px dotted var(--hair-f); }
+
+/* ============================================================
+   章三 · 火 — 勝色 / 観る。ピン留め＋スクラブ。
+   ============================================================ */
+#roast-stage{ position:relative; text-align:center; }
+#roast-stage .statement{ font-size:clamp(1.5rem,4.4vw,2.8rem); letter-spacing:.3em; text-indent:.3em; line-height:2; }
+#roast-slot{ margin:clamp(40px,7vh,88px) auto 0; width:min(100%,880px); }
+#roast-slot .frame{ aspect-ratio:16/9; border-color:var(--hair); }
+#roastCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+#seqbar{ position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--hair-f); }
+#seqbar span{ position:absolute; inset:0; background:var(--on-3); transform-origin:left; transform:scaleX(0); transition:transform .4s linear; }
+.readout{ margin-top:clamp(36px,7vh,80px); display:flex; justify-content:center; gap:clamp(20px,5vw,64px); flex-wrap:wrap; align-items:baseline; }
+.readout .rd{ display:flex; align-items:baseline; gap:9px; }
+.readout .k{ font-family:var(--latin); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--on-3); }
+.readout .v{ font-family:var(--mincho); font-weight:500; font-size:clamp(1.05rem,2.3vw,1.55rem); letter-spacing:.1em; font-variant-numeric:tabular-nums; color:var(--on-2); }
+.echelle{ margin:clamp(30px,5vh,64px) auto 0; max-width:680px; display:grid; gap:16px; }
+.echelle .track{ position:relative; height:1px; background:var(--hair); }
+.echelle .fill{ position:absolute; inset:0 auto 0 0; width:100%; background:var(--on); transform-origin:left; transform:scaleX(0); }
+.echelle .seed{ position:absolute; top:50%; left:0; width:9px; height:9px; margin:-4.5px 0 0 -4.5px; background:#B7BB9F; transform:rotate(45deg); will-change:transform; }
+.echelle .ticks{ display:flex; justify-content:space-between; font-family:var(--mincho); font-weight:var(--w-display); font-size:.72rem; letter-spacing:.14em; color:var(--on-3); }
+.echelle .ticks span{ transition:color 1s var(--ease); }
+.echelle .ticks span.on{ color:var(--on); }
+#roast-stage .body{
+  margin:clamp(34px,6vh,72px) auto 0; max-width:36em; text-align:left;
+  font-size:.85rem; line-height:2.7; letter-spacing:.09em; color:var(--on-2);
+}
+
+/* ============================================================
+   章四 · 読みもの — 白 / 読む。このページで一番よく使う場所です。
+   ============================================================ */
+.j-index{ margin-top:clamp(10px,2vh,24px); }
+.j-row{
+  display:grid; gap:6px 24px; padding-block:clamp(20px,3.2vh,32px);
+  border-top:1px solid var(--hair-f); align-items:baseline;
+}
+.j-row:last-of-type{ border-bottom:1px solid var(--hair-f); }
+@media (min-width:760px){ .j-row{ grid-template-columns:110px 1fr auto; } }
+.j-row .date{ font-family:var(--latin); font-size:10.5px; letter-spacing:.14em; color:var(--on-3); }
+.j-row .t{ font-family:var(--mincho); font-weight:var(--w-display); font-size:clamp(.96rem,1.9vw,1.14rem); letter-spacing:.1em; line-height:1.95; }
+.j-row .cat{ font-family:var(--latin); font-size:10px; letter-spacing:.16em; color:var(--on-3); }
+.j-row .ex{ grid-column:1/-1; font-size:.78rem; line-height:2.4; letter-spacing:.06em; color:var(--on-2); max-width:52em; }
+@media (min-width:760px){ .j-row .ex{ grid-column:2/3; } }
+
+.piece{ margin-top:clamp(70px,13vh,160px); }
+.piece .hd{ border-top:1px solid var(--hair); padding-top:clamp(26px,4vh,44px); }
+.piece h3{ margin-top:14px; font-size:clamp(1.3rem,3.2vw,2rem); letter-spacing:.14em; line-height:2; }
+.piece .by{ margin-top:18px; font-family:var(--latin); font-size:10.5px; letter-spacing:.16em; color:var(--on-3); }
+/* extended Japanese reading: 38 全角 per line, 2.05 leading, 一字下げ */
+.prose{ margin-top:clamp(30px,5vh,56px); max-width:38em; font-size:clamp(.94rem,1.55vw,1.02rem); line-height:2.05; letter-spacing:.045em; color:var(--on); font-weight:var(--w-body); }
+.prose p{ text-indent:1em; }
+.prose p + p{ margin-top:1.7em; }
+.prose h4{ margin-top:2.6em; font-size:1.02em; letter-spacing:.14em; line-height:2; color:var(--on); }
+.prose h4 + p{ margin-top:1.1em; text-indent:1em; }
+.prose .lead{ text-indent:0; color:var(--on-2); }
+.prose blockquote{ margin:2.2em 0 2.2em 1.4em; padding-left:1.2em; border-left:1px solid var(--hair); color:var(--on-2); font-size:.94em; }
+.prose blockquote p{ text-indent:0; }
+.piece .end{ margin-top:clamp(36px,6vh,68px); padding-top:26px; border-top:1px solid var(--hair-f); display:flex; flex-wrap:wrap; gap:18px 30px; align-items:baseline; justify-content:space-between; }
+.j-more{ margin-top:clamp(40px,7vh,80px); }
+
+/* ============================================================
+   章五 · 手 — 勝色 / 観る。縦組みはページ中ここ一箇所のみ。
+   ============================================================ */
+.hands{ display:grid; gap:clamp(34px,6vw,70px); }
+@media (min-width:820px){ .hands{ grid-template-columns:1fr 1fr; } }
+.hands .slot .frame{ aspect-ratio:1/1; }
+.hands .t{ margin-top:22px; font-family:var(--mincho); font-weight:var(--w-display); font-size:1rem; letter-spacing:.2em; line-height:2.2; }
+.hands .d{ margin-top:12px; font-size:.79rem; line-height:2.5; letter-spacing:.08em; color:var(--on-2); max-width:30em; }
+/* the one vertical moment on the page */
+.tategaki{
+  margin:clamp(70px,13vh,150px) auto 0; width:min(100%,600px);
+  padding:clamp(24px,5vw,46px) clamp(14px,4vw,38px);
+  border:1px solid var(--hair-f);
+  display:flex; justify-content:center; align-items:flex-start; gap:clamp(16px,4vw,42px);
+}
+.vert{
+  writing-mode:vertical-rl; text-orientation:upright;
+  font-family:var(--mincho); font-weight:500;
+  font-size:clamp(.88rem,1.5vw,1rem); line-height:3; letter-spacing:.22em;
+  max-height:min(56vh,440px); color:var(--on-2); text-align:start;
+}
+.vert .mk{ color:var(--ember); }
+.vert.title{ font-size:clamp(1.1rem,2.2vw,1.42rem); font-weight:600; letter-spacing:.3em; line-height:1.8; color:var(--on); max-height:none; }
+.sig-v{ writing-mode:vertical-rl; font-family:var(--mincho); font-weight:500; font-size:.72rem; letter-spacing:.2em; color:var(--on-3); max-height:none; }
+@media (max-width:520px){ .tategaki{ gap:12px; padding-inline:10px; } .vert{ font-size:.84rem; letter-spacing:.18em; } }
+.goutte{ margin:clamp(50px,9vh,104px) auto 0; width:1px; height:120px; background:var(--hair-f); position:relative; }
+.goutte::after{
+  content:""; position:absolute; left:50%; top:0; width:5px; height:5px; margin-left:-2.5px;
+  border-radius:50%; background:var(--ember); opacity:0;
+  animation:drip 5.4s cubic-bezier(.5,0,.35,1) infinite;
+}
+@keyframes drip{
+  0%{transform:translateY(0) scale(.6);opacity:0} 12%{opacity:.95;transform:translateY(0) scale(1)}
+  70%{opacity:.95;transform:translateY(112px) scale(1)} 84%{opacity:0;transform:translateY(120px) scale(.35)}
+  100%{opacity:0;transform:translateY(120px) scale(.35)}
+}
+
+/* ============================================================
+   章六 · 購う — 白 / 読む。決済はこのページにありません。
+   ============================================================ */
+#ch-buy .facts{ margin-top:clamp(38px,6vh,74px); display:grid; gap:clamp(22px,4vw,44px); }
+@media (min-width:800px){ #ch-buy .facts{ grid-template-columns:repeat(3,1fr); } }
+.fact{ border-top:1px solid var(--hair); padding-top:18px; }
+.fact dt{ font-family:var(--latin); font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--on-3); }
+.fact dd{ margin:12px 0 0; font-size:.82rem; line-height:2.45; letter-spacing:.07em; color:var(--on-2); }
+#ch-buy .act{ margin-top:clamp(52px,9vh,110px); display:flex; flex-direction:column; align-items:flex-start; gap:clamp(20px,4vh,34px); }
+#ch-buy .fine{ margin-top:clamp(32px,5vh,60px); font-size:.73rem; line-height:2.5; letter-spacing:.08em; color:var(--on-3); max-width:48em; }
+
+/* ============================================================
+   footer — 勝色。幕が下りるところ。
+   ============================================================ */
+#site-footer{ position:relative; padding-block:clamp(66px,11vh,124px) 46px; font-size:.76rem; letter-spacing:.09em; line-height:2.5; color:var(--on-2); }
+#site-footer .f-grid{ display:grid; gap:clamp(30px,5vw,58px); }
+@media (min-width:820px){ #site-footer .f-grid{ grid-template-columns:1.2fr .8fr .8fr auto; align-items:start; } }
+#site-footer .fmark{ font-family:var(--mincho); font-weight:600; font-size:21px; letter-spacing:.2em; color:var(--on); }
+#site-footer ul{ list-style:none; margin:0; padding:0; }
+#site-footer ul a{ color:var(--on-2); transition:color .7s var(--ease); }
+#site-footer ul a:hover{ color:var(--on); }
+#site-footer .legal{ margin-top:46px; font-family:var(--latin); font-size:9px; letter-spacing:.16em; color:var(--on-3); text-transform:uppercase; }
+
+/* ============================================================
+   法人向け卸販売 — 同じ地色、同じ書体、違う語り口。
+   読み物ではなく、調達担当者が走査する文書です。行間を詰め、
+   段落を短くし、数字を左に揃え、装飾を外しています。
+   ============================================================ */
+[data-view="wholesale"] .chapter{ padding-block:clamp(84px,13vh,150px) clamp(96px,18vh,200px); }
+#w-hero{ min-height:auto; padding-top:clamp(120px,20vh,190px); }
+#w-hero-media{ position:absolute; inset:0; z-index:-2; overflow:hidden; pointer-events:none; }
+#w-hero-media::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(24,27,57,.9) 0%, rgba(24,27,57,.62) 46%, rgba(24,27,57,.94) 100%);
+}
+#w-hero h1{ margin-top:16px; font-size:clamp(1.55rem,4.6vw,2.9rem); letter-spacing:.2em; text-indent:.2em; line-height:1.9; }
+#w-hero .lede{ margin-top:22px; max-width:42em; font-size:.86rem; line-height:2.5; letter-spacing:.08em; color:var(--on-2); }
+.w-keys{ margin-top:clamp(40px,7vh,80px); display:grid; gap:clamp(18px,3vw,36px); }
+@media (min-width:760px){ .w-keys{ grid-template-columns:repeat(3,1fr); } }
+.w-keys div{ border-top:1px solid var(--hair); padding-top:16px; }
+.w-keys dt{ font-family:var(--latin); font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--on-3); }
+.w-keys dd{ margin:10px 0 0; font-family:var(--mincho); font-weight:var(--w-display); font-size:clamp(1rem,2.2vw,1.3rem); letter-spacing:.1em; color:var(--on); }
+.w-keys dd small{ display:block; margin-top:8px; font-family:var(--serif); font-weight:var(--w-body); font-size:.74rem; letter-spacing:.06em; line-height:2.2; color:var(--on-2); }
+
+.w-sec{ margin-top:clamp(64px,11vh,130px); }
+.w-sec:first-of-type{ margin-top:0; }
+.w-sec > h3{
+  font-size:clamp(1.06rem,2.3vw,1.36rem); letter-spacing:.18em; line-height:2;
+  padding-bottom:16px; border-bottom:1px solid var(--hair);
+}
+.w-sec > p{ margin-top:22px; font-size:.83rem; line-height:2.35; letter-spacing:.06em; color:var(--on-2); max-width:50em; }
+.w-sec > p + p{ margin-top:14px; }
+
+/* 取引の流れ — numbered rows, scannable, no cards */
+.flow{ counter-reset:step; margin-top:clamp(26px,4vh,44px); }
+.flow li{ list-style:none; counter-increment:step; display:grid; gap:4px 20px; padding-block:18px; border-bottom:1px solid var(--hair-f); }
+@media (min-width:680px){ .flow li{ grid-template-columns:46px 190px 1fr; align-items:baseline; } }
+.flow li::before{ content:counter(step,decimal-leading-zero); font-family:var(--latin); font-size:11px; font-weight:500; letter-spacing:.14em; color:var(--on-3); }
+.flow .st{ font-family:var(--mincho); font-weight:var(--w-display); font-size:.98rem; letter-spacing:.12em; }
+.flow .dt{ font-size:.79rem; line-height:2.2; letter-spacing:.05em; color:var(--on-2); }
+.flow ul{ margin:0; padding:0; }
+
+/* tables — hairlines only, numbers left-aligned and tabular */
+.tbl{ width:100%; border-collapse:collapse; margin-top:clamp(22px,3.5vh,38px); font-size:.79rem; letter-spacing:.05em; }
+.tbl caption{ text-align:left; font-family:var(--latin); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--on-3); padding-bottom:12px; }
+.tbl th, .tbl td{ text-align:left; vertical-align:top; padding:14px 16px 14px 0; border-bottom:1px solid var(--hair-f); line-height:2.1; }
+.tbl thead th{ border-bottom:1px solid var(--hair); font-family:var(--latin); font-weight:500; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--on-3); padding-bottom:10px; }
+.tbl td.num{ font-variant-numeric:tabular-nums; white-space:nowrap; color:var(--on); }
+.tbl tbody th{ font-family:var(--mincho); font-weight:var(--w-display); font-size:.86rem; letter-spacing:.1em; white-space:nowrap; }
+.tbl td{ color:var(--on-2); }
+.tbl-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+.cases{ margin-top:clamp(22px,3.5vh,38px); }
+.cases li{ list-style:none; padding-block:18px; border-bottom:1px solid var(--hair-f); display:grid; gap:4px 24px; }
+@media (min-width:720px){ .cases li{ grid-template-columns:150px 1fr; } }
+.cases .who{ font-family:var(--mincho); font-weight:var(--w-display); font-size:.92rem; letter-spacing:.12em; }
+.cases .how{ font-size:.79rem; line-height:2.2; letter-spacing:.05em; color:var(--on-2); }
+.cases ul{ margin:0; padding:0; }
+
+/* FAQ — native details, no JS, keyboard-operable by the browser */
+.faq{ margin-top:clamp(22px,3.5vh,38px); }
+.faq details{ border-bottom:1px solid var(--hair-f); }
+.faq summary{
+  list-style:none; cursor:pointer; padding-block:18px;
+  font-family:var(--mincho); font-weight:var(--w-display); font-size:.92rem;
+  letter-spacing:.1em; line-height:1.9; display:flex; gap:14px; align-items:baseline;
+}
+.faq summary::-webkit-details-marker{ display:none; }
+.faq summary::before{ content:"Q"; font-family:var(--latin); font-size:10px; letter-spacing:.14em; color:var(--on-3); flex:0 0 auto; }
+.faq details[open] summary{ color:var(--on); }
+.faq .a{ padding:0 0 22px 24px; font-size:.79rem; line-height:2.3; letter-spacing:.05em; color:var(--on-2); max-width:52em; }
+
+/* ---------- お問い合わせフォーム ------------------------------- */
+/* No backend in this prototype. The markup is production-shaped:
+   every control has a real <label for>, a real type, an autocomplete
+   token, required where required, aria-describedby pointing at the
+   error node that sits IMMEDIATELY AFTER the field, and aria-invalid
+   flipped on failure. Wiring is documented in the comment at the form. */
+.form{ margin-top:clamp(26px,4vh,46px); max-width:44em; }
+.fld{ margin-bottom:clamp(22px,3.4vh,34px); }
+.fld > label, .fset > legend{
+  display:block; font-family:var(--latin); font-size:11px; font-weight:500;
+  letter-spacing:.14em; color:var(--on-2); margin-bottom:10px; padding:0;
+}
+.req{ color:var(--alert); margin-left:.5em; font-size:10px; letter-spacing:.1em; }
+.opt{ color:var(--on-3); margin-left:.5em; font-size:10px; letter-spacing:.1em; }
+.fld input[type=text], .fld input[type=email], .fld input[type=tel], .fld select, .fld textarea{
+  width:100%; background:var(--lift); color:var(--on);
+  border:1px solid var(--hair); border-radius:0; padding:13px 14px;
+  font-family:var(--serif); font-weight:var(--w-body); font-size:.88rem; letter-spacing:.05em; line-height:1.9;
+  transition:border-color .3s linear;
+}
+.fld textarea{ min-height:150px; resize:vertical; line-height:2.1; }
+.fld select{ appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--on-3) 50%),linear-gradient(135deg,var(--on-3) 50%,transparent 50%); background-position:calc(100% - 20px) 50%,calc(100% - 15px) 50%; background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:44px; }
+.fld input:focus-visible, .fld select:focus-visible, .fld textarea:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; border-color:var(--on-3); }
+.fld .hint{ margin-top:9px; font-size:.72rem; line-height:2; letter-spacing:.05em; color:var(--on-3); }
+.err{ display:none; margin-top:9px; font-family:var(--latin); font-size:11.5px; letter-spacing:.06em; line-height:1.8; color:var(--alert); }
+.fld.bad .err{ display:block; }
+.fld.bad input, .fld.bad select, .fld.bad textarea{ border-color:var(--alert); }
+.fset{ border:0; margin:0 0 clamp(22px,3.4vh,34px); padding:0; }
+.checks{ display:flex; flex-wrap:wrap; gap:10px 26px; }
+.checks label, .agree label{ display:flex; align-items:flex-start; gap:10px; font-size:.8rem; letter-spacing:.05em; line-height:2; color:var(--on-2); cursor:pointer; }
+.checks input, .agree input{ width:16px; height:16px; margin-top:.55em; accent-color:var(--katsu); flex:0 0 auto; }
+.form .submit{
+  margin-top:8px; font-family:var(--mincho); font-weight:var(--w-display);
+  font-size:1rem; letter-spacing:.2em; text-indent:.2em; color:var(--on);
+  background:none; border:1px solid var(--on-3); padding:17px 34px; cursor:pointer;
+  transition:background-color .5s var(--ease), color .5s var(--ease), border-color .5s var(--ease);
+}
+.form .submit:hover{ background:var(--katsu); color:var(--white); border-color:var(--katsu); }
+#form-status{ margin-top:22px; font-size:.8rem; line-height:2.2; letter-spacing:.05em; color:var(--on-2); }
+#form-status[data-state="ok"]{ color:var(--on); }
+#form-status[data-state="bad"]{ color:var(--alert); }
+
+/* ============================================================
+   静止 — prefers-reduced-motion と Save-Data は同じ場所に着きます。
+   地色はセクションごとに直接塗られ、転換帯は二色のグラデーション
+   一枚になります。両方の章が、両方とも読める状態で完成します。
+   ============================================================ */
+body.still #ground-a, body.still #ground-b,
+body.still #light, body.still .grain{ display:none; }
+body.still .chapter[data-ground="dark"], body.still #site-footer{ background:var(--katsu); }
+body.still .chapter[data-ground="light"]{ background:var(--white); }
+body.still .turn[data-to="light"]{ background:linear-gradient(var(--katsu),var(--white)); }
+body.still .turn[data-to="dark"]{ background:linear-gradient(var(--white),var(--katsu)); }
+body.still .turn .horizon i{ transform:scaleX(1); opacity:.5; }
+body.still .chapter > .ch-body{ opacity:1 !important; filter:none !important; }
+body.still *,body.still *::before,body.still *::after{ animation:none !important; }
+body.still .ph-steam{ opacity:.5; }
+body.still #hero-media::after{ background:linear-gradient(180deg,rgba(24,27,57,.86),rgba(24,27,57,.5) 44%,rgba(24,27,57,.92)); }
+/* the tab is hidden: stop every loop rather than leave the compositor
+   spinning on a page nobody is looking at */
+body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animation-play-state:paused !important; }
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation:none !important; transition-duration:.01ms !important; }
+  #veil{ display:none !important; }
+  .rule-c{ transform:scaleX(1) !important; }
+  .store-cta::after{ transform:scaleX(1) !important; }
+  #rail{ display:none !important; }
+  .echelle .fill{ transform:scaleX(.62) !important; }
+  .ph-steam{ opacity:.5; }
+}
+</style>
+
+<div id="ground-a" aria-hidden="true"></div>
+<div id="ground-b" aria-hidden="true"></div>
+<div id="light" aria-hidden="true"><div id="lite-c"></div><div id="lite-w"></div></div>
+<div class="grain" id="grain-s" aria-hidden="true"></div>
+<div class="grain" id="grain-m" aria-hidden="true"></div>
+
+<div id="veil" aria-hidden="true"><span class="vmark">Soigné</span></div>
+
+<a id="skip" href="#main-home">本文へスキップ</a>
+
+<div id="rail" aria-hidden="true">
+  <div class="stem">
+    <span class="ink"></span>
+    <span class="tick" style="top:0%"></span>
+    <span class="tick" style="top:22%"></span>
+    <span class="tick" style="top:41%"></span>
+    <span class="tick" style="top:58%"></span>
+    <span class="tick" style="top:76%"></span>
+    <span class="tick" style="top:100%"></span>
+    <span class="dot"></span>
+  </div>
+</div>
+
+<!-- The header crosses both grounds. Its colours come from html[data-ground],
+     which the router and the turn-scrubs keep in sync; it is never left
+     half-legible over a ground it was not coloured for. -->
+<header>
+  <a class="mark" href="#/" data-route="#/">Soigné</a>
+  <nav aria-label="主要">
+    <a class="hide-m" href="#ch-beans">豆</a>
+    <a class="hide-m" href="#ch-journal">読みもの</a>
+    <a class="hide-m" href="#ch-roast">焙煎所</a>
+    <a class="b2b-btn" href="#/wholesale" data-route="#/wholesale" id="b2b-header">法人向けはこちら</a>
+    <!-- 決済は Square オンラインビジネス。このサイトに買い物かごはありません。 -->
+    <a class="store-min ext" id="store-header"
+       href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=header&amp;utm_campaign=always_on&amp;utm_content=header_store"
+       target="_blank" rel="noopener noreferrer">オンラインストア<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+  </nav>
+</header>
+
+<p id="route-live" class="vh" role="status" aria-live="polite"></p>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     VIEW 1 — #/  トップ
+     章一 勝色 / 章二 白 / 章三 勝色 / 章四 白 / 章五 勝色 / 章六 白
+     ══════════════════════════════════════════════════════════════════ -->
+<main id="main-home" data-view="home" tabindex="-1">
+
+  <!-- ═══ 章一 · 序景 ═══ 勝色 = 観る。全画面、無音。 ═══════════════ -->
+  <section class="chapter" id="ch-hero" data-ground="dark" aria-labelledby="hero-h1">
+    <!-- ─────────────────────────────────────────────────────────────
+         MEDIA SLOT B2-01 · roastery-room · 16:9 landscape
+         被写体にロット名も季節も写りません。だから差し替え不要です。
+         PRODUCTION MARKUP — delete the .ph placeholder inside this
+         element and insert exactly this in its place:
+
+         <video id="v-room"
+                class="media"
+                data-media="roastery-room"
+                muted playsinline webkit-playsinline autoplay loop
+                preload="auto"
+                disablepictureinpicture disableremoteplayback
+                poster="/media/poster/room-1920.avif"
+                aria-hidden="true" tabindex="-1"
+                style="width:100%;height:100%;object-fit:cover">
+           <source src="/media/room-1920.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+           <source src="/media/room-1920.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+         </video>
+
+         · ONE asset, no portrait variant. A12 shot a second 9:16 file for
+           narrow screens; this one is framed with the subject inside the
+           centre 9:16 safe area so object-fit:cover crops correctly on a
+           phone. That removes an asset and a reshoot forever.
+         · `muted` + `playsinline` are both required or iOS Safari refuses
+           to autoplay and shows native controls.
+         · Under prefers-reduced-motion or Save-Data the <video> is never
+           inserted: the poster <img> stays and nothing downloads.
+         · No {saison} in the filename. There is no seasonal swap. The
+           season is carried by the text in 章二「今週の棚」.
+         ───────────────────────────────────────────────────────────── -->
+    <div id="hero-media" data-media="roastery-room" aria-hidden="true">
+      <div class="ph">
+        <div class="ph-field"></div>
+        <div class="ph-rake"></div>
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <!-- the drum, low and to the left; the window, high and right -->
+          <g fill="none" stroke="rgba(226,233,248,.22)" stroke-width="1">
+            <rect x="188" y="404" width="440" height="286" rx="14"/>
+            <circle cx="408" cy="547" r="86"/>
+            <circle cx="408" cy="547" r="58"/>
+            <path d="M628 470 L744 470 M628 620 L744 620"/>
+            <path d="M188 690 L188 792 M628 690 L628 792"/>
+          </g>
+          <ellipse cx="408" cy="547" rx="52" ry="52" fill="rgba(192,135,60,.40)"/>
+          <ellipse cx="408" cy="547" rx="76" ry="76" fill="rgba(192,135,60,.14)"/>
+          <g fill="none" stroke="rgba(226,233,248,.13)" stroke-width="1">
+            <rect x="1012" y="152" width="392" height="452"/>
+            <path d="M1208 152 L1208 604 M1012 378 L1404 378"/>
+          </g>
+          <ellipse cx="1208" cy="378" rx="290" ry="290" fill="rgba(180,200,240,.05)"/>
+          <path d="M120 792 L1480 792" stroke="rgba(226,233,248,.16)" stroke-width="1"/>
+          <g fill="rgba(226,233,248,.10)">
+            <rect x="880" y="694" width="150" height="98" rx="3"/>
+            <rect x="1058" y="706" width="128" height="86" rx="3"/>
+          </g>
+        </svg>
+        <div class="ph-steam" aria-hidden="true">
+          <i style="left:25%;animation-delay:-0.4s"></i>
+          <i style="left:28%;height:34%;animation-delay:-4.1s"></i>
+          <i style="left:31%;height:27%;animation-delay:-7.6s"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch-body wrap">
+      <div id="hero-inner">
+        <p class="kicker">Soigné Coffee Roastery — Tokyo, Aobadai</p>
+        <p id="wordmark" data-t="Soigné"></p>
+        <div id="hero-rule-wrap">
+          <div class="rule-c" id="hero-rule"></div>
+        </div>
+        <h1 id="hero-h1">
+          <span class="ln" data-t="静かな一杯を、"></span>
+          <span class="ln" data-t="焙煎する。"></span>
+        </h1>
+        <p class="lede">少量焙煎。週に一度、火を入れます。<br>その日に出会えた豆のことだけを考えて。</p>
+      </div>
+
+      <div id="hero-foot">
+        <p class="label left">章一 · 序景</p>
+        <div class="mid"><span class="cue"><span class="line"></span><span class="label">Descendre</span></span></div>
+        <div class="right">
+          <!-- 俵屋の先例。このページに音楽はありません。この操作は B2-01 に
+               既に入っている環境音のミュートを外すだけで、既定はOff、状態は
+               保存しません。 -->
+          <button id="son" type="button" aria-pressed="false">音 · Off</button>
+        </div>
+      </div>
+      <p id="hero-cap">B2-01 · Roastery room · 16:9 · 14 s seamless · no cuts · silent · AV1 1.5 MB / H.264 2.8 MB</p>
+    </div>
+  </section>
+
+  <!-- ─── 転換 : 勝色 → 白。明かりが落ちて、明かりが戻る。 ─── -->
+  <div class="turn" data-to="light" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+
+  <!-- ═══ 章二 · 珈琲 ═══ 白 = 読む。映像は一本もありません。 ═══════ -->
+  <section class="chapter" id="ch-beans" data-ground="light" aria-labelledby="beans-h2">
+    <div class="ch-body wrap">
+      <div class="sec-head axis">
+        <p class="kicker">章二 · 珈琲</p>
+        <h2 id="beans-h2">今、棚にある豆</h2>
+        <p class="sub">どの豆が棚にあるかは週で変わります。ここは文字だけで組んであります。<br>在庫も焙煎度も価格も、書き換えるのは一行です。撮り直しは発生しません。</p>
+      </div>
+
+      <div class="axis">
+        <article class="bean">
+          <div class="top"><span class="no">01</span><h3>エチオピア イルガチェフェ／コンガ</h3></div>
+          <p class="orig">Ethiopia · Yirgacheffe · Washed · 1,950 m</p>
+          <div class="meta"><span>白桃・ベルガモット・紅茶</span><span>浅煎り</span><span class="price">¥1,980 / 200g</span></div>
+          <a class="store-min ext go" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_yirgacheffe_konga" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+        </article>
+
+        <article class="bean">
+          <div class="top"><span class="no">02</span><h3>グアテマラ アンティグア／エル・ソコロ</h3></div>
+          <p class="orig">Guatemala · Antigua · Fully washed · 1,650 m</p>
+          <div class="meta"><span>焦がしカラメル・胡桃・黒糖</span><span>中煎り</span><span class="price">¥1,760 / 200g</span></div>
+          <a class="store-min ext go" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_antigua_socorro" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+        </article>
+
+        <article class="bean">
+          <div class="top"><span class="no">03</span><h3>ケニア ニエリ／カリンダ AA</h3></div>
+          <p class="orig">Kenya · Nyeri · Washed, SL28 · 1,780 m</p>
+          <div class="meta"><span>黒すぐり・レモングラス・蜜</span><span>中浅煎り</span><span class="price">¥2,420 / 200g</span></div>
+          <a class="store-min ext go" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_nyeri_karinda" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+        </article>
+
+        <article class="bean">
+          <div class="top"><span class="no">04</span><h3>ブレンド／夜のための一杯</h3></div>
+          <p class="orig">Blend · Brazil &amp; Colombia · 中深煎り</p>
+          <div class="meta"><span>ビターチョコ・干し葡萄・杉</span><span>中深煎り</span><span class="price">¥1,540 / 200g</span></div>
+          <a class="store-min ext go" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_blend_yoru" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+        </article>
+
+        <!-- 今週の棚 — 週に一度、焙煎士が書き換える唯一のブロック。
+             A12ではここが季節ごとの再撮影でした。文字に移しました。 -->
+        <div class="shelf">
+          <p class="when">2026.09.14 更新</p>
+          <div>
+            <h3>今週の棚</h3>
+            <p>朝の気温が下がってきたので、夏のあいだ棚から外していた中浅煎りを戻しました。ニエリは今週から新しいロットです。前のロットより酸が穏やかで、蜜の印象が強く出ています。</p>
+            <ul>
+              <li><span>イルガチェフェ／コンガ</span><span>在庫あり</span></li>
+              <li><span>アンティグア／エル・ソコロ</span><span>残りわずか</span></li>
+              <li><span>ニエリ／カリンダ AA</span><span>9/12 入荷</span></li>
+              <li><span>ブレンド／夜のための一杯</span><span>在庫あり</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 転換 : 白 → 勝色 ─── -->
+  <div class="turn" data-to="dark" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
