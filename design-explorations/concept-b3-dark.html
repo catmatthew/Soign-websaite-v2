@@ -1,0 +1,2456 @@
+<title>Soigné — 勝色の頁</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500;600&family=Noto+Serif+JP:wght@300;400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap">
+
+<style>
+/* ==============================================================
+   案B3 — 勝色基調 / KATSUIRO-DOMINANT
+   Built on A12: its media-slot chassis, its production markup
+   comments, its GSAP motion system, its font stack.
+
+   Changed, deliberately:
+   · The ground is 勝色 #181B39. There is no light chapter.
+     The ONE exception is a stated rule, not an escape hatch:
+       「地は勝色。読むために立ち止まる面だけ、紙を置く。」
+     A light paper panel is inset into the dark page wherever the
+     reader is expected to STAY and read — the 読みもの article
+     and the 法人向け factual body. Everything one MOVES THROUGH
+     stays katsuiro. Dark = passage. Paper = dwelling.
+   · Cormorant Garamond is REMOVED. See the .md.
+   · Four media assets, not nine. All evergreen.
+   · No cart. Purchase is external (Square). No music, ever.
+   ============================================================== */
+
+:root{
+  /* ---- 地 : 勝色。三段だけ。面を増やすとカードになる。 ---- */
+  --katsu:      #181B39;   /* the page */
+  --katsu-deep: #12152C;   /* recessed — every media slot's reserved box */
+  --katsu-lift: #1F2449;   /* lifted — header when lifted, form fields */
+
+  /* ---- インク : 純白は使わない。#F8F9FA を上限とし、
+         長文は一段落として halation を避ける。 ---- */
+  --ink:      #F8F9FA;   /* 15.9:1 — 見出し・数値・短い行のみ */
+  --ink-read: #C8CEE0;   /* 10.7:1 — 暗い地の上の長めの本文 */
+  --ink-mid:  #A7B0CC;   /*  7.6:1 — 副次的な説明 */
+  --ink-mute: #8C95B4;   /*  5.6:1 — ラテン小文字・キャプション */
+  --rule:   rgba(248,249,250,.17);
+  --rule-f: rgba(248,249,250,.085);
+
+  /* ---- 差し色は二色だけ。役割で完全に分けている。 ----
+     照柿 : 熱。焙煎・火・外部購入導線。編集面のみ。     4.99:1
+     浅葱 : 機能。フォーカスリング・必須印・手順番号。   6.2:1  */
+  --terigaki: #D96E45;
+  --asagi:    #6FA8A0;
+
+  /* ---- 紙 : 滞在して読む面だけに敷く ---- */
+  --paper:      #F8F9FA;
+  --paper-2:    #EEF0F4;
+  --paper-ink:  #181B39;  /* 15.9:1 */
+  --paper-read: #2A2F52;  /* 12.3:1 — 紙の上の長文 */
+  --paper-mute: #5C6383;
+  --paper-rule: rgba(24,27,57,.15);
+
+  --gutter: clamp(16px, 5.5vw, 104px);
+  --axis: 980px;
+  --ease: cubic-bezier(.16,1,.3,1);
+
+  --mincho: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --serif:  "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --latin:  "Zen Kaku Gothic New", "Hiragino Sans", "Helvetica Neue", sans-serif;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ overflow-x:clip; scroll-behavior:auto; }
+body{
+  margin:0;
+  background: var(--katsu);
+  color: var(--ink-read);
+  font-family: var(--serif);
+  /* 反転組では一段重く。明るい地の300は、暗い地では細って消える。 */
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:clip;
+}
+
+/* ---------- 光と粒 : 暗い地では「足す」。引かない。 ----------
+   A12の grain は mix-blend-mode:multiply だった。暗い地では
+   何も起こらないので soft-light に変え、光は乗算ではなく加算の
+   ごく弱い radial とした。 */
+#ground{ position:fixed; inset:0; z-index:-4; pointer-events:none; background:var(--katsu); }
+#light{
+  position:fixed; inset:-24%; z-index:-3; pointer-events:none;
+  animation: drift 94s ease-in-out infinite alternate; will-change:transform;
+}
+#light-i{
+  position:absolute; inset:0; will-change:transform; opacity:1;
+  background:
+    radial-gradient(58% 44% at 50% 8%,  rgba(180,200,230,.085), rgba(180,200,230,0) 66%),
+    radial-gradient(46% 40% at 84% 82%, rgba(217,110,69,.055),  rgba(217,110,69,0) 62%);
+}
+@keyframes drift{
+  0%   { transform: translate3d(-2%,-1.5%,0) scale(1.00); }
+  100% { transform: translate3d( 2.4%, 2.2%,0) scale(1.06); }
+}
+#grain{
+  position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.055;
+  mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- 00 開幕 ---------- */
+#veil{
+  position:fixed; inset:0; z-index:60; pointer-events:none;
+  background: var(--katsu); display:grid; place-items:center;
+}
+#veil .vmark{
+  font-family: var(--mincho); font-weight:500; font-size:24px;
+  letter-spacing:.34em; text-indent:.34em; color:var(--ink-mid);
+}
+
+/* ---------- 共通の組 ---------- */
+h1,h2,h3,h4{ font-family:var(--mincho); font-weight:500; margin:0; }
+p{ margin:0; }
+a{ color:inherit; text-decoration:none; }
+.wrap{ padding-inline:var(--gutter); max-width:calc(var(--axis) + 208px); margin-inline:auto; }
+.axis{ max-width:var(--axis); margin-inline:auto; }
+section{ position:relative; }
+.sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+/* フォーカスは暗い地のために設計する。ブラウザ既定の青は勝色に沈む。 */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--asagi);
+  outline-offset:3px;
+  border-radius:1px;
+}
+.paper :where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline-color:#1D6B62;
+}
+
+.latin{
+  font-family:var(--latin); font-weight:400; font-size:10px;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--ink-mute); line-height:1.9;
+}
+.kicker{
+  font-family:var(--latin); font-weight:400;
+  font-size:clamp(10px,1.1vw,11.5px); letter-spacing:.3em; text-transform:uppercase;
+  color:var(--ink-mute);
+}
+
+/* 罫は髪の毛一本。中央から開く。 */
+.rule-d{
+  height:1px; background:var(--rule);
+  width:min(100%, 560px); margin:0 auto;
+  transform:scaleX(0); transform-origin:center;
+}
+.lozenge{
+  display:block; width:5px; height:5px; margin:20px auto;
+  background:var(--terigaki);            /* ── 照柿 1/6 ── */
+  transform:rotate(45deg);
+}
+
+/* ---------- 進行 : 読みの罫 ---------- */
+#rail{
+  position:fixed; left:calc(var(--gutter)*.40); top:50%;
+  transform:translateY(-50%); z-index:15; pointer-events:none; display:none;
+}
+@media (min-width:1220px){ body[data-view="home"] #rail{ display:block; } }
+#rail .stem{ width:1px; height:42vh; background:var(--rule-f); position:relative; }
+#rail .stem .ink{
+  position:absolute; left:0; top:0; width:1px; height:100%;
+  background:var(--rule); transform-origin:top; transform:scaleY(0);
+}
+#rail .dot{
+  position:absolute; left:-2px; top:0; width:5px; height:5px; border-radius:50%;
+  background:var(--ink-mid); transform:translateY(-2.5px);
+}
+#rail .tick{ position:absolute; left:-4px; width:9px; height:1px; background:var(--rule); opacity:.5; }
+
+/* ---------- 01 header ---------- */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:20;
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:18px var(--gutter);
+  border-bottom:1px solid transparent;
+  background:linear-gradient(var(--katsu) 56%, rgba(24,27,57,0));
+}
+header.lifted{ border-bottom-color:var(--rule-f); background:var(--katsu); }
+header .mark{
+  font-family:var(--mincho); font-weight:500; font-size:19px;
+  letter-spacing:.22em; text-indent:.22em; color:var(--ink);
+}
+header nav{ display:flex; align-items:center; gap:clamp(10px,2.1vw,26px); }
+header nav a{
+  font-family:var(--latin); font-size:10.5px; letter-spacing:.16em;
+  color:var(--ink-mute); transition:color .9s var(--ease);
+}
+header nav a:hover{ color:var(--ink); }
+@media (max-width:860px){ header nav a.hide-m{ display:none; } }
+@media (max-width:620px){ header .mark{ font-size:17px; } header nav{ gap:10px; } }
+
+/* 法人向けボタン : ヘッダに置く。購買担当者は
+   スクロールせずに自分の入口を見つけられなければならない。 */
+.btn-b2b{
+  font-family:var(--latin); font-size:10.5px; letter-spacing:.14em;
+  color:var(--ink) !important; border:1px solid var(--rule);
+  padding:7px 13px; white-space:nowrap;
+  transition:border-color .8s var(--ease), background-color .8s var(--ease);
+}
+.btn-b2b:hover{ border-color:var(--ink-mid); background:var(--katsu-lift); }
+.btn-b2b[aria-current="page"]{ border-color:var(--asagi); }
+
+/* 音 — 既定Off。差し色は使わない。 */
+#son{
+  font-family:var(--latin); font-size:9.5px; letter-spacing:.15em;
+  color:var(--ink-mute); background:none; border:0; border-bottom:1px solid var(--rule-f);
+  padding:0 0 4px; cursor:pointer; transition:color .9s var(--ease), border-color .9s var(--ease);
+}
+#son:hover{ color:var(--ink); border-color:var(--rule); }
+#son[aria-pressed="true"]{ color:var(--ink); border-color:var(--ink-mid); }
+@media (max-width:760px){ #son{ display:none; } }
+
+/* ---------- 外部リンクの印 : Squareへ出る唯一の合図 ----------
+   暗い地では下線が沈むので、照柿の細い罫＋矢印の二重表示にした。
+   色だけに意味を持たせない（矢印とスクリーンリーダ用の文言を必ず伴う）。*/
+.ext{
+  position:relative; display:inline-flex; align-items:baseline; gap:.45em;
+  color:var(--ink); padding-bottom:5px;
+  border-bottom:1px solid rgba(217,110,69,.55);   /* ── 照柿 2/6 ── */
+  transition:border-color .7s var(--ease), color .7s var(--ease);
+}
+.ext:hover{ border-bottom-color:var(--terigaki); }
+.ext .arw{ width:.62em; height:.62em; flex:0 0 auto; transform:translateY(.02em); }
+.ext .arw path{ stroke:var(--terigaki); stroke-width:1.6; fill:none; }
+.paper .ext{ color:var(--paper-ink); border-bottom-color:rgba(170,70,35,.6); }
+.paper .ext .arw path{ stroke:#A9462A; }
+
+/* ==============================================================
+   MEDIA SLOTS — A12の骨組みをそのまま継承。
+   すべての枠は aspect-ratio で場所を先に確保する。崩れない。
+   ============================================================== */
+.slot{ position:relative; margin:0; }
+.slot .frame{
+  position:relative; width:100%; overflow:hidden;
+  background:var(--katsu-deep);
+  border:1px solid var(--rule-f);
+}
+.slot .cap{
+  display:block; margin-top:10px;
+  font-family:var(--latin); font-size:9px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-mute); line-height:1.9;
+}
+.slot .cap b{ font-weight:500; color:var(--ink-mid); }
+/* 本番では .ph を削除し、直前のコメント内の <video> をそのまま置く */
+.ph{ position:absolute; inset:0; }
+.ph svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+/* 暗い地に合わせた素材面。低照度・火色の溜まり。 */
+.ph-field{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(60% 46% at 44% 26%, rgba(150,170,205,.16), rgba(150,170,205,0) 72%),
+    radial-gradient(52% 38% at 62% 88%, rgba(217,110,69,.12), rgba(217,110,69,0) 70%),
+    linear-gradient(168deg, #1E2244 0%, #171A36 54%, #0E1126 100%);
+}
+/* 窓からの斜光 — どの枠の中でも止まらない微動 */
+.ph-rake{
+  position:absolute; inset:-30%;
+  background:radial-gradient(40% 32% at 30% 22%, rgba(214,226,246,.20), rgba(214,226,246,0) 68%);
+  animation: rake 30s ease-in-out infinite alternate; will-change:transform,opacity;
+}
+@keyframes rake{
+  0%{ transform:translate3d(-3%,-2%,0) scale(1); opacity:.6; }
+  100%{ transform:translate3d(4%,3%,0) scale(1.12); opacity:1; }
+}
+/* 湯気 — 暗い地では白く立つ */
+.ph-steam i{
+  position:absolute; bottom:8%; width:1px; height:46%;
+  background:linear-gradient(to top, rgba(232,238,250,.34), rgba(232,238,250,0));
+  transform-origin:bottom; animation: rise 11s ease-in-out infinite;
+}
+@keyframes rise{
+  0%{   transform:translateY(16px) scaleY(.5) skewX(0deg); opacity:0; }
+  26%{  opacity:.85; }
+  72%{  opacity:.45; }
+  100%{ transform:translateY(-26px) scaleY(1.1) skewX(6deg); opacity:0; }
+}
+
+/* ---------- 02 hero ---------- */
+#hero{
+  min-height:100svh; display:grid; grid-template-rows:1fr auto;
+  padding-top:clamp(112px, 20vh, 220px); text-align:center;
+}
+#hero-media{
+  position:absolute; inset:0; z-index:-2; overflow:hidden; pointer-events:none;
+}
+#hero-media .ph{ inset:-2%; }
+/* 暗い地では映像を「暗くする」veilではなく、地の色で沈める veil を掛ける。
+   映像は低照度で撮り、勝色より明るいのは火と手元だけになる。 */
+#hero-media::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(24,27,57,.62) 0%, rgba(24,27,57,.42) 40%, rgba(24,27,57,.88) 100%);
+}
+#hero .inner{ display:grid; align-content:center; }
+#hero .wordmark{
+  font-family:var(--mincho); font-weight:400;
+  font-size:clamp(2.7rem, 10.5vw, 6.6rem); line-height:1.04;
+  letter-spacing:.12em; text-indent:.12em; color:var(--ink);
+}
+#hero .wordmark .ch{ display:inline-block; will-change:transform,opacity; }
+#hero h1{
+  margin-top:clamp(28px,6vh,60px);
+  font-family:var(--mincho); font-weight:500;
+  font-size:clamp(1.05rem, 2.5vw, 1.5rem);
+  line-height:2.5; letter-spacing:.32em; text-indent:.32em; color:var(--ink);
+}
+#hero h1 .ln{ display:block; }
+#hero .sub{
+  margin:clamp(28px,5vh,54px) auto 0; max-width:32ch;
+  font-size:clamp(.82rem,1.4vw,.92rem); line-height:2.5; letter-spacing:.13em;
+  color:var(--ink-read);
+}
+#hero .foot{
+  display:flex; align-items:flex-end; justify-content:space-between; gap:18px;
+  padding-bottom:30px; text-align:left;
+}
+#hero .foot .mid{ text-align:center; }
+#hero .foot .right{ text-align:right; }
+.cue{ display:inline-flex; flex-direction:column; align-items:center; gap:10px; }
+.cue .line{ display:block; width:1px; height:46px; background:var(--rule-f); position:relative; overflow:hidden; }
+.cue .line::after{
+  content:""; position:absolute; left:0; top:0; width:1px; height:34%;
+  background:var(--ink-mid); animation: fall 5s cubic-bezier(.45,0,.2,1) infinite;
+}
+@keyframes fall{
+  0%{ transform:translateY(-120%); opacity:0; }
+  22%{ opacity:1; } 78%{ opacity:1; }
+  100%{ transform:translateY(300%); opacity:0; }
+}
+@media (max-width:660px){
+  #hero .foot{ display:block; text-align:center; }
+  #hero .foot .left{ display:none; }
+  #hero .foot .right{ text-align:center; margin-top:18px; }
+}
+#hero-cap{
+  position:absolute; left:var(--gutter); right:var(--gutter); bottom:8px;
+  text-align:center; font-family:var(--latin); font-size:8.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-mute);
+}
+
+/* ---------- 節見出し ---------- */
+.sec-head{ text-align:center; margin-bottom:clamp(54px,10vh,124px); }
+.sec-head h2{
+  font-size:clamp(1.5rem,4vw,2.5rem); letter-spacing:.24em; text-indent:.24em;
+  line-height:1.5; color:var(--ink);
+}
+.sec-head .en{ margin-top:16px; }
+
+/* ---------- 03 珈琲 : 縦の行。映像は置かない。 ---------- */
+#cafes{ padding-block:clamp(120px,22vh,280px); }
+.cafe{
+  display:block; padding-block:clamp(26px,4vh,44px);
+  position:relative; cursor:pointer; transition:opacity 1.1s var(--ease);
+}
+.cafe::before{
+  content:""; position:absolute; left:0; right:0; top:0; height:1px;
+  background:var(--rule-f); transform:scaleX(0); transform-origin:left;
+}
+.cafe:last-of-type::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:1px;
+  background:var(--rule-f); transform:scaleX(0); transform-origin:left;
+}
+.cafelist[data-focused="true"] .cafe:not(.is-on){ opacity:.34; }
+.cafe .mk{
+  position:absolute; left:0; top:0; height:1px; width:44px; background:var(--rule);
+  transform:scaleX(0); transform-origin:left; transition:transform 1.05s var(--ease);
+}
+.cafe.is-on .mk{ transform:scaleX(1); }
+.cafe-top{ display:flex; align-items:baseline; gap:clamp(13px,2.4vw,26px); }
+.cafe .no{
+  font-family:var(--latin); font-size:11px; letter-spacing:.24em;
+  color:var(--ink-mute); flex:0 0 auto; padding-top:.45em;
+  transition:color 1.1s var(--ease);
+}
+.cafe.is-on .no{ color:var(--terigaki); }     /* ── 照柿 3/6 ── */
+.cafe .name{
+  font-family:var(--mincho); font-weight:500;
+  font-size:clamp(1.06rem,2.2vw,1.5rem);
+  letter-spacing:.16em; line-height:1.9; color:var(--ink);
+  transition:letter-spacing 1.4s var(--ease);
+}
+.cafe.is-on .name{ letter-spacing:.22em; }
+.cafe .origin{
+  margin-top:9px; margin-left:calc(11px + clamp(13px,2.4vw,26px));
+  font-family:var(--latin); font-weight:300; font-size:.78rem;
+  letter-spacing:.09em; color:var(--ink-mute);
+}
+.cafe .meta{
+  margin-top:15px; margin-left:calc(11px + clamp(13px,2.4vw,26px));
+  display:flex; flex-wrap:wrap; gap:5px 22px;
+  font-size:.79rem; letter-spacing:.1em; line-height:2.2; color:var(--ink-read);
+}
+.cafe .meta .price{ color:var(--ink); font-variant-numeric:tabular-nums; }
+/* 在庫・季節の注記は「文字」で持つ。撮り直さない。 */
+.cafe .stock{
+  margin-top:13px; margin-left:calc(11px + clamp(13px,2.4vw,26px));
+  font-family:var(--latin); font-size:10px; letter-spacing:.13em; color:var(--ink-mute);
+}
+.cafe .stock em{ font-style:normal; color:var(--asagi); }
+.cafe .stock em.low{ color:var(--terigaki); }
+.cafe .go{ margin-top:19px; margin-left:calc(11px + clamp(13px,2.4vw,26px)); display:inline-block; }
+.cafe .go .ext{ font-family:var(--latin); font-size:11px; letter-spacing:.14em; }
+@media (max-width:520px){ .cafe .origin,.cafe .meta,.cafe .stock,.cafe .go{ margin-left:0; } }
+#cafes .listnote{
+  margin-top:clamp(34px,6vh,64px); max-width:44ch;
+  font-size:.79rem; line-height:2.4; letter-spacing:.09em; color:var(--ink-mid);
+}
+
+/* ---------- 04 焙煎 : ピン留め＋スクラブ ---------- */
+#torref{ padding-block:clamp(130px,26vh,300px); }
+#torref .stage{ position:relative; }
+#torref .lede{ text-align:center; }
+#torref .statement{
+  font-family:var(--mincho); font-weight:500;
+  font-size:clamp(1.55rem,4.4vw,2.9rem);
+  letter-spacing:.28em; text-indent:.28em; line-height:2; color:var(--ink);
+}
+#torref .epigraph{
+  margin-top:clamp(20px,3.5vh,40px); font-size:clamp(.86rem,1.6vw,1rem);
+  letter-spacing:.14em; color:var(--ink-mid);
+}
+#roast-slot{ margin:clamp(44px,7vh,90px) auto 0; width:min(100%, 860px); }
+#roast-slot .frame{ aspect-ratio:16/9; border-color:var(--rule); }
+#roastCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+#seqbar{ position:absolute; left:0; right:0; bottom:0; height:1px; background:var(--rule-f); }
+#seqbar span{
+  position:absolute; inset:0; background:var(--ink-mid);
+  transform-origin:left; transform:scaleX(0); transition:transform .4s linear;
+}
+#torref .body{
+  margin:clamp(38px,6vh,80px) auto 0; max-width:34ch; text-align:left;
+  font-size:.87rem; line-height:2.55; letter-spacing:.1em; color:var(--ink-read);
+}
+.readout{
+  margin-top:clamp(42px,8vh,96px);
+  display:flex; justify-content:center; gap:clamp(22px,6vw,68px); flex-wrap:wrap; align-items:baseline;
+}
+.readout .rd{ display:flex; align-items:baseline; gap:9px; }
+.readout .rd .k{ font-family:var(--latin); font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-mute); }
+.readout .rd .v{
+  font-family:var(--mincho); font-weight:500; font-size:clamp(1.1rem,2.4vw,1.6rem);
+  letter-spacing:.1em; font-variant-numeric:tabular-nums; color:var(--ink);
+}
+.echelle{ margin:clamp(32px,5.5vh,68px) auto 0; max-width:680px; display:grid; gap:18px; }
+.echelle .track{ position:relative; height:1px; background:var(--rule-f); }
+.echelle .track .fill{
+  position:absolute; inset:0 auto 0 0; width:100%; background:var(--rule);
+  transform-origin:left; transform:scaleX(0);
+}
+.echelle .track .seed{
+  position:absolute; top:50%; left:0; width:9px; height:9px; margin:-4.5px 0 0 -4.5px;
+  background:#B9BE9F; transform:rotate(45deg); will-change:transform;
+}
+.echelle .ticks{
+  display:flex; justify-content:space-between;
+  font-family:var(--mincho); font-weight:400; font-size:.74rem; letter-spacing:.14em; color:var(--ink-mute);
+}
+.echelle .ticks span{ transition:color 1s var(--ease); }
+.echelle .ticks span.on{ color:var(--ink); }
+
+/* ==============================================================
+   05 読みもの — THE WRITING SPACE
+   ここがこの案の中心。焙煎士が実際に維持する唯一の面である。
+   索引は勝色のまま（通り過ぎる面）。
+   本文は紙を置く（立ち止まる面）。規則はこの一行に尽きる。
+   ============================================================== */
+#lecture{ padding-block:clamp(120px,22vh,280px); border-top:1px solid var(--rule-f); }
+
+/* 縦組みはここ一箇所だけ。索引の肩に立てる標題。 */
+.lect-head{
+  display:grid; gap:clamp(28px,5vw,58px); align-items:start;
+  grid-template-columns:1fr;
+}
+@media (min-width:880px){ .lect-head{ grid-template-columns:auto 1fr; } }
+.vert{
+  writing-mode:vertical-rl; text-orientation:upright;
+  font-family:var(--mincho); font-weight:500;
+  font-size:clamp(1.1rem,2.2vw,1.42rem); letter-spacing:.3em;
+  line-height:1.75; color:var(--ink);
+  border-right:1px solid var(--rule-f); padding-right:clamp(14px,2.4vw,28px);
+  max-height:none;
+}
+.vert .mk{ color:var(--terigaki); }          /* ── 照柿 4/6 ── */
+@media (max-width:879px){
+  .vert{ writing-mode:horizontal-tb; border-right:0; border-bottom:1px solid var(--rule-f);
+         padding:0 0 18px; letter-spacing:.24em; }
+}
+.lect-intro{ max-width:40ch; font-size:.85rem; line-height:2.5; letter-spacing:.1em; color:var(--ink-read); }
+.lect-intro .cadence{
+  display:block; margin-top:22px;
+  font-family:var(--latin); font-size:10px; letter-spacing:.14em; color:var(--ink-mute);
+}
+
+/* 索引 : 行。カードではない。 */
+.idx{ margin-top:clamp(52px,9vh,110px); border-top:1px solid var(--rule-f); }
+.idx .piece{
+  display:block; padding-block:clamp(24px,3.6vh,38px);
+  border-bottom:1px solid var(--rule-f);
+  transition:opacity 1s var(--ease);
+}
+.idx[data-focused="true"] .piece:not(:hover):not(:focus-within){ opacity:.42; }
+.idx .prow{ display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 18px; }
+.idx .date{ font-family:var(--latin); font-size:10px; letter-spacing:.16em; color:var(--ink-mute); font-variant-numeric:tabular-nums; }
+.idx .cat{
+  font-family:var(--latin); font-size:10px; letter-spacing:.16em; color:var(--ink-mute);
+  border:1px solid var(--rule-f); padding:3px 9px;
+}
+.idx h3{
+  width:100%; margin-top:12px;
+  font-size:clamp(1.04rem,2.1vw,1.38rem); letter-spacing:.14em; line-height:1.95; color:var(--ink);
+  transition:letter-spacing 1.3s var(--ease);
+}
+.idx .piece:hover h3, .idx .piece:focus-within h3{ letter-spacing:.19em; }
+.idx .lede{
+  margin-top:12px; max-width:38ch;
+  font-size:.81rem; line-height:2.45; letter-spacing:.1em; color:var(--ink-mid);
+}
+.idx .more{ margin-top:16px; font-family:var(--latin); font-size:10px; letter-spacing:.15em; color:var(--ink-mute); }
+.idx .piece:hover .more{ color:var(--ink); }
+.idx .piece[aria-current="true"] .more{ color:var(--asagi); }
+
+/* ---- 紙を置く : the light reading panel ------------------------
+   規則 :「地は勝色。読むために立ち止まる面だけ、紙を置く。」
+   紙は必ず勝色の余白に囲まれて浮く。全幅には決してしない。
+   暗い机の上に一枚置かれた紙である、という比喩を保つため。 */
+.paper{
+  background:var(--paper); color:var(--paper-read);
+  position:relative;
+}
+.paper h1,.paper h2,.paper h3,.paper h4{ color:var(--paper-ink); }
+.paper .latin,.paper .kicker{ color:var(--paper-mute); }
+/* 紙の上では組みを一段軽く戻す。反転組のための増量は不要になる。 */
+.paper p, .paper li, .paper dd{ font-weight:400; }
+
+#article{
+  margin-top:clamp(64px,11vh,130px);
+  padding:clamp(34px,6vw,84px) clamp(20px,5vw,72px) clamp(44px,7vw,92px);
+  max-width:760px; margin-inline:auto;
+  box-shadow:0 0 0 1px rgba(248,249,250,.10);
+}
+#article .meta{
+  display:flex; flex-wrap:wrap; gap:8px 18px; align-items:baseline;
+  font-family:var(--latin); font-size:10px; letter-spacing:.16em; color:var(--paper-mute);
+}
+#article h3.title{
+  margin-top:20px;
+  font-size:clamp(1.45rem,4vw,2.15rem); font-weight:600;
+  letter-spacing:.14em; line-height:1.85;
+}
+#article .tr{ margin-top:26px; height:1px; background:var(--paper-rule); }
+/* 長文のための組み : 32–34字、行送り2.1、字送りは詰めない。 */
+#article .prose{ margin-top:clamp(28px,4.5vh,48px); }
+#article .prose p{
+  font-size:clamp(.94rem,1.6vw,1.02rem);
+  line-height:2.15; letter-spacing:.055em;
+  max-width:33em; color:var(--paper-read);
+}
+#article .prose p + p{ margin-top:1.9em; }
+#article .prose h4{
+  margin-top:2.9em; margin-bottom:1.1em;
+  font-size:clamp(1.02rem,1.9vw,1.16rem); letter-spacing:.17em; line-height:1.9;
+}
+#article .prose .pull{
+  margin:2.6em 0; padding-left:clamp(14px,3vw,26px);
+  border-left:2px solid var(--terigaki);    /* ── 照柿 5/6 ── */
+  font-family:var(--mincho); font-weight:500;
+  font-size:clamp(1.04rem,2.1vw,1.2rem); line-height:2.1; letter-spacing:.12em;
+  color:var(--paper-ink); max-width:26em;
+}
+#article .sign{
+  margin-top:clamp(40px,6vh,72px); padding-top:24px; border-top:1px solid var(--paper-rule);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; align-items:center;
+  font-family:var(--latin); font-size:10.5px; letter-spacing:.15em; color:var(--paper-mute);
+}
+#article .sign .who{ font-family:var(--mincho); font-weight:500; font-size:.86rem; letter-spacing:.2em; color:var(--paper-ink); }
+#article .cachet{
+  display:inline-block; width:27px; height:27px; margin-left:12px; vertical-align:middle;
+  border:1px solid #A9462A; color:#A9462A;    /* ── 照柿 6/6（紙上の値） ── */
+  font-family:var(--mincho); font-weight:500; font-size:13px; line-height:25px; text-align:center;
+  will-change:transform,opacity;
+}
+.paper-note{
+  max-width:760px; margin:14px auto 0;
+  font-family:var(--latin); font-size:9px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-mute); text-align:right;
+}
+
+/* ---------- 06 淹れる : 一本の映像と、文字の手順 ---------- */
+#infusion{ padding-block:clamp(120px,22vh,280px); border-top:1px solid var(--rule-f); }
+.brew{ display:grid; gap:clamp(40px,6vw,80px); align-items:center; }
+@media (min-width:900px){ .brew{ grid-template-columns:.78fr 1fr; } }
+#brew-slot .frame{ aspect-ratio:4/5; }
+.steps{ display:grid; gap:clamp(26px,4vh,40px); }
+.step{ display:grid; grid-template-columns:auto 1fr; gap:clamp(14px,2.6vw,26px); align-items:start; }
+.step .n{
+  font-family:var(--latin); font-size:11px; letter-spacing:.2em; color:var(--asagi);
+  padding-top:.5em; font-variant-numeric:tabular-nums;
+}
+.step .t{ font-family:var(--mincho); font-weight:500; font-size:1rem; letter-spacing:.19em; line-height:2.1; color:var(--ink); }
+.step .d{ margin-top:10px; font-size:.81rem; line-height:2.45; letter-spacing:.1em; color:var(--ink-read); max-width:30ch; }
+.goutte{ margin:clamp(50px,9vh,104px) auto 0; width:1px; height:120px; background:var(--rule-f); position:relative; }
+.goutte::after{
+  content:""; position:absolute; left:50%; top:0; width:5px; height:5px;
+  margin-left:-2.5px; border-radius:50%; background:var(--terigaki); opacity:0;
+  animation: drip 5.4s cubic-bezier(.5,0,.35,1) infinite;
+}
+@keyframes drip{
+  0%{ transform:translateY(0) scale(.6); opacity:0; }
+  12%{ opacity:.9; transform:translateY(0) scale(1); }
+  70%{ opacity:.9; transform:translateY(112px) scale(1); }
+  84%{ opacity:0; transform:translateY(120px) scale(.35); }
+  100%{ opacity:0; transform:translateY(120px) scale(.35); }
+}
+
+/* ---------- 07 求める : 外部のSquareへ ---------- */
+#commander{
+  min-height:86svh; display:grid; align-content:center; text-align:center;
+  padding-block:clamp(105px,17vh,220px); border-top:1px solid var(--rule-f);
+}
+#commander h2{
+  margin-top:18px; font-size:clamp(1.3rem,3.6vw,2.4rem);
+  letter-spacing:.25em; text-indent:.25em; line-height:2.1; color:var(--ink);
+}
+.actions{ margin-top:clamp(46px,8vh,100px); display:flex; flex-direction:column; align-items:center; gap:clamp(20px,3.6vh,34px); }
+.cta-main{
+  flex-wrap:wrap; justify-content:center; text-align:center;
+  font-family:var(--mincho); font-weight:500;
+  font-size:clamp(1.1rem,2.4vw,1.46rem); letter-spacing:.22em; text-indent:.22em;
+  padding-bottom:13px; border-bottom-width:1px;
+}
+.cta-main .sub{
+  flex:0 0 100%; font-family:var(--latin); font-weight:400; font-size:10px;
+  letter-spacing:.18em; text-indent:.18em; color:var(--ink-mute); margin-top:13px;
+}
+.cta-2{
+  font-family:var(--latin); font-size:10.5px; letter-spacing:.16em;
+  color:var(--ink-mid); border-bottom:1px solid var(--rule-f); padding-bottom:6px;
+  transition:color .9s var(--ease), border-color .9s var(--ease);
+}
+.cta-2:hover{ color:var(--ink); border-color:var(--ink-mid); }
+#commander .note{ margin-top:clamp(34px,5.5vh,64px); font-size:.76rem; letter-spacing:.1em; line-height:2.4; color:var(--ink-mute); }
+
+/* ---------- 08 footer ---------- */
+footer{
+  border-top:1px solid var(--rule-f); padding-block:clamp(56px,9vh,100px) 42px;
+  font-size:.77rem; letter-spacing:.1em; line-height:2.5; color:var(--ink-mid);
+}
+.f-grid{ display:grid; gap:clamp(32px,5vw,60px); }
+@media (min-width:780px){ .f-grid{ grid-template-columns:1.1fr .9fr auto; align-items:start; } }
+footer .fmark{ font-family:var(--mincho); font-weight:500; font-size:20px; letter-spacing:.22em; color:var(--ink); }
+footer ul{ list-style:none; margin:0; padding:0; }
+footer ul a{ color:var(--ink-mid); transition:color .9s var(--ease); }
+footer ul a:hover{ color:var(--ink); }
+footer .legal{ margin-top:46px; font-family:var(--latin); font-size:9px; letter-spacing:.16em; color:var(--ink-mute); text-transform:uppercase; }
+/* 第二の法人向け入口 : 最後まで読んだ人が、実は店をやっていた場合のため */
+.f-b2b{ display:inline-block; margin-top:22px; }
+
+/* ==============================================================
+   法人向け卸販売 — #/wholesale
+   同じ書体・同じ勝色。ただし語調は平坦・事実的・走査が速い。
+   帯だけ勝色に残し、事実の本体は紙に置く。机で読み、共有し、
+   印刷される可能性がある頁だからである。
+   ============================================================== */
+#view-wholesale{ padding-top:0; }
+.wbanner{
+  position:relative; overflow:hidden;
+  padding:clamp(120px,19vh,220px) 0 clamp(56px,9vh,110px);
+}
+.wbanner-media{ position:absolute; inset:0; z-index:-1; }
+.wbanner-media::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(24,27,57,.80) 0%, rgba(24,27,57,.66) 46%, rgba(24,27,57,.96) 100%);
+}
+.wbanner h1{
+  font-size:clamp(1.6rem,4.4vw,2.7rem); letter-spacing:.24em; text-indent:.24em;
+  line-height:1.85; color:var(--ink);
+}
+.wbanner .lead{
+  margin-top:clamp(24px,4vh,42px); max-width:42ch;
+  font-size:.88rem; line-height:2.5; letter-spacing:.1em; color:var(--ink-read);
+}
+.wbanner .facts{
+  margin-top:clamp(34px,5.5vh,64px); display:flex; flex-wrap:wrap;
+  gap:10px clamp(22px,4vw,48px);
+}
+.wbanner .facts div{ font-family:var(--latin); font-size:10.5px; letter-spacing:.14em; color:var(--ink-mute); }
+.wbanner .facts b{ display:block; margin-top:6px; font-family:var(--mincho); font-weight:500; font-size:1rem; letter-spacing:.14em; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* 紙の本体 */
+#wsheet{
+  max-width:880px; margin:0 auto; margin-block:clamp(0px,0vh,0px) clamp(70px,11vh,140px);
+  padding:clamp(34px,5.5vw,76px) clamp(20px,4.6vw,64px) clamp(44px,7vw,88px);
+  box-shadow:0 0 0 1px rgba(248,249,250,.10);
+}
+#wsheet .wsec{ padding-top:clamp(42px,6.5vh,74px); }
+#wsheet .wsec:first-of-type{ padding-top:0; }
+#wsheet .wsec + .wsec{ border-top:1px solid var(--paper-rule); }
+#wsheet h2{
+  font-size:clamp(1.08rem,2.2vw,1.32rem); letter-spacing:.2em; line-height:1.9;
+  display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+}
+#wsheet h2 .num{ font-family:var(--latin); font-size:10px; letter-spacing:.2em; color:#1D6B62; font-variant-numeric:tabular-nums; }
+#wsheet .wbody{ margin-top:clamp(20px,3vh,30px); }
+#wsheet p{ font-size:.89rem; line-height:2.2; letter-spacing:.055em; max-width:46em; }
+#wsheet p + p{ margin-top:1.4em; }
+
+/* 取引の流れ : 番号つきの行。箱にしない。 */
+.flow{ list-style:none; margin:0; padding:0; counter-reset:f; }
+.flow li{
+  display:grid; grid-template-columns:auto 1fr; gap:clamp(14px,2.6vw,24px);
+  padding-block:20px; border-bottom:1px solid var(--paper-rule);
+}
+.flow li:last-child{ border-bottom:0; }
+.flow li::before{
+  counter-increment:f; content:counter(f,decimal-leading-zero);
+  font-family:var(--latin); font-size:10.5px; letter-spacing:.18em; color:#1D6B62;
+  padding-top:.5em; font-variant-numeric:tabular-nums;
+}
+.flow b{ font-family:var(--mincho); font-weight:500; font-size:.99rem; letter-spacing:.14em; line-height:1.9; color:var(--paper-ink); }
+.flow span{ display:block; margin-top:8px; font-size:.83rem; line-height:2.1; letter-spacing:.05em; }
+.flow .lead-time{ display:inline-block; margin-top:8px; font-family:var(--latin); font-size:10px; letter-spacing:.13em; color:var(--paper-mute); }
+
+/* 表 : 罫は細く、横罫だけ。走査のための表である。 */
+.wtable{ width:100%; border-collapse:collapse; margin-top:6px; font-size:.84rem; }
+.wtable caption{ text-align:left; font-family:var(--latin); font-size:10px; letter-spacing:.14em; color:var(--paper-mute); padding-bottom:12px; }
+.wtable th,.wtable td{
+  text-align:left; padding:13px 14px 13px 0; border-bottom:1px solid var(--paper-rule);
+  line-height:1.95; letter-spacing:.04em; vertical-align:top;
+}
+.wtable thead th{
+  font-family:var(--latin); font-weight:400; font-size:10px; letter-spacing:.15em;
+  color:var(--paper-mute); padding-bottom:10px;
+}
+.wtable tbody th{ font-family:var(--mincho); font-weight:500; color:var(--paper-ink); white-space:nowrap; }
+.wtable .num{ font-variant-numeric:tabular-nums; white-space:nowrap; }
+.wscroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+.wlist{ list-style:none; margin:0; padding:0; }
+.wlist li{ padding-block:15px; border-bottom:1px solid var(--paper-rule); display:grid; grid-template-columns:1fr; gap:6px; }
+@media (min-width:640px){ .wlist li{ grid-template-columns:13.5em 1fr; gap:0 24px; } }
+.wlist li:last-child{ border-bottom:0; }
+.wlist b{ font-family:var(--mincho); font-weight:500; font-size:.92rem; letter-spacing:.12em; line-height:2; color:var(--paper-ink); }
+.wlist span{ font-size:.84rem; line-height:2.1; letter-spacing:.05em; }
+
+details.faq{ border-bottom:1px solid var(--paper-rule); }
+details.faq summary{
+  list-style:none; cursor:pointer; padding-block:17px;
+  font-family:var(--mincho); font-weight:500; font-size:.93rem; letter-spacing:.11em; line-height:2;
+  color:var(--paper-ink); display:flex; gap:14px; align-items:baseline;
+}
+details.faq summary::-webkit-details-marker{ display:none; }
+details.faq summary::before{ content:"Q"; font-family:var(--latin); font-size:10px; letter-spacing:.16em; color:#1D6B62; }
+details.faq[open] summary{ color:#1D6B62; }
+details.faq .a{ padding:0 0 20px 24px; font-size:.84rem; line-height:2.15; letter-spacing:.05em; max-width:46em; }
+
+/* フォーム : 紙の上に置く。暗い地の入力欄より読み書きしやすい。 */
+.wform{ margin-top:clamp(20px,3vh,30px); }
+.fgrid{ display:grid; gap:clamp(20px,3vw,28px); }
+@media (min-width:640px){ .fgrid{ grid-template-columns:1fr 1fr; } .fgrid .wide{ grid-column:1/-1; } }
+.field label.lb{
+  display:block; font-family:var(--latin); font-size:10.5px; letter-spacing:.14em;
+  color:var(--paper-mute); margin-bottom:9px;
+}
+.field label.lb .req{
+  color:#1D6B62; margin-left:8px; letter-spacing:.1em;
+}
+.field input[type=text],.field input[type=email],.field input[type=tel],
+.field select,.field textarea{
+  width:100%; font-family:var(--serif); font-size:.92rem; font-weight:400;
+  color:var(--paper-ink); background:#FFFFFF;
+  border:1px solid rgba(24,27,57,.26); border-radius:0;
+  padding:12px 13px; line-height:1.8; letter-spacing:.04em;
+  transition:border-color .5s var(--ease);
+}
+.field textarea{ min-height:150px; resize:vertical; line-height:2.05; }
+.field select{ appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--paper-mute) 50%),linear-gradient(135deg,var(--paper-mute) 50%,transparent 50%); background-position:calc(100% - 18px) 50%, calc(100% - 13px) 50%; background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:38px; }
+.field input:hover,.field select:hover,.field textarea:hover{ border-color:rgba(24,27,57,.45); }
+.field input[aria-invalid="true"],.field textarea[aria-invalid="true"],.field select[aria-invalid="true"]{
+  border-color:#A9462A; border-width:1px; box-shadow:inset 2px 0 0 #A9462A;
+}
+.field .err{
+  display:none; margin-top:8px; font-family:var(--latin); font-size:10.5px;
+  letter-spacing:.09em; line-height:1.8; color:#93381F;
+}
+.field .err.on{ display:block; }
+.field .hint{ margin-top:8px; font-family:var(--latin); font-size:10px; letter-spacing:.1em; color:var(--paper-mute); }
+fieldset.checks{ border:0; margin:0; padding:0; }
+fieldset.checks legend{ font-family:var(--latin); font-size:10.5px; letter-spacing:.14em; color:var(--paper-mute); padding:0; margin-bottom:11px; }
+.checkrow{ display:flex; flex-wrap:wrap; gap:10px 26px; }
+.checkrow label{ display:inline-flex; align-items:center; gap:9px; font-size:.85rem; letter-spacing:.05em; color:var(--paper-read); cursor:pointer; }
+.checkrow input[type=checkbox]{ width:15px; height:15px; accent-color:#1D6B62; }
+.fsubmit{ margin-top:clamp(28px,4vh,40px); display:flex; flex-wrap:wrap; gap:20px 28px; align-items:center; }
+button.send{
+  font-family:var(--mincho); font-weight:500; font-size:.95rem;
+  letter-spacing:.22em; text-indent:.22em;
+  color:var(--paper); background:var(--paper-ink);
+  border:1px solid var(--paper-ink); padding:15px 38px; cursor:pointer;
+  transition:background-color .6s var(--ease), color .6s var(--ease);
+}
+button.send:hover{ background:#252A56; }
+.fsubmit .fine{ font-family:var(--latin); font-size:10px; letter-spacing:.1em; line-height:1.9; color:var(--paper-mute); max-width:34ch; }
+#errsum{
+  display:none; margin-bottom:26px; padding:18px 20px;
+  border:1px solid #A9462A; border-left-width:3px; background:#FBF2EE;
+}
+#errsum.on{ display:block; }
+#errsum h3{ font-size:.92rem; letter-spacing:.14em; line-height:1.9; color:#93381F; }
+#errsum ul{ margin:10px 0 0; padding-left:1.2em; font-size:.83rem; line-height:2; }
+#errsum a{ color:#93381F; text-decoration:underline; text-underline-offset:3px; }
+#okmsg{
+  display:none; margin-top:26px; padding:18px 20px;
+  border:1px solid #1D6B62; border-left-width:3px; background:#EFF6F4;
+  font-size:.86rem; line-height:2.05; letter-spacing:.05em; color:#14504A;
+}
+#okmsg.on{ display:block; }
+
+.wcontact-alt{
+  margin-top:clamp(34px,5vh,58px); padding-top:24px; border-top:1px solid var(--paper-rule);
+  display:grid; gap:14px;
+}
+@media (min-width:640px){ .wcontact-alt{ grid-template-columns:repeat(3,1fr); } }
+.wcontact-alt div b{ display:block; font-family:var(--latin); font-size:10px; letter-spacing:.15em; color:var(--paper-mute); font-weight:400; }
+.wcontact-alt div span{ display:block; margin-top:7px; font-family:var(--mincho); font-weight:500; font-size:.94rem; letter-spacing:.1em; color:var(--paper-ink); font-variant-numeric:tabular-nums; }
+
+/* ---------- 視点切替 ---------- */
+[hidden]{ display:none !important; }
+
+/* ==============================================================
+   静止 — prefers-reduced-motion と Save-Data は同じ場所に着地する。
+   どのループもポスターの位置で止まり、頁は完成したまま読める。
+   ============================================================== */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation:none !important; transition-duration:.01ms !important; }
+  #veil{ display:none !important; }
+  .rule-d{ transform:scaleX(1) !important; }
+  .cafe::before,.cafe:last-of-type::after{ transform:scaleX(1) !important; }
+  .echelle .track .fill{ transform:scaleX(1) !important; }
+  #rail .stem .ink{ transform:scaleY(1) !important; }
+  .ph-steam{ opacity:.45; }
+  .ph-rake{ opacity:.85; }
+}
+body.still *,body.still *::before,body.still *::after{ animation:none !important; }
+body.still .ph-steam{ opacity:.45; }
+body.still .ph-rake{ opacity:.85; }
+
+/* ==============================================================
+   @media print — 暗い地は印刷できない。
+   購買担当者は卸の頁を印刷して稟議に回す。反転させる。
+   ============================================================== */
+@media print{
+  :root{ --ink:#000; --ink-read:#111; --ink-mid:#333; --ink-mute:#555; --rule:#999; --rule-f:#CCC; }
+  html,body{ background:#FFF !important; color:#111 !important; }
+  #ground,#light,#grain,#veil,#rail,header,.wbanner-media,.ph,.cue,.goutte,#hero-media,#roast-slot,.paper-note{ display:none !important; }
+  /* 開いている視点だけを刷る。[hidden] はそのまま効く。 */
+  main[hidden]{ display:none !important; }
+  .wbanner{ padding:0 0 18pt; }
+  .wbanner h1{ color:#000 !important; font-size:20pt; letter-spacing:.14em; text-indent:.14em; }
+  .wbanner .lead,.wbanner .facts div{ color:#222 !important; }
+  .wbanner .facts b{ color:#000 !important; }
+  #wsheet{ box-shadow:none; max-width:none; margin:0; padding:0; background:#FFF !important; }
+  #wsheet h2{ color:#000 !important; break-after:avoid; }
+  .wsec{ break-inside:avoid; }
+  details.faq{ }
+  details.faq .a{ display:block !important; }
+  .wtable th,.wtable td{ border-bottom:1px solid #BBB !important; padding:6pt 10pt 6pt 0; }
+  .wform,#errsum,#okmsg,.fsubmit{ display:none !important; }
+  .wcontact-alt{ break-inside:avoid; }
+  a[href^="http"]::after{ content:" (" attr(href) ")"; font-size:8pt; color:#555; letter-spacing:0; }
+  a[href^="#"]::after{ content:""; }
+  body{ font-size:10.5pt; }
+  @page{ margin:16mm 14mm; }
+}
+</style>
+
+<div id="ground"></div>
+<div id="light"><div id="light-i"></div></div>
+<div id="grain"></div>
+
+<div id="veil" aria-hidden="true"><span class="vmark">ソワニエ</span></div>
+
+<div id="rail" aria-hidden="true">
+  <div class="stem">
+    <span class="ink"></span>
+    <span class="tick" style="top:0%"></span>
+    <span class="tick" style="top:22%"></span>
+    <span class="tick" style="top:42%"></span>
+    <span class="tick" style="top:62%"></span>
+    <span class="tick" style="top:82%"></span>
+    <span class="tick" style="top:100%"></span>
+    <span class="dot"></span>
+  </div>
+</div>
+
+<!-- 外部リンクの共通説明。すべての .ext が aria-describedby で参照する。 -->
+<p id="extnote" class="sr">このリンクは外部サイト（Square オンラインストア）を新しいタブで開きます。</p>
+
+<header>
+  <a class="mark" href="#/">Soigné</a>
+  <nav aria-label="主要">
+    <a href="#cafes">珈琲</a>
+    <a class="hide-m" href="#torref">焙煎</a>
+    <a href="#lecture">読みもの</a>
+    <!-- 法人向けボタン。ヘッダに置く理由 :
+         購買担当者は検索や紹介で直接この頁に来る。自分の入口が
+         最初の画面にないと、消費者向けの長い縦スクロールを
+         読まされることになる。フッタにも同じ導線を重ねている。 -->
+    <a class="btn-b2b" href="#/wholesale" id="b2bTop">法人向けはこちら</a>
+    <!-- 俵屋の先例 : この頁に音楽はない。このボタンは音楽を鳴らさず、
+         V-01 にすでに収録されている環境音のミュートを外すだけ。
+         既定はOff、状態は保存しない。 -->
+    <button id="son" type="button" aria-pressed="false">音&nbsp;·&nbsp;Off</button>
+  </nav>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════════
+     VIEW 1 — #/  消費者向け
+     ══════════════════════════════════════════════════════════════ -->
+<main id="view-home" tabindex="-1">
+
+  <!-- ══ 01 扉 ══ 無音のアンビエントループ、全画面 ══════════════ -->
+  <section id="hero" class="wrap">
+
+    <!-- ─────────────────────────────────────────────────────────
+         MEDIA SLOT V-01 · roastery-air · 16:9 landscape
+         常緑（evergreen）。季節もロットも写らない。差し替えは年1回。
+
+         PRODUCTION MARKUP — .frame 内の .ph を削除し、これを置く :
+
+         <video id="v-hero"
+                class="media"
+                data-media="roastery-air"
+                muted playsinline webkit-playsinline autoplay loop
+                preload="auto"
+                disablepictureinpicture disableremoteplayback
+                poster="/media/poster/roastery-air-1920.avif"
+                aria-hidden="true" tabindex="-1"
+                style="width:100%;height:100%;object-fit:cover;object-position:52% 58%">
+           <source src="/media/roastery-air-1920.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+           <source src="/media/roastery-air-1920.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+         </video>
+
+         · A12 は縦構図の再撮（V-01P）を要求していた。B3 では
+           縦画面は object-position のみで賄う。16:9 を
+           「中央 3:4 を切っても成立する」構図で一度だけ撮る。
+           撮影は半日ではなく半日の半分になり、資産が一つ減る。
+         · muted + playsinline の両方がないと iOS Safari は自動再生を
+           拒否してネイティブコントロールを出す。
+         · 勝色の地に載せるため、低照度・低コントラストで撮る。
+           画面内で勝色より明るいのは、窓の光と手元と火だけ。
+         · Save-Data / prefers-reduced-motion では <video> を挿入せず、
+           poster の <img> のまま何も落とさない。
+         · 季節差し替えなし。ファイル名に季節を持たせない。
+         ───────────────────────────────────────────────────────── -->
+    <div id="hero-media" data-media="roastery-air" aria-hidden="true">
+      <div class="ph">
+        <div class="ph-field"></div>
+        <div class="ph-rake"></div>
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <radialGradient id="hb" cx="46%" cy="44%" r="72%">
+              <stop offset="0%"   stop-color="#D9B98F" stop-opacity=".16"/>
+              <stop offset="100%" stop-color="#0B0E20" stop-opacity=".55"/>
+            </radialGradient>
+            <linearGradient id="hf" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%"   stop-color="#D96E45" stop-opacity=".30"/>
+              <stop offset="100%" stop-color="#D96E45" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- 焙煎機の胴と、覗き窓から漏れる火。構図は画面下寄り。 -->
+          <ellipse cx="800" cy="700" rx="470" ry="118" fill="url(#hb)"/>
+          <ellipse cx="800" cy="700" rx="470" ry="118" fill="none" stroke="rgba(248,249,250,.16)" stroke-width="1"/>
+          <circle cx="1132" cy="612" r="42" fill="url(#hf)"/>
+          <circle cx="1132" cy="612" r="42" fill="none" stroke="rgba(217,110,69,.42)" stroke-width="1"/>
+          <g stroke="rgba(248,249,250,.10)" stroke-width=".8" fill="none">
+            <path d="M400 736 C 560 786, 1040 786, 1200 736"/>
+            <path d="M356 754 C 546 816, 1054 816, 1244 754"/>
+          </g>
+          <rect x="248" y="150" width="210" height="330" fill="rgba(214,226,246,.055)"/>
+        </svg>
+        <div class="ph-steam" aria-hidden="true">
+          <i style="left:44%; animation-delay:-0.4s"></i>
+          <i style="left:49%; height:38%; animation-delay:-4.1s"></i>
+          <i style="left:54%; height:31%; animation-delay:-7.6s"></i>
+          <i style="left:58%; height:26%; animation-delay:-2.2s"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner">
+      <p class="kicker" style="margin-bottom:clamp(28px,6.5vh,72px)">Soigné Coffee Roastery — Tokyo, Aobadai</p>
+
+      <p class="wordmark" id="wordmark" data-t="ソワニエ"></p>
+
+      <div id="heroRuleWrap">
+        <div class="rule-d" id="heroRule"></div>
+        <span class="lozenge" aria-hidden="true"></span>
+        <p class="kicker">Torréfaction depuis 2018</p>
+      </div>
+
+      <h1 id="heroline">
+        <span class="ln" data-t="静かな一杯を、"></span>
+        <span class="ln" data-t="焙煎する。"></span>
+      </h1>
+
+      <p class="sub">少量焙煎。週に二度、火を入れます。<br>その日に出会えた豆のことだけを考えて。</p>
+    </div>
+
+    <div class="foot">
+      <p class="latin left">No.&nbsp;01</p>
+      <div class="mid"><span class="cue"><span class="line"></span><span class="latin">Scroll</span></span></div>
+      <p class="latin right">東京・青葉台</p>
+    </div>
+
+    <p id="hero-cap">
+      V-01 · Roastery air · 16:9 · 12 s seamless · no cuts · silent · evergreen · AV1 1.4 MB / H.264 2.6 MB
+    </p>
+  </section>
+
+  <!-- ══ 02 珈琲 ══ 縦の行。映像は一本も置かない。 ══════════════
+       A12 はここに3本のロット別ループ（V-02/03/04）を置いていた。
+       ロットが替わるたび再撮が必要で、これが最大の保守負荷だった。
+       B3 では在庫・季節・焙煎度・価格をすべて文字で持つ。
+       豆が入れ替わっても、直すのはこの数行だけである。 -->
+  <section id="cafes" class="wrap">
+    <div class="sec-head rv">
+      <h2>今の珈琲</h2>
+      <p class="kicker en">Nos cafés — 常時 4–6 種</p>
+      <div class="rule-d" style="margin-top:28px;"></div>
+    </div>
+
+    <div class="axis">
+      <div class="cafelist" id="cafelist">
+
+        <article class="cafe" data-i="1">
+          <span class="mk" aria-hidden="true"></span>
+          <div class="cafe-top">
+            <span class="no">I</span>
+            <h3 class="name">エチオピア イルガチェフェ／コンガ</h3>
+          </div>
+          <p class="origin">Ethiopia · Yirgacheffe · washed · 1,950 m</p>
+          <div class="meta">
+            <span>白桃・ベルガモット・紅茶</span><span>浅煎り</span><span class="price">¥1,980 / 200g</span>
+          </div>
+          <p class="stock">在庫 <em>あり</em> · 焙煎日 火・金 · 2026年6月入港</p>
+          <p class="go">
+            <a class="ext" href="https://example.square.site/?utm_source=soigne_lp&utm_medium=referral&utm_campaign=lp_b3&utm_content=cafe_row_01_yirgacheffe"
+               target="_blank" rel="noopener noreferrer" aria-describedby="extnote">
+              オンラインストアへ
+              <svg class="arw" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.2 8.8 L8.8 3.2 M4.4 3.2 H8.8 V7.6"/></svg>
+            </a>
+          </p>
+        </article>
+
+        <article class="cafe" data-i="2">
+          <span class="mk" aria-hidden="true"></span>
+          <div class="cafe-top">
+            <span class="no">II</span>
+            <h3 class="name">グアテマラ アンティグア／エル・ソコロ</h3>
+          </div>
+          <p class="origin">Guatemala · Antigua · fully washed · 1,650 m</p>
+          <div class="meta">
+            <span>焦がしカラメル・胡桃・黒糖</span><span>中煎り</span><span class="price">¥1,760 / 200g</span>
+          </div>
+          <p class="stock">在庫 <em>あり</em> · 焙煎日 火・金 · 定期便の基準豆</p>
+          <p class="go">
+            <a class="ext" href="https://example.square.site/?utm_source=soigne_lp&utm_medium=referral&utm_campaign=lp_b3&utm_content=cafe_row_02_antigua"
+               target="_blank" rel="noopener noreferrer" aria-describedby="extnote">
+              オンラインストアへ
+              <svg class="arw" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.2 8.8 L8.8 3.2 M4.4 3.2 H8.8 V7.6"/></svg>
+            </a>
+          </p>
+        </article>
+
+        <article class="cafe" data-i="3">
+          <span class="mk" aria-hidden="true"></span>
+          <div class="cafe-top">
+            <span class="no">III</span>
+            <h3 class="name">ケニア ニエリ／カリンダ AA</h3>
+          </div>
+          <p class="origin">Kenya · Nyeri · washed, SL28 · 1,780 m</p>
+          <div class="meta">
+            <span>黒すぐり・レモングラス・蜜</span><span>中浅煎り</span><span class="price">¥2,420 / 200g</span>
+          </div>
+          <p class="stock">残り <em class="low">わずか</em> · 次回入荷 2026年11月</p>
+          <p class="go">
+            <a class="ext" href="https://example.square.site/?utm_source=soigne_lp&utm_medium=referral&utm_campaign=lp_b3&utm_content=cafe_row_03_nyeri"
+               target="_blank" rel="noopener noreferrer" aria-describedby="extnote">
+              オンラインストアへ
+              <svg class="arw" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.2 8.8 L8.8 3.2 M4.4 3.2 H8.8 V7.6"/></svg>
+            </a>
+          </p>
+        </article>
+
+        <article class="cafe" data-i="4">
+          <span class="mk" aria-hidden="true"></span>
+          <div class="cafe-top">
+            <span class="no">IV</span>
+            <h3 class="name">デカフェ コロンビア／ウイラ（山水処理）</h3>
+          </div>
+          <p class="origin">Colombia · Huila · sugarcane EA decaf · 1,700 m</p>
+          <div class="meta">
+            <span>カカオ・干し葡萄・きび砂糖</span><span>中深煎り</span><span class="price">¥1,980 / 200g</span>
+          </div>
+          <p class="stock">在庫 <em>あり</em> · 通年</p>
+          <p class="go">
+            <a class="ext" href="https://example.square.site/?utm_source=soigne_lp&utm_medium=referral&utm_campaign=lp_b3&utm_content=cafe_row_04_decaf"
+               target="_blank" rel="noopener noreferrer" aria-describedby="extnote">
+              オンラインストアへ
+              <svg class="arw" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.2 8.8 L8.8 3.2 M4.4 3.2 H8.8 V7.6"/></svg>
+            </a>
+          </p>
+        </article>
+
+      </div>
+
+      <p class="listnote rv">
+        価格・在庫・入荷予定はこの一覧の文字だけで更新します。豆が替わっても撮影はありません。
+        ご購入・お支払いは Square オンラインストアで承ります。
+      </p>
+    </div>
+  </section>
+
+  <!-- ══ 03 焙煎 ══ ピン留め、読者が火をスクラブする ════════════ -->
+  <section id="torref" class="wrap">
+    <div class="stage" id="torrefStage">
+
+      <div class="sec-head rv" style="margin-bottom:clamp(38px,6.5vh,76px)">
+        <h2>焙煎</h2>
+        <p class="kicker en">La torréfaction — 18 min</p>
+      </div>
+
+      <div class="lede">
+        <h3 class="statement rv">火を、待つ。</h3>
+        <p class="epigraph rv">急かすことだけは、できない。</p>
+      </div>
+
+      <!-- ─────────────────────────────────────────────────────
+           MEDIA SLOT V-02 · roast-scrub · 16:9 · 走査される連番
+           推奨配信 : 連番フレーム＋canvas（video.currentTime 駆動ではない）
+
+           1. currentTime のシークはキーフレーム依存。滑らかに送るには
+              GOP=1 で再エンコードが必要で、通常の3〜5倍の容量になる。
+              その時点で連番の方が軽い。
+           2. iOS Safari はシークを非同期に間引く。逆送りで引っかかり、
+              最後のデコード済みフレームで固まる。待つべきイベントがない。
+           3. 連番は読み込み進捗を描け（枠下の細罫）、メモリ上限が決まる。
+           4. prefers-reduced-motion では1枚だけ描いて止まる。
+
+           SPEC : 60枚・1280×720・AVIF q50（約20KB／枚、計約1.2MB）、
+           WebP代替。区間が2画面以内に入った時のみ取得。
+
+           単一ファイルを望む場合の <video> 形 :
+
+           <video id="v-roast" data-media="roast-scrub"
+                  muted playsinline webkit-playsinline preload="auto"
+                  disablepictureinpicture disableremoteplayback
+                  poster="/media/poster/roast-1280.avif"
+                  aria-hidden="true" tabindex="-1"
+                  style="width:100%;height:100%;object-fit:cover">
+             <source src="/media/roast-gop1-1280.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+             <source src="/media/roast-gop1-1280.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+           </video>
+
+           …autoplay も loop も付けず、ScrollTrigger の onUpdate の中で
+           v.currentTime = progress * v.duration を書く。ピンも読み出しも同じ。
+
+           常緑性 : ここに写るのはドラムと火だけで、ロットも季節も写らない。
+           一度撮れば数年もつ。差し替えの動機は機材更新のときだけ。
+           ───────────────────────────────────────────────────── -->
+      <figure class="slot rv" id="roast-slot" data-media="roast-scrub">
+        <div class="frame">
+          <canvas id="roastCanvas" aria-hidden="true"></canvas>
+          <div id="seqbar" aria-hidden="true"><span id="seqfill"></span></div>
+        </div>
+        <figcaption class="cap">
+          V-02 · <b>Scrub sequence 16:9 · 60 frames · 1280×720 AVIF ≈ 1.2 MB</b> · silent · scroll-driven · evergreen
+        </figcaption>
+      </figure>
+
+      <p class="body rv">
+        十八分。生豆の水分が抜け、香りが立ちのぼるまでの時間です。焙煎士にできるのは、
+        その時間を急かさないことだけ。数字は記録しますが、最後に信じるのはドラムの音と、
+        立ちのぼる香りの変わり目です。
+      </p>
+
+      <div class="readout rv">
+        <span class="rd"><span class="k">経過</span><span class="v" id="rTime">00:00</span></span>
+        <span class="rd"><span class="k">ドラム</span><span class="v" id="rTemp">22°C</span></span>
+        <span class="rd"><span class="k">段階</span><span class="v" id="rStage">生豆</span></span>
+      </div>
+
+      <div class="echelle rv" id="echelle">
+        <div class="track"><span class="fill"></span><span class="seed"></span></div>
+        <div class="ticks">
+          <span data-k="0">生豆</span><span data-k="1">乾燥</span><span data-k="2">一ハゼ</span><span data-k="3">焙煎止め</span>
+        </div>
+        <p class="latin" style="text-align:center;margin-top:4px">Courbe de torréfaction — 18 min</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ 04 読みもの ══ この頁の中心。文字だけが毎週増える。 ════ -->
+  <section id="lecture" class="wrap">
+
+    <div class="axis">
+      <div class="lect-head rv">
+        <!-- 縦組みはこの一箇所のみ。頁全体で一度だけ立てる。 -->
+        <h2 class="vert">読<span class="mk">み</span>もの</h2>
+        <div class="lect-intro">
+          <p>
+            焙煎の記録、産地から届いた話、道具のこと、台所で試したこと。
+            映像は年に一度しか撮り直しませんが、ここは毎月増えます。
+            この頁が生きているかどうかは、結局この欄が決めています。
+          </p>
+          <span class="cadence">更新 — 月2〜3本 · 執筆 焙煎士 中村佳乃 · 2026年9月現在 42本</span>
+        </div>
+      </div>
+
+      <!-- ─── 索引 : 行。カードにしない。──────────────────────── -->
+      <div class="idx" id="idx">
+
+        <article class="piece" aria-current="true">
+          <div class="prow">
+            <span class="date">2026.09.12</span>
+            <span class="cat">焙煎ノート</span>
+          </div>
+          <h3><a href="#article" data-piece="1">火と時間のあいだ</a></h3>
+          <p class="lede">一ハゼの音が始まってから止めるまでの、九十秒ほどの話。数字で決められることと、決められないことについて。</p>
+          <p class="more">本文を読む — 下に全文</p>
+        </article>
+
+        <article class="piece">
+          <div class="prow">
+            <span class="date">2026.08.28</span>
+            <span class="cat">産地</span>
+          </div>
+          <h3><a href="#article" data-piece="2">イルガチェフェ、雨のあとの畑で</a></h3>
+          <p class="lede">六月の輸入前、現地の輸出業者から届いた十六枚の写真と、そこに写っていなかったものについて。</p>
+          <p class="more">本文を読む</p>
+        </article>
+
+        <article class="piece">
+          <div class="prow">
+            <span class="date">2026.08.05</span>
+            <span class="cat">道具</span>
+          </div>
+          <h3><a href="#article" data-piece="3">ミルの刃を替える日</a></h3>
+          <p class="lede">家庭用のミルは、だいたい六百キロで刃が鈍ります。そのとき味に何が起きるか、どう気づくか。</p>
+          <p class="more">本文を読む</p>
+        </article>
+
+        <article class="piece">
+          <div class="prow">
+            <span class="date">2026.07.19</span>
+            <span class="cat">台所から</span>
+          </div>
+          <h3><a href="#article" data-piece="4">氷を入れてから淹れる</a></h3>
+          <p class="lede">急冷式の分量を、何度もやり直して決めた記録です。結論だけ先に書くと、湯は百六十グラムでした。</p>
+          <p class="more">本文を読む</p>
+        </article>
+
+        <article class="piece">
+          <div class="prow">
+            <span class="date">2026.06.30</span>
+            <span class="cat">焙煎ノート</span>
+          </div>
+          <h3><a href="#article" data-piece="5">浅煎りが苦いとき、何が起きているか</a></h3>
+          <p class="lede">「浅いのに苦い」というご質問を続けていただきました。豆ではなく、たいてい湯の落とし方の話です。</p>
+          <p class="more">本文を読む</p>
+        </article>
+
+      </div>
+
+      <p class="latin rv" style="margin-top:22px;text-align:right">
+        <a href="#lecture">記事一覧 — 全42本 →</a>
+      </p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         紙を置く。この頁で唯一、地が反転する場所。
+         規則 :「地は勝色。読むために立ち止まる面だけ、紙を置く。」
+         例外ではなく規則である。索引（通り過ぎる面）は勝色のまま、
+         本文（滞在する面）だけが紙になる。暗い机に一枚置かれた紙。
+         ══════════════════════════════════════════════════════════ -->
+    <article id="article" class="paper" tabindex="-1" aria-labelledby="art-title">
+      <div class="meta">
+        <span>2026.09.12</span><span>焙煎ノート</span><span>約 5 分</span>
+      </div>
+      <h3 class="title" id="art-title">火と時間のあいだ</h3>
+      <div class="tr" aria-hidden="true"></div>
+
+      <div class="prose">
+        <p>
+          焙煎機の前に立っている十八分のうち、判断らしい判断をしているのは最後の九十秒だけです。
+          それまでの十六分半は、ほとんど待っているだけと言っていい。温度は上がるべき速さで上がり、
+          水分は抜けるべき順に抜けていきます。こちらがすることは、その進み方を邪魔しないことに尽きます。
+        </p>
+        <p>
+          一ハゼが始まると、それが変わります。豆の内側にたまっていた圧が抜けて、
+          小さな破裂音が不規則に重なりはじめる。最初の一粒から、音がひとつの流れになるまでに、
+          だいたい二十秒。そこから、止めるまでの時間をどう取るかで、同じ豆がまったく別の飲み物になります。
+        </p>
+
+        <p class="pull">火加減を変えるのではなく、いつ手を離すかを決めている。</p>
+
+        <h4>数字で決められること</h4>
+        <p>
+          記録は毎回とります。投入温度、中点、一ハゼの開始時刻、排出温度、そして全体の時間。
+          これらは紙に書き、月末にまとめて見返します。数字があるおかげで、
+          前回よりよかった、悪かったという話が感想で終わらずに済む。
+          豆が替わったときに最初の一回をどこから始めるか、という見当もつきます。
+        </p>
+        <p>
+          ただし数字が教えてくれるのは、だいたいの場所までです。
+          同じ生豆でも、輸入してから三か月経てば含水率は落ちますし、
+          梅雨のあいだは焙煎室そのものが湿ります。
+          去年の九月の記録をそのままなぞって、去年の九月の味が出たことは一度もありません。
+        </p>
+
+        <h4>数字で決められないこと</h4>
+        <p>
+          最後の九十秒で見ているのは、音の密度と、煙の立ち方と、香りの変わり目です。
+          一ハゼの音がいちばん詰まったところから、少し間延びしはじめる瞬間があります。
+          その少し手前で止めると、酸がまっすぐ立って、冷めても痩せません。
+          少し遅らせると、甘さが前に出るかわりに、輪郭がゆるみます。
+          どちらが正しいということはなく、その豆をどう飲んでほしいかという話になります。
+        </p>
+        <p>
+          この判断は、残念ながら言葉にしても伝わりません。
+          焙煎を教えてほしいと言われることがありますが、
+          お伝えできるのは記録の取り方と、聴くべき変化の場所までです。
+          そのあとは、同じ豆を何十回か焼いて、自分の耳で覚えてもらうしかない。
+          私も、そうやって覚えました。
+        </p>
+
+        <h4>それでも記録する</h4>
+        <p>
+          だから記録には意味がない、とは思っていません。
+          耳で覚えたことを、あとから数字で確かめられるからです。
+          いい一杯になった日の排出温度が、思っていたより二度低かった、というようなことがある。
+          そのときはじめて、自分の感覚がどこに寄っていたのかがわかります。
+        </p>
+        <p>
+          十八分は、待つ時間ではなく、最後の九十秒のために整えておく時間です。
+          そう考えるようになってから、焙煎の前に窯を空回しする時間を、
+          少し長く取るようになりました。急がないための準備に、いちばん時間をかけています。
+        </p>
+      </div>
+
+      <div class="sign">
+        <span class="who">焙煎士　中村 佳乃<span class="cachet" id="cachet" aria-hidden="true">曹</span></span>
+        <span>Soigné Coffee Roastery — 読みもの No. 042</span>
+      </div>
+    </article>
+    <p class="paper-note">紙を置く — 読むために立ち止まる面だけ、地を反転する</p>
+
+  </section>
+
+  <!-- ══ 05 淹れる ══ 映像は一本。手順は文字。 ══════════════════ -->
+  <section id="infusion" class="wrap">
+    <div class="sec-head rv">
+      <h2>淹れる</h2>
+      <p class="kicker en">L'infusion — 2 min 30 s</p>
+    </div>
+
+    <div class="brew axis">
+
+      <!-- ─────────────────────────────────────────────────────
+           MEDIA SLOT V-03 · pour · 4:5 portrait · 6 s seamless · silent
+           A12 はここに1:1のループを3本（V-06/07/08）置いていた。
+           B3 では一本に畳む。注ぐ手が映っていれば、蒸らしも落としきりも
+           文字で足りる。撮影は1日ではなく1時間になる。
+
+           PRODUCTION MARKUP :
+
+           <video id="v-pour" class="media" data-media="pour"
+                  muted playsinline webkit-playsinline loop
+                  preload="none"
+                  disablepictureinpicture disableremoteplayback
+                  poster="/media/poster/pour-1080.avif"
+                  aria-hidden="true" tabindex="-1"
+                  style="width:100%;height:100%;object-fit:cover">
+             <source src="/media/pour-1080.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+             <source src="/media/pour-1080.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+           </video>
+
+           · preload="none" — 頁の後半にあるものに、最初の描画で費用を
+             払わせない。IntersectionObserver が進入で play()、退出で
+             pause()。visibilitychange でも止める。
+           · 常緑 : 手とケトルとドリッパーしか写らない。ロットも季節もない。
+           ───────────────────────────────────────────────────── -->
+      <figure class="slot rv" id="brew-slot" data-media="pour">
+        <div class="frame">
+          <div class="ph">
+            <div class="ph-field"></div>
+            <div class="ph-rake" style="animation-duration:26s"></div>
+            <svg viewBox="0 0 400 500" aria-hidden="true">
+              <!-- ケトルの注ぎ口から落ちる湯の線と、ドリッパーの輪郭 -->
+              <path d="M196 96 C 196 170, 182 210, 182 268" fill="none" stroke="rgba(248,249,250,.30)" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M124 248 L182 386 L240 248" fill="none" stroke="rgba(248,249,250,.24)" stroke-width="1"/>
+              <path d="M138 276 L226 276" stroke="rgba(248,249,250,.14)" stroke-width="1"/>
+              <ellipse cx="182" cy="248" rx="58" ry="12" fill="none" stroke="rgba(248,249,250,.24)" stroke-width="1"/>
+              <ellipse cx="182" cy="248" rx="58" ry="12" fill="rgba(248,249,250,.05)"/>
+              <circle cx="182" cy="394" r="3" fill="rgba(217,110,69,.85)">
+                <animate attributeName="cy" values="386;432;432" dur="4.4s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;.9;0" dur="4.4s" repeatCount="indefinite"/>
+              </circle>
+              <ellipse cx="182" cy="452" rx="66" ry="14" fill="rgba(248,249,250,.045)"/>
+            </svg>
+            <div class="ph-steam"><i style="left:44%;height:26%;animation-delay:-1.8s"></i><i style="left:52%;height:20%;animation-delay:-6.9s"></i></div>
+          </div>
+        </div>
+        <figcaption class="cap">V-03 · <b>Pour 4:5 · 6 s loop · silent · evergreen</b></figcaption>
+      </figure>
+
+      <div class="steps">
+        <div class="step rv">
+          <span class="n">01</span>
+          <div>
+            <p class="t">湯を落ち着かせる</p>
+            <p class="d">沸かしたら火を止め、九十二度まで待ちます。粉は二十グラム、中細挽き。</p>
+          </div>
+        </div>
+        <div class="step rv">
+          <span class="n">02</span>
+          <div>
+            <p class="t">三十秒、蒸らす</p>
+            <p class="d">四十グラムの湯を置くように注ぎ、粉が静かに膨らむのを見ているだけの時間。</p>
+          </div>
+        </div>
+        <div class="step rv">
+          <span class="n">03</span>
+          <div>
+            <p class="t">三投で落としきる</p>
+            <p class="d">中心から小さく円を描き、合計三百グラム。二分三十秒で落としきります。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="goutte" aria-hidden="true"></div>
+    <p class="latin rv" style="text-align:center;margin-top:22px">2 min 30 s</p>
+  </section>
+
+  <!-- ══ 06 求める ══ 購入は外部（Square）。カートは存在しない。 ═ -->
+  <section id="commander" class="wrap">
+    <p class="kicker rv">Commander</p>
+    <h2 class="rv">はじめての方へ、<br>三種の飲み比べを。</h2>
+    <div class="actions rv">
+      <!-- 主導線。Square オンラインビジネスへ出る。
+           UTM は .md の「購入導線」に一覧。 -->
+      <a class="ext cta-main" id="ctaMain"
+         href="https://example.square.site/?utm_source=soigne_lp&utm_medium=referral&utm_campaign=lp_b3&utm_content=cta_primary_tasting_set"
+         target="_blank" rel="noopener noreferrer" aria-describedby="extnote">
+        オンラインストアへ
+        <svg class="arw" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.2 8.8 L8.8 3.2 M4.4 3.2 H8.8 V7.6"/></svg>
+        <span class="sub">Square オンラインストア — 別タブで開きます</span>
+      </a>
+      <a class="ext cta-2"
+         href="https://example.square.site/?utm_source=soigne_lp&utm_medium=referral&utm_campaign=lp_b3&utm_content=cta_secondary_subscription"
+         target="_blank" rel="noopener noreferrer" aria-describedby="extnote">
+        定期便について
+        <svg class="arw" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.2 8.8 L8.8 3.2 M4.4 3.2 H8.8 V7.6"/></svg>
+      </a>
+    </div>
+    <p class="note rv">
+      ご注文・お支払い・配送状況の確認は、すべて Square オンラインストアで承ります。<br>
+      焙煎日から二日以内に発送。¥5,000 以上のお買い上げで送料無料。<br>
+      100g×3種のテイスティングセット ¥2,860（送料込）。
+    </p>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════════════
+     VIEW 2 — #/wholesale  法人向け卸販売
+     同じヘッダ・同じフッタ・同じ設計体系。語調だけが変わる。
+     ══════════════════════════════════════════════════════════════ -->
+<main id="view-wholesale" tabindex="-1" hidden>
+
+  <section class="wbanner">
+    <!-- ─────────────────────────────────────────────────────────
+         MEDIA SLOT V-04 · hands-at-work · 3:2 landscape · 8 s · silent
+         二つの場所で同じファイルを使う（この帯と、読みもの欄の予備枠）。
+         資産を増やさずに面を二つ賄うのが、保守を下げる一番の手である。
+
+         PRODUCTION MARKUP :
+
+         <video id="v-hands" class="media" data-media="hands-at-work"
+                muted playsinline webkit-playsinline loop autoplay
+                preload="metadata"
+                disablepictureinpicture disableremoteplayback
+                poster="/media/poster/hands-1600.avif"
+                aria-hidden="true" tabindex="-1"
+                style="width:100%;height:100%;object-fit:cover;object-position:50% 46%">
+           <source src="/media/hands-1600.av1.webm" type="video/webm; codecs=av01.0.05M.08">
+           <source src="/media/hands-1600.h264.mp4" type="video/mp4;  codecs=avc1.640028">
+         </video>
+
+         · 被写体は手と秤と1kg袋。顔も商品ラベルも映さない。
+           ラベルが映ると、ラベルを変えるたびに撮り直しになる。
+         · 印刷時は @media print で非表示。インクを使わせない。
+         ───────────────────────────────────────────────────────── -->
+    <div class="wbanner-media" data-media="hands-at-work" aria-hidden="true">
+      <div class="ph">
+        <div class="ph-field"></div>
+        <div class="ph-rake" style="animation-duration:34s"></div>
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <!-- 秤の上の1kg袋と、計量する手。輪郭だけ。 -->
+          <rect x="640" y="430" width="320" height="300" rx="6" fill="rgba(248,249,250,.045)" stroke="rgba(248,249,250,.16)" stroke-width="1"/>
+          <path d="M660 430 L700 386 L900 386 L940 430" fill="none" stroke="rgba(248,249,250,.16)" stroke-width="1"/>
+          <rect x="560" y="730" width="480" height="14" fill="rgba(248,249,250,.07)" stroke="rgba(248,249,250,.14)" stroke-width="1"/>
+          <line x1="180" y1="744" x2="1420" y2="744" stroke="rgba(248,249,250,.09)" stroke-width="1"/>
+          <rect x="1090" y="596" width="150" height="90" fill="none" stroke="rgba(111,168,160,.30)" stroke-width="1"/>
+          <line x1="1108" y1="640" x2="1222" y2="640" stroke="rgba(111,168,160,.30)" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="wrap axis">
+      <p class="kicker">Vente en gros — 法人のお客さまへ</p>
+      <h1 id="wTitle" style="margin-top:22px">法人向け卸販売</h1>
+      <p class="lead">
+        カフェ・レストラン・ホテル・オフィス・小売店さまへ、自家焙煎の豆を卸しています。
+        月4kgから、焙煎日を指定してお届けします。サンプルは無償です。
+      </p>
+      <div class="facts">
+        <div>最低ロット<b>初回 2kg／継続 月4kg〜</b></div>
+        <div>焙煎日<b>毎週 火・金</b></div>
+        <div>納品<b>関東 翌日／他地域 中1日</b></div>
+        <div>取引実績<b>38 店舗（2026年9月現在）</b></div>
+      </div>
+      <p class="latin" style="margin-top:28px">
+        V-04 · Hands at work · 3:2 · 8 s loop · silent · evergreen · shared with 読みもの
+      </p>
+    </div>
+  </section>
+
+  <!-- 紙を置く。机で読み、共有され、印刷される頁だからである。
+       勝色の帯は残し、事実の本体だけ反転させる。同じ規則の適用。 -->
+  <div class="wrap">
+  <div id="wsheet" class="paper">
+
+    <section class="wsec" data-anchor="flow">
+      <h2><span class="num">01</span>取引の流れ</h2>
+      <div class="wbody">
+        <p>お問い合わせから初回納品まで、標準で2〜3週間です。サンプル発送と抽出テストの費用はいただきません。</p>
+        <ol class="flow">
+          <li><div><b>お問い合わせ</b><span>下のフォーム、またはお電話で。業態・席数・想定使用量をお知らせください。</span><span class="lead-time">営業日 1日以内に返信</span></div></li>
+          <li><div><b>サンプル発送</b><span>ご用途に合わせて3種（各100g）を無償でお送りします。挽き・粒度のご指定も承ります。</span><span class="lead-time">発送まで 2〜3営業日</span></div></li>
+          <li><div><b>抽出テストと打ち合わせ</b><span>店舗の器具でレシピを合わせます。ご来店・訪問・オンラインのいずれでも。</span><span class="lead-time">所要 60〜90分</span></div></li>
+          <li><div><b>お見積りと取引条件の確認</b><span>月間使用量・提供形態・納品頻度・お支払い条件を書面でご提示します。</span><span class="lead-time">提示まで 2営業日</span></div></li>
+          <li><div><b>初回納品、以降は定期</b><span>初回納品時に抽出レシピを書面でお渡しします。以降は締切に合わせて自動手配も可能です。</span><span class="lead-time">初回納品まで 2〜3週間</span></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="wsec" data-anchor="lot">
+      <h2><span class="num">02</span>最低ロットと価格帯の考え方</h2>
+      <div class="wbody">
+        <p>
+          一律の卸掛率は設けていません。焙煎の手間は1回あたりでほぼ決まるため、
+          <strong>1回の焙煎でまとめられる量</strong>、すなわち月間使用量で単価が決まります。
+          同じ月4kgでも、週1回まとめてお届けするほうが、週2回に分けるより有利です。
+        </p>
+        <div class="wscroll">
+        <table class="wtable">
+          <caption>参考単価（税別・1kgあたり・2026年9月改定）</caption>
+          <thead>
+            <tr><th scope="col">月間使用量</th><th scope="col">スタンダード</th><th scope="col">シングルオリジン</th><th scope="col">デカフェ</th><th scope="col">納品頻度の目安</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">4–9 kg</th><td class="num">¥3,400</td><td class="num">¥4,200〜</td><td class="num">¥4,600</td><td>月2回</td></tr>
+            <tr><th scope="row">10–29 kg</th><td class="num">¥3,150</td><td class="num">¥3,900〜</td><td class="num">¥4,300</td><td>週1回</td></tr>
+            <tr><th scope="row">30–59 kg</th><td class="num">¥2,950</td><td class="num">¥3,650〜</td><td class="num">¥4,050</td><td>週1〜2回</td></tr>
+            <tr><th scope="row">60 kg 〜</th><td class="num">個別見積</td><td class="num">個別見積</td><td class="num">個別見積</td><td>週2回</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p>
+          初回は2kgから承ります。継続のお取引は月4kgからです。
+          生豆相場と為替の影響が大きい品目のため、単価は年2回（3月・9月）見直し、
+          改定の30日前までに書面でお知らせします。期中に一方的な改定は行いません。
+        </p>
+      </div>
+    </section>
+
+    <section class="wsec" data-anchor="delivery">
+      <h2><span class="num">03</span>納期と配送</h2>
+      <div class="wbody">
+        <ul class="wlist">
+          <li><b>焙煎日</b><span>毎週 火曜・金曜。ご注文の締切は焙煎日前日の15時です。</span></li>
+          <li><b>発送</b><span>焙煎当日または翌営業日に発送。常温便（ヤマト運輸）。</span></li>
+          <li><b>到着</b><span>関東 翌日／中部・関西 翌日／中国・四国・九州・東北 中1日／北海道・沖縄 中2日。</span></li>
+          <li><b>送料</b><span>1回のお届けが4kg以上の場合は弊社負担。4kg未満は実費（ご請求書に記載）。</span></li>
+          <li><b>定期手配</b><span>数量と曜日を登録いただくと、締切ごとの発注が不要になります。増減・停止は前日15時まで随時。</span></li>
+          <li><b>お支払い</b><span>月末締め翌月末払い（銀行振込）。初回3か月は前払いをお願いする場合があります。</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="wsec" data-anchor="format">
+      <h2><span class="num">04</span>提供形態</h2>
+      <div class="wbody">
+        <ul class="wlist">
+          <li><b>業務用 1kg 袋</b><span>アルミ蒸着・ガス抜きバルブ付。焙煎日を袋に印字します。標準形態です。</span></li>
+          <li><b>200g 小袋（再販用）</b><span>小売店さま向け。共通ラベルのほか、店名を入れたラベルにも対応します（初回のみ版代 ¥8,000）。</span></li>
+          <li><b>挽き</b><span>メッシュをご指定ください（エスプレッソ／中細／中粗）。鮮度が落ちやすいため、2週間以内に使い切る量での納品をおすすめします。</span></li>
+          <li><b>ドリップバッグ</b><span>OEM対応。最低 500袋から、納期は3週間。個包装・外箱の仕様は別途ご相談ください。</span></li>
+          <li><b>生豆のまま</b><span>自家焙煎をされる店舗さまへ。取扱いのある銘柄に限ります。</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="wsec" data-anchor="support">
+      <h2><span class="num">05</span>抽出サポートと研修</h2>
+      <div class="wbody">
+        <ul class="wlist">
+          <li><b>レシピ作成</b><span>初回納品時、店舗の器具・水・提供温度に合わせたレシピを作成します。無償。</span></li>
+          <li><b>スタッフ研修</b><span>2時間 ¥22,000（税別・交通費別）。抽出の基礎、器具の清掃、味のぶれの見つけ方。5名まで。</span></li>
+          <li><b>定期カッピング</b><span>隔月・焙煎所にて。取引先さまは無償でご参加いただけます。</span></li>
+          <li><b>器具の選定相談</b><span>グラインダー・ドリッパー・浄水の選定について、販売は行いませんが助言はいたします。</span></li>
+          <li><b>味のぶれのご相談</b><span>納品済みロットについて、同一ロットの控えと照合して原因をお調べします。</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="wsec" data-anchor="cases">
+      <h2><span class="num">06</span>導入形態の例</h2>
+      <div class="wbody">
+        <p>いずれも実際のお取引に近い構成です。数量は目安としてご覧ください。</p>
+        <div class="wscroll">
+        <table class="wtable">
+          <thead>
+            <tr><th scope="col">業態</th><th scope="col">規模</th><th scope="col">月間</th><th scope="col">構成</th><th scope="col">納品</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">カフェ</th><td>客席 20席</td><td class="num">8 kg</td><td>中煎り 6kg／浅煎り 1kg／デカフェ 1kg</td><td>週1回・火</td></tr>
+            <tr><th scope="row">レストラン</th><td>ディナー中心 40席</td><td class="num">3 kg</td><td>中深煎り 2kg／デカフェ 1kg</td><td>月2回・金</td></tr>
+            <tr><th scope="row">ホテル</th><td>朝食 120名／日</td><td class="num">25 kg</td><td>スタンダード 25kg（挽き・中細）</td><td>週2回</td></tr>
+            <tr><th scope="row">オフィス</th><td>在席 80名</td><td class="num">6 kg</td><td>スタンダード 5kg／デカフェ 1kg</td><td>月2回</td></tr>
+            <tr><th scope="row">小売</th><td>食料品店</td><td class="num">24 kg</td><td>200g×120袋（店名ラベル）</td><td>週1回</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="wsec" data-anchor="faq">
+      <h2><span class="num">07</span>よくあるご質問</h2>
+      <div class="wbody">
+        <details class="faq"><summary>サンプルは有償ですか。</summary><div class="a">無償です。3種・各100gまで、送料も弊社負担でお送りします。4種以上をご希望の場合はご相談ください。</div></details>
+        <details class="faq"><summary>銘柄を指定せず、おまかせにできますか。</summary><div class="a">できます。ご提供温度と提供方法（ハンドドリップ／エスプレッソ／バッチブリュー）と、避けたい風味だけお知らせください。季節ごとに構成を組み替えてご提案します。</div></details>
+        <details class="faq"><summary>焙煎度を店舗に合わせて変えてもらえますか。</summary><div class="a">月10kg以上のお取引で承っています。既存の焙煎プロファイルから調整する形になりますので、2〜3回のサンプルのやりとりをお願いしています。</div></details>
+        <details class="faq"><summary>急に必要になった場合、当日出荷は可能ですか。</summary><div class="a">焙煎日（火・金）の在庫がある場合に限り、11時までのご連絡で当日出荷できることがあります。確約はいたしかねます。恒常的に発生する場合は、常備在庫の取り決めをおすすめします。</div></details>
+        <details class="faq"><summary>取引を停止・再開する場合の手続きは。</summary><div class="a">定期手配の停止・再開はご連絡のみで可能です。契約期間の縛りや解約金はありません。</div></details>
+        <details class="faq"><summary>賞味期限と保管方法を教えてください。</summary><div class="a">焙煎日から180日を賞味期限として印字しています。未開封・常温・直射日光を避けて保管してください。開封後は密閉し、2週間以内を目安にお使いください。冷凍保存についてはレシピと併せてご案内します。</div></details>
+        <details class="faq"><summary>食品表示や成分表は出してもらえますか。</summary><div class="a">規格書・原産地証明・アレルゲン情報を書面でご用意します。ホテル・給食など、提出が必要な場合はお申しつけください。</div></details>
+      </div>
+    </section>
+
+    <section class="wsec" data-anchor="contact">
+      <h2><span class="num">08</span>お問い合わせ</h2>
+      <div class="wbody">
+        <p>1営業日以内にご返信します。サンプルのご希望は、下の「ご希望」でお選びください。</p>
+
+        <!-- ─────────────────────────────────────────────────────
+             このプロトタイプにバックエンドはない。本番配線 :
+
+             <form method="post" action="/api/wholesale-inquiry">
+             1. 受け口 : Cloudflare Workers（または Vercel Functions）。
+                POST /api/wholesale-inquiry。application/json。
+             2. 検証 : サーバ側で必須・形式・長さを再検証する。
+                クライアント検証は利便のためだけのもので、信用しない。
+             3. スパム対策 : Cloudflare Turnstile（不可視）を
+                cf-turnstile-response で受け、サーバで検証。
+                併せて honeypot（下の #company_url、CSSで隠す）と
+                IP単位の毎分5件のレート制限。
+             4. 通知 : Resend / SendGrid で roastery@soigne.jp へ即時通知。
+                同時に送信者へ自動返信（内容の控え＋一次回答の目安）。
+             5. 記録 : 受信内容を Airtable もしくは Google スプレッドシートへ
+                追記し、対応状況の列を持たせる。CRMは導入しない。
+             6. 応答 : 200 で JSON {ok:true}。JSが無効な環境でも
+                <form action> の通常POSTで完結するよう、サーバは
+                HTMLの完了ページも返す（プログレッシブ・エンハンスメント）。
+             7. 個人情報 : 保存はメール・スプレッドシートのみ、
+                24か月で削除。プライバシーポリシーへのリンクを併記。
+             ───────────────────────────────────────────────────── -->
+        <form class="wform" id="wform" novalidate>
+
+          <div id="errsum" role="alert" tabindex="-1" aria-labelledby="errsum-t">
+            <h3 id="errsum-t">入力内容をご確認ください</h3>
+            <ul id="errsum-list"></ul>
+          </div>
+
+          <div class="fgrid">
+
+            <div class="field">
+              <label class="lb" for="f-org">会社名・店舗名<span class="req">必須</span></label>
+              <input type="text" id="f-org" name="organization" autocomplete="organization" required
+                     aria-required="true" aria-describedby="e-org">
+              <p class="err" id="e-org"></p>
+            </div>
+
+            <div class="field">
+              <label class="lb" for="f-name">ご担当者名<span class="req">必須</span></label>
+              <input type="text" id="f-name" name="name" autocomplete="name" required
+                     aria-required="true" aria-describedby="e-name">
+              <p class="err" id="e-name"></p>
+            </div>
+
+            <div class="field">
+              <label class="lb" for="f-mail">メールアドレス<span class="req">必須</span></label>
+              <input type="email" id="f-mail" name="email" autocomplete="email" inputmode="email" required
+                     aria-required="true" aria-describedby="e-mail h-mail">
+              <p class="err" id="e-mail"></p>
+              <p class="hint" id="h-mail">お見積りはこのアドレスへお送りします</p>
+            </div>
+
+            <div class="field">
+              <label class="lb" for="f-tel">電話番号</label>
+              <input type="tel" id="f-tel" name="tel" autocomplete="tel" inputmode="tel"
+                     aria-describedby="e-tel">
+              <p class="err" id="e-tel"></p>
+            </div>
+
+            <div class="field">
+              <label class="lb" for="f-type">業態<span class="req">必須</span></label>
+              <select id="f-type" name="businessType" required aria-required="true" aria-describedby="e-type">
+                <option value="">選択してください</option>
+                <option>カフェ・喫茶</option>
+                <option>レストラン・バー</option>
+                <option>ホテル・宿泊</option>
+                <option>オフィス・社内提供</option>
+                <option>小売・再販</option>
+                <option>その他</option>
+              </select>
+              <p class="err" id="e-type"></p>
+            </div>
+
+            <div class="field">
+              <label class="lb" for="f-vol">想定月間使用量<span class="req">必須</span></label>
+              <select id="f-vol" name="volume" required aria-required="true" aria-describedby="e-vol">
+                <option value="">選択してください</option>
+                <option>未定・相談したい</option>
+                <option>4–9 kg</option>
+                <option>10–29 kg</option>
+                <option>30–59 kg</option>
+                <option>60 kg 以上</option>
+              </select>
+              <p class="err" id="e-vol"></p>
+            </div>
+
+            <div class="field wide">
+              <fieldset class="checks">
+                <legend>ご希望（複数選択可）</legend>
+                <div class="checkrow">
+                  <label><input type="checkbox" name="want" value="sample"> サンプルを希望する</label>
+                  <label><input type="checkbox" name="want" value="test"> 抽出テストを希望する</label>
+                  <label><input type="checkbox" name="want" value="quote"> お見積りがほしい</label>
+                  <label><input type="checkbox" name="want" value="visit"> 焙煎所を見学したい</label>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="field wide">
+              <label class="lb" for="f-msg">ご相談内容<span class="req">必須</span></label>
+              <textarea id="f-msg" name="message" required aria-required="true" aria-describedby="e-msg h-msg"></textarea>
+              <p class="err" id="e-msg"></p>
+              <p class="hint" id="h-msg">席数、提供方法（ハンドドリップ／エスプレッソ／バッチブリュー）、開業時期などをお書きください</p>
+            </div>
+
+            <!-- honeypot : 人間には見えない。埋まっていれば破棄する。 -->
+            <div class="field" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+              <label class="lb" for="company_url">URL</label>
+              <input type="text" id="company_url" name="company_url" tabindex="-1" autocomplete="off">
+            </div>
+
+          </div>
+
+          <div class="fsubmit">
+            <button class="send" type="submit">送信する</button>
+            <p class="fine">送信により、<a href="#/wholesale" style="text-decoration:underline;text-underline-offset:3px">プライバシーポリシー</a>に同意いただいたものとします。1営業日以内にご返信します。</p>
+          </div>
+
+          <p id="okmsg" role="status"></p>
+        </form>
+
+        <div class="wcontact-alt">
+          <div><b>電話</b><span>03-0000-0000</span></div>
+          <div><b>受付</b><span>平日 11:00–17:00</span></div>
+          <div><b>メール</b><span>wholesale@example.jp</span></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  </div>
+</main>
+
+<footer class="wrap">
+  <div class="f-grid">
+    <div>
+      <p class="fmark">Soigné</p>
+      <p style="margin-top:12px;">ソワニエ コーヒーロースタリー<br>東京都目黒区青葉台 1-2-3<br>11:00–18:00 ／ 水曜定休</p>
+      <!-- 第二の法人向け入口。最後まで読み通した人が、実は店を
+           やっていたという場合のため。ヘッダは「探しに来た人」、
+           フッタは「読んで思い当たった人」に向いている。 -->
+      <a class="btn-b2b f-b2b" href="#/wholesale" id="b2bFoot">法人向けはこちら — 卸販売のご案内</a>
+    </div>
+    <ul>
+      <li><a href="#cafes">今の珈琲</a></li>
+      <li><a href="#torref">焙煎について</a></li>
+      <li><a href="#lecture">読みもの</a></li>
+      <li><a href="#infusion">淹れ方</a></li>
+      <li>
+        <a class="ext" style="border-bottom-width:1px"
+           href="https://example.square.site/?utm_source=soigne_lp&utm_medium=referral&utm_campaign=lp_b3&utm_content=footer_store"
+           target="_blank" rel="noopener noreferrer" aria-describedby="extnote">
+          オンラインストア
+          <svg class="arw" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.2 8.8 L8.8 3.2 M4.4 3.2 H8.8 V7.6"/></svg>
+        </a>
+      </li>
+    </ul>
+    <ul>
+      <li><a href="#/wholesale">法人向け卸販売</a></li>
+      <li><a href="#/wholesale">特定商取引法に基づく表記</a></li>
+      <li><a href="#/wholesale">プライバシーポリシー</a></li>
+      <li><a href="#/wholesale">お問い合わせ</a></li>
+    </ul>
+  </div>
+  <p class="legal">© 2026 Soigné Coffee Roastery — Torréfié à Tokyo · 勝色 #181B39</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     0. 一字ずつに割る（A12から）
+     ========================================================= */
+  function split(el, cls){
+    var t = el.getAttribute("data-t") || "";
+    el.textContent = "";
+    for (var i = 0; i < t.length; i++){
+      var s = document.createElement("span");
+      s.className = cls; s.textContent = t[i];
+      el.appendChild(s);
+    }
+  }
+  var wm = document.getElementById("wordmark");
+  if (wm) split(wm, "ch");
+  document.querySelectorAll("#heroline .ln").forEach(function(ln){ split(ln, "ch"); });
+
+  /* =========================================================
+     1. 回線と設定の門
+        Save-Data と 2g/slow-2g は prefers-reduced-motion と
+        まったく同じ静止した完成ページに着地する。
+     ========================================================= */
+  var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  var saveData = !!(conn && (conn.saveData === true ||
+                    /^(slow-)?2g$/.test(conn.effectiveType || "")));
+  var reduceQ = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (saveData) document.body.classList.add("still");
+  var STILL = saveData || reduceQ.matches;
+
+  /* =========================================================
+     2. 視点の切替 — hash routing  #/ と #/wholesale
+        ・#/wholesale で始まるものはすべて法人向け
+        ・それ以外（#cafes 等の節アンカーを含む）は消費者向け
+        ・戻る／進む、直リンク、焦点移動、スクロール位置を扱う
+     ========================================================= */
+  var viewHome  = document.getElementById("view-home");
+  var viewWhole = document.getElementById("view-wholesale");
+  var b2bTop    = document.getElementById("b2bTop");
+  var b2bFoot   = document.getElementById("b2bFoot");
+  var TITLES = { home:"Soigné — 勝色の頁", wholesale:"法人向け卸販売 — Soigné" };
+  var scrollMemo = { home:0, wholesale:0 };
+  var current = null;
+
+  function parseHash(){
+    var h = location.hash || "#/";
+    if (h.indexOf("#/wholesale") === 0){
+      var rest = h.slice("#/wholesale".length).replace(/^[-#]/, "");
+      return { view:"wholesale", anchor:rest };
+    }
+    if (h === "#/" || h === "#" || h === "") return { view:"home", anchor:"" };
+    return { view:"home", anchor:h.slice(1) };
+  }
+
+  function applyRoute(initial){
+    var r = parseHash();
+
+    /* 出ていく視点のスクロール位置を控えておく */
+    if (current && current !== r.view) scrollMemo[current] = window.scrollY;
+
+    var changed = (current !== r.view);
+    current = r.view;
+
+    viewHome.hidden  = (r.view !== "home");
+    viewWhole.hidden = (r.view !== "wholesale");
+    document.body.setAttribute("data-view", r.view);
+    document.title = TITLES[r.view];
+
+    /* 現在地を示す。色だけに意味を持たせない（aria-current を併用） */
+    [b2bTop, b2bFoot].forEach(function(b){
+      if (!b) return;
+      if (r.view === "wholesale") b.setAttribute("aria-current","page");
+      else b.removeAttribute("aria-current");
+    });
+
+    /* 節アンカーがあればそこへ、なければ視点ごとの記憶位置へ */
+    var target = null;
+    if (r.anchor){
+      target = document.getElementById(r.anchor) ||
+               document.querySelector('[data-anchor="' + r.anchor + '"]');
+    }
+
+    if (target){
+      /* レイアウトが確定してから運ぶ */
+      requestAnimationFrame(function(){
+        var y = target.getBoundingClientRect().top + window.scrollY - 92;
+        window.scrollTo(0, Math.max(0, y));
+      });
+    } else if (changed && !initial){
+      window.scrollTo(0, scrollMemo[r.view] || 0);
+    } else if (initial){
+      window.scrollTo(0, 0);
+    }
+
+    /* 焦点 : 視点が変わったら、その視点の先頭へ確実に移す。
+       焦点を失わせない／閉じ込めない。 */
+    if (changed && !initial){
+      var focusTo = target && target.hasAttribute("tabindex") ? target
+                  : (r.view === "wholesale" ? viewWhole : viewHome);
+      try { focusTo.focus({ preventScroll:true }); } catch(e){ focusTo.focus(); }
+    }
+
+    /* 隠れていた側は高さ0で測られている。戻ってきたら測り直す。 */
+    if (window.ScrollTrigger){
+      requestAnimationFrame(function(){ ScrollTrigger.refresh(); });
+    }
+  }
+
+  window.addEventListener("hashchange", function(){ applyRoute(false); });
+
+  /* 直リンクで法人向けに着地したときは、開幕の帳を出さない。
+     購買担当者に2秒の演出を見せる理由がないからである。 */
+  var initialView = parseHash().view;
+
+  /* =========================================================
+     3. 焙煎の版。単一の 0→1 値だけで、描画・読み出し・目盛が動く。
+        本番では paintRoast の中身が二行に置き換わる。
+     ========================================================= */
+  var cvs = document.getElementById("roastCanvas");
+  var ctx = cvs ? cvs.getContext("2d", { alpha:false }) : null;
+  var cw = 0, ch = 0;
+
+  function sizeCanvas(){
+    if (!cvs || !ctx) return;
+    var r = cvs.getBoundingClientRect();
+    if (!r.width) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cw = Math.round(r.width); ch = Math.round(r.height);
+    cvs.width  = Math.round(cw * dpr);
+    cvs.height = Math.round(ch * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  var stops = [[185,189,162],[199,178,134],[150,102,66],[74,50,38]];
+  function mix(t){
+    var p = Math.min(0.999, Math.max(0,t)) * (stops.length - 1);
+    var i = Math.floor(p), f = p - i;
+    var a = stops[i], b = stops[Math.min(i+1, stops.length-1)];
+    return [Math.round(a[0]+(b[0]-a[0])*f),
+            Math.round(a[1]+(b[1]-a[1])*f),
+            Math.round(a[2]+(b[2]-a[2])*f)];
+  }
+
+  var BEANS = (function(){
+    var out = [], s = 20260918;
+    function rnd(){ s = (s * 1103515245 + 12345) % 2147483648; return s / 2147483648; }
+    for (var i = 0; i < 110; i++){
+      out.push({ x:rnd(), y:rnd(), r:.018 + rnd()*.016, a:rnd()*Math.PI, sp:.6 + rnd()*.9 });
+    }
+    return out;
+  })();
+
+  function paintRoast(t){
+    if (!ctx || !cw) return;
+    t = Math.min(1, Math.max(0, t));
+    /* --- 本番 : この本体は二行になる ---
+       var idx = Math.min(FRAMES-1, Math.round(t * (FRAMES-1)));
+       if (frames[idx] && frames[idx].complete) ctx.drawImage(frames[idx],0,0,cw,ch);
+       ------------------------------------- */
+    var c = mix(t);
+    /* ドラムの内側 : 勝色から始まり、火に向かって温まる */
+    var g = ctx.createRadialGradient(cw*.5, ch*.54, ch*.05, cw*.5, ch*.54, ch*1.05);
+    g.addColorStop(0, "rgb(" + Math.round(38 + t*58) + "," + Math.round(40 + t*34) + "," + Math.round(74 - t*18) + ")");
+    g.addColorStop(1, "rgb(" + Math.round(14 + t*14) + "," + Math.round(16 + t*8)  + "," + Math.round(38 - t*14) + ")");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, cw, ch);
+
+    /* 火 : 一ハゼで膨らみ、その後ゆるむ。照柿。 */
+    var heat = Math.max(0, Math.sin(Math.min(1,t/0.88) * Math.PI)) * .56 + t*.20;
+    var hg = ctx.createRadialGradient(cw*.5, ch*.60, 0, cw*.5, ch*.60, cw*.48);
+    hg.addColorStop(0, "rgba(217,110,69," + (heat*.42).toFixed(3) + ")");
+    hg.addColorStop(1, "rgba(217,110,69,0)");
+    ctx.fillStyle = hg; ctx.fillRect(0, 0, cw, ch);
+
+    /* ドラムが回る。豆の床はスクラブと一緒に回り、勝手には回らない。 */
+    var rot = t * Math.PI * 2.4;
+    ctx.save();
+    ctx.translate(cw*.5, ch*.57);
+    ctx.rotate(rot * .16);
+    var col = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+    for (var i = 0; i < BEANS.length; i++){
+      var b = BEANS[i];
+      var a = b.a + rot * b.sp;
+      var rad = (0.10 + b.y * 0.30) * ch;
+      var x = Math.cos(a) * rad * 1.9;
+      var y = Math.sin(a) * rad * 0.62 + (b.x - .5) * ch * .10;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(a * .5);
+      ctx.fillStyle = col;
+      ctx.globalAlpha = .58 + (b.y * .32);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, b.r * ch * 1.35, b.r * ch * .82, 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha = .30;
+      ctx.strokeStyle = "rgba(10,8,16,.8)"; ctx.lineWidth = .8;
+      ctx.beginPath(); ctx.moveTo(-b.r*ch*1.0, 0); ctx.lineTo(b.r*ch*1.0, 0); ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+
+    /* 煙 : 豆が実際に出しはじめてから。暗い地では白く立つ。 */
+    if (t > .42){
+      ctx.globalAlpha = Math.min(.20, (t - .42) * .55);
+      var sg = ctx.createLinearGradient(0, 0, 0, ch);
+      sg.addColorStop(0, "rgba(206,216,238,.85)");
+      sg.addColorStop(1, "rgba(206,216,238,0)");
+      ctx.fillStyle = sg; ctx.fillRect(0, 0, cw, ch*.72);
+      ctx.globalAlpha = 1;
+    }
+    /* どのレンズにも出る周辺光量落ち */
+    var vg = ctx.createRadialGradient(cw*.5, ch*.5, ch*.32, cw*.5, ch*.5, cw*.72);
+    vg.addColorStop(0, "rgba(0,0,0,0)");
+    vg.addColorStop(1, "rgba(6,8,20,.44)");
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, cw, ch);
+  }
+
+  var rTime = document.getElementById("rTime");
+  var rTemp = document.getElementById("rTemp");
+  var rStage = document.getElementById("rStage");
+  var stageNames = ["生豆","乾燥","一ハゼ","焙煎止め"];
+  var ech   = document.getElementById("echelle");
+  var track = ech.querySelector(".track");
+  var fill  = ech.querySelector(".fill");
+  var seed  = ech.querySelector(".seed");
+  var ticks = ech.querySelectorAll(".ticks span");
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+
+  function renderRoast(t){
+    t = Math.min(1, Math.max(0, t));
+    paintRoast(t);
+    if (window.gsap){
+      gsap.set(fill, { scaleX:t });
+      gsap.set(seed, { x: track.offsetWidth * t, backgroundColor:"rgb(" + mix(t).join(",") + ")" });
+    } else {
+      fill.style.transform = "scaleX(" + t + ")";
+      seed.style.transform = "translateX(" + (track.offsetWidth * t) + "px) rotate(45deg)";
+    }
+    var secs = Math.round(t * 18 * 60);
+    rTime.textContent = pad(Math.floor(secs/60)) + ":" + pad(secs % 60);
+    rTemp.textContent = Math.round(22 + t * 190) + "°C";
+    var idx = Math.min(3, Math.floor(t * 3.999));
+    rStage.textContent = stageNames[idx];
+    for (var k = 0; k < ticks.length; k++){
+      ticks[k].classList.toggle("on", k <= idx && t > .02);
+    }
+  }
+
+  var seqfill = document.getElementById("seqfill");
+  function seqProgress(p){ if (seqfill) seqfill.style.transform = "scaleX(" + p + ")"; }
+
+  /* =========================================================
+     4. 素材の生死 — 画面外でも隠れたタブでも、何も再生しない。
+        本番の <video> にもそのまま同じ扱いを適用する。
+     ========================================================= */
+  var playable = [].slice.call(document.querySelectorAll("[data-media]"));
+  var inView = new WeakSet();
+  function setPlaying(el, on){
+    el.classList.toggle("is-playing", on);
+    /* 本番 :
+       var v = el.matches("video") ? el : el.querySelector("video");
+       if (!v) return;
+       if (on && !STILL) { v.play().catch(function(){}); } else { v.pause(); }   */
+  }
+  if ("IntersectionObserver" in window){
+    var mio = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) inView.add(en.target); else inView.delete(en.target);
+        setPlaying(en.target, en.isIntersecting && !document.hidden);
+      });
+    }, { rootMargin:"120px 0px" });
+    playable.forEach(function(el){ mio.observe(el); });
+  }
+  document.addEventListener("visibilitychange", function(){
+    playable.forEach(function(el){ setPlaying(el, !document.hidden && inView.has(el)); });
+    /* 漂う光も湯気も CSS アニメーション。隠れたタブではブラウザが
+       既に止める。独自の rAF ループはこの頁に一つもない。canvas は
+       ScrollTrigger のティッカーからしか描かれない。 */
+  });
+
+  /* =========================================================
+     5. 音 — 既定Off。再読み込みでもOff。保存しない。
+     ========================================================= */
+  var son = document.getElementById("son");
+  if (son){
+    son.addEventListener("click", function(){
+      var on = son.getAttribute("aria-pressed") === "true";
+      son.setAttribute("aria-pressed", on ? "false" : "true");
+      son.textContent = on ? "音 · Off" : "音 · On";
+      /* 本番 : V-01 に既に入っている環境音のミュートを外すだけ。
+         第二の音声ファイルは読まない。音楽は存在しない。
+           var v = document.getElementById("v-hero");
+           if (v) { v.muted = on; if (!on) v.volume = 0.32; }
+         状態は意図的に保存しない。訪問のたびに無音から始まる。 */
+    });
+  }
+
+  /* =========================================================
+     6. 法人向けフォーム（このプロトタイプには送信先がない）
+        ・各項目の直下に誤りを出す（aria-describedby で結ぶ）
+        ・併せて先頭に要約を出し、role="alert" と焦点で知らせる
+        ・最初の誤った項目へ焦点を移す
+     ========================================================= */
+  var form = document.getElementById("wform");
+  if (form){
+    var errsum = document.getElementById("errsum");
+    var errlist = document.getElementById("errsum-list");
+    var okmsg = document.getElementById("okmsg");
+
+    var RULES = [
+      { id:"f-org",  label:"会社名・店舗名",   msg:"会社名・店舗名をご入力ください" },
+      { id:"f-name", label:"ご担当者名",       msg:"ご担当者名をご入力ください" },
+      { id:"f-mail", label:"メールアドレス",   msg:"メールアドレスの形式をご確認ください",
+        test:function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); } },
+      { id:"f-tel",  label:"電話番号",         msg:"数字・ハイフンでご入力ください", optional:true,
+        test:function(v){ return /^[0-9+\-() ]{9,}$/.test(v); } },
+      { id:"f-type", label:"業態",             msg:"業態をお選びください" },
+      { id:"f-vol",  label:"想定月間使用量",   msg:"想定月間使用量をお選びください" },
+      { id:"f-msg",  label:"ご相談内容",       msg:"ご相談内容をご入力ください" }
+    ];
+
+    function clearErr(r){
+      var el = document.getElementById(r.id);
+      var e  = document.getElementById(r.id.replace("f-","e-"));
+      el.removeAttribute("aria-invalid");
+      e.textContent = ""; e.classList.remove("on");
+    }
+    function setErr(r){
+      var el = document.getElementById(r.id);
+      var e  = document.getElementById(r.id.replace("f-","e-"));
+      el.setAttribute("aria-invalid","true");
+      e.textContent = r.msg; e.classList.add("on");
+    }
+    function check(r){
+      var el = document.getElementById(r.id);
+      var v  = (el.value || "").trim();
+      if (!v) return r.optional ? true : false;
+      return r.test ? r.test(v) : true;
+    }
+
+    RULES.forEach(function(r){
+      var el = document.getElementById(r.id);
+      el.addEventListener("blur", function(){ if (check(r)) clearErr(r); });
+      el.addEventListener("input", function(){ if (check(r)) clearErr(r); });
+      el.addEventListener("change", function(){ if (check(r)) clearErr(r); });
+    });
+
+    form.addEventListener("submit", function(ev){
+      ev.preventDefault();
+      okmsg.classList.remove("on"); okmsg.textContent = "";
+      var bad = [];
+      RULES.forEach(function(r){
+        if (check(r)) { clearErr(r); } else { setErr(r); bad.push(r); }
+      });
+
+      if (bad.length){
+        errlist.innerHTML = "";
+        bad.forEach(function(r){
+          var li = document.createElement("li");
+          var a = document.createElement("a");
+          a.href = "#" + r.id; a.textContent = r.label + " — " + r.msg;
+          a.addEventListener("click", function(e){
+            e.preventDefault();
+            document.getElementById(r.id).focus();
+          });
+          li.appendChild(a); errlist.appendChild(li);
+        });
+        errsum.classList.add("on");
+        try { errsum.focus({ preventScroll:false }); } catch(e){ errsum.focus(); }
+        return;
+      }
+
+      errsum.classList.remove("on");
+      /* 本番 : ここで fetch("/api/wholesale-inquiry", {method:"POST", ...})。
+         このプロトタイプには送信先がないので、完了の見え方だけ示す。 */
+      okmsg.textContent = "送信内容を確認しました。（このプロトタイプには送信先がありません。本番では /api/wholesale-inquiry へ POST し、1営業日以内に自動返信が届きます。）";
+      okmsg.classList.add("on");
+    });
+  }
+
+  /* =========================================================
+     7. モーション
+     ========================================================= */
+  var veil = document.getElementById("veil");
+
+  if (!window.gsap || !window.ScrollTrigger){
+    veil.style.display = "none";
+    sizeCanvas(); renderRoast(1); seqProgress(1);
+    document.querySelectorAll(".rule-d").forEach(function(r){ r.style.transform = "scaleX(1)"; });
+    applyRoute(true);
+    return;
+  }
+  gsap.registerPlugin(ScrollTrigger);
+  var mm = gsap.matchMedia();
+
+  var roastCommon = {
+    onUpdate:function(self){ renderRoast(self.progress); },
+    onRefresh:function(self){ sizeCanvas(); renderRoast(self.progress); }
+  };
+
+  /* ---- 7a. 静止 : 欠けるもののない完成した頁 ---------------- */
+  mm.add("(prefers-reduced-motion: reduce)", function(){
+    veil.style.display = "none";
+    gsap.set(".rv, #wordmark .ch, #heroline .ch, .cafe", { clearProps:"all", opacity:1 });
+    document.querySelectorAll(".rule-d").forEach(function(r){ r.style.transform = "scaleX(1)"; });
+    document.querySelectorAll(".cafe").forEach(function(b){ b.classList.add("ruled"); });
+    document.getElementById("rail").style.display = "none";
+    sizeCanvas();
+    renderRoast(.62); seqProgress(1);   /* 焙煎中盤の一枚で止まる */
+    return function(){};
+  });
+
+  /* ---- 7b. 全モーション ------------------------------------- */
+  mm.add("(prefers-reduced-motion: no-preference)", function(){
+
+    gsap.set("#wordmark .ch", { opacity:0, y:".10em", filter:"blur(4px)" });
+    gsap.set("#heroline .ch", { opacity:0, y:".16em", filter:"blur(4px)" });
+    gsap.set(["header", "#heroRuleWrap", "#hero .sub", "#hero .foot", "#hero-cap", ".rv"], { opacity:0, y:12 });
+    gsap.set("#hero-media", { opacity:0, scale:1.04 });
+    gsap.set(".cafe", { opacity:0, y:12 });
+
+    /* 開幕 — 勝色の帳が退く。映像はその下で既に回っている。
+       黒から明けるのではない。地の色から、地の色が退く。 */
+    if (initialView !== "home"){
+      veil.style.display = "none";
+      gsap.set(["header", "#heroRuleWrap", "#hero .sub", "#hero .foot", "#hero-cap"], { opacity:1, y:0 });
+      gsap.set(["#wordmark .ch", "#heroline .ch"], { opacity:1, y:0, filter:"blur(0px)" });
+      gsap.set("#hero-media", { opacity:1, scale:1 });
+      gsap.set("#heroRule", { scaleX:1 });
+    }
+    var open = gsap.timeline({ paused: initialView !== "home" });
+    open.to("#hero-media", { opacity:1, scale:1, duration:4.2, ease:"power2.out" }, .2)
+        .to("#veil .vmark", { opacity:0, duration:.9, ease:"power1.inOut" }, .5)
+        .to("#veil", { opacity:0, duration:1.2, ease:"power2.inOut",
+                       onComplete:function(){ veil.style.display = "none"; } }, .95)
+        .to("#wordmark .ch", { opacity:1, y:0, filter:"blur(0px)",
+                               duration:2.2, ease:"power2.out", stagger:.1 }, 1.1)
+        .to("#heroRuleWrap", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 2.2)
+        .to("#heroRule", { scaleX:1, duration:2.6, ease:"power2.inOut" }, 2.4)
+        .to("#heroline .ch", { opacity:1, y:0, filter:"blur(0px)",
+                               duration:2.0, ease:"power2.out", stagger:.07 }, 2.6)
+        .to("header", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 3.0)
+        .to("#hero .sub", { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.4)
+        .to(["#hero .foot", "#hero-cap"], { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.8);
+
+    /* ヒーロー映像は画面にある間ずっと漂う。寄りは告知しない速さで。 */
+    gsap.to("#hero-media .ph", {
+      scale:1.07, yPercent:-2.5, ease:"none",
+      scrollTrigger:{ trigger:"#hero", start:"top top", end:"bottom top", scrub:1.4 }
+    });
+    gsap.to("#hero-media", {
+      opacity:.18, ease:"none",
+      scrollTrigger:{ trigger:"#hero", start:"top top", end:"bottom 30%", scrub:1.2 }
+    });
+
+    /* 光がポインタに従う。暗い地では「足す光」なので、動きは更に弱くした。 */
+    var lx = gsap.quickTo("#light-i", "xPercent", { duration:2.4, ease:"power3.out" });
+    var ly = gsap.quickTo("#light-i", "yPercent", { duration:2.4, ease:"power3.out" });
+    function onPointer(e){
+      lx((e.clientX / window.innerWidth  - .5) * 5);
+      ly((e.clientY / window.innerHeight - .5) * 5);
+    }
+    window.addEventListener("pointermove", onPointer, { passive:true });
+
+    /* 地が読まれるにつれ、わずかに沈む : 勝色 → 一段深い勝色 */
+    gsap.to("#ground", { backgroundColor:"#12152C", ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:1.2 } });
+    gsap.to("#grain", { opacity:.075, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:1.2 } });
+
+    /* 読みの罫 */
+    gsap.to("#rail .ink", { scaleY:1, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:.6 } });
+    var stem = document.querySelector("#rail .stem");
+    gsap.to("#rail .dot", {
+      y:function(){ return stem.offsetHeight - 2.5; }, ease:"none",
+      scrollTrigger:{ trigger:document.body, start:"top top", end:"bottom bottom", scrub:.6, invalidateOnRefresh:true }
+    });
+
+    ScrollTrigger.create({
+      trigger:"#hero", start:"bottom 72%",
+      onEnter:function(){ document.querySelector("header").classList.add("lifted"); },
+      onLeaveBack:function(){ document.querySelector("header").classList.remove("lifted"); }
+    });
+
+    /* 節の定位 — 長く、静まる方向へ。滑らせない。 */
+    gsap.utils.toArray(".rv").forEach(function(el){
+      gsap.to(el, { opacity:1, y:0, duration:1.9, ease:"power2.out",
+        scrollTrigger:{ trigger:el, start:"top 88%" } });
+    });
+    gsap.utils.toArray(".rule-d").forEach(function(r){
+      if (r.id === "heroRule") return;
+      gsap.to(r, { scaleX:1, duration:2.4, ease:"power2.inOut",
+        scrollTrigger:{ trigger:r, start:"top 92%" } });
+    });
+
+    /* 商品の行 */
+    gsap.utils.toArray(".cafe").forEach(function(b){
+      gsap.to(b, { opacity:1, y:0, duration:1.6, ease:"power2.out", delay:.3,
+        scrollTrigger:{ trigger:b, start:"top 86%", onEnter:function(){ b.classList.add("ruled"); } } });
+    });
+    var ruleStyle = document.createElement("style");
+    ruleStyle.textContent =
+      ".cafe.ruled::before,.cafe.ruled:last-of-type::after{transform:scaleX(1);" +
+      "transition:transform 1.5s cubic-bezier(.16,1,.3,1);}" +
+      ".cafe:last-of-type.ruled::after{transition-delay:.25s;}";
+    document.head.appendChild(ruleStyle);
+
+    /* 一行を読むと、他の行が沈む */
+    var list = document.getElementById("cafelist");
+    var rows = list.querySelectorAll(".cafe");
+    rows.forEach(function(b){
+      var focus = function(){
+        rows.forEach(function(x){ x.classList.remove("is-on"); });
+        b.classList.add("is-on");
+        list.setAttribute("data-focused","true");
+      };
+      b.addEventListener("mouseenter", focus);
+      b.addEventListener("focusin", focus);
+    });
+    list.addEventListener("mouseleave", function(){
+      list.setAttribute("data-focused","false");
+      rows.forEach(function(x){ x.classList.remove("is-on"); });
+    });
+    /* 触る画面には hover がない。画面中央に来た行が読まれている行。 */
+    rows.forEach(function(b){
+      ScrollTrigger.create({
+        trigger:b, start:"top 62%", end:"bottom 38%",
+        onToggle:function(self){ if (self.isActive){
+          rows.forEach(function(x){ x.classList.remove("is-on"); });
+          b.classList.add("is-on");
+        }}
+      });
+    });
+
+    /* 索引も同じ作法で沈める */
+    var idx = document.getElementById("idx");
+    if (idx){
+      idx.addEventListener("mouseenter", function(){ idx.setAttribute("data-focused","true"); });
+      idx.addEventListener("mouseleave", function(){ idx.setAttribute("data-focused","false"); });
+    }
+
+    /* 紙が置かれる : 下からではなく、わずかに浮き上がって定位する */
+    gsap.fromTo("#article", { opacity:0, y:26, scale:.992 },
+      { opacity:1, y:0, scale:1, duration:2.2, ease:"power2.out",
+        scrollTrigger:{ trigger:"#article", start:"top 84%" } });
+
+    /* 落款が捺される */
+    gsap.fromTo("#cachet", { opacity:0, scale:1.16 },
+      { opacity:1, scale:1, duration:1.4, ease:"power3.out",
+        scrollTrigger:{ trigger:"#article .sign", start:"top 88%" } });
+
+    /* 購入の罫が引かれる */
+    ScrollTrigger.create({
+      trigger:"#commander", start:"top 62%",
+      onEnter:function(){
+        /* 購入の罫が、下線として左から引かれる */
+        gsap.fromTo("#ctaMain",
+          { clipPath:"inset(0 100% 0 0)" },
+          { clipPath:"inset(0 0% 0 0)", duration:1.6, ease:"power2.inOut", delay:.5 });
+      }
+    });
+
+    return function(){
+      window.removeEventListener("pointermove", onPointer);
+      ruleStyle.remove();
+    };
+  });
+
+  /* ---- 7c. 焙煎のピン留め : 余裕のある画面でだけ ------------- */
+  mm.add("(prefers-reduced-motion: no-preference) and (min-width: 880px) and (min-height: 700px)", function(){
+    ScrollTrigger.create(Object.assign({
+      trigger:"#torrefStage", start:"center center", end:"+=200%",
+      pin:"#torrefStage", pinSpacing:true, scrub:1, invalidateOnRefresh:true
+    }, roastCommon));
+
+    gsap.timeline({ scrollTrigger:{ trigger:"#torrefStage", start:"center center", end:"+=200%", scrub:1 }})
+      .fromTo("#torref .statement", { letterSpacing:"0.28em" }, { letterSpacing:"0.36em", duration:1, ease:"none" }, 0);
+    return function(){};
+  });
+
+  /* 狭い／低い画面ではピンを外し、同じスクラブを版の通過に結ぶ */
+  mm.add("(prefers-reduced-motion: no-preference) and (max-width: 879px), (prefers-reduced-motion: no-preference) and (max-height: 699px)", function(){
+    ScrollTrigger.create(Object.assign({
+      trigger:"#roast-slot", start:"top 82%", end:"bottom 24%", scrub:1, invalidateOnRefresh:true
+    }, roastCommon));
+    return function(){};
+  });
+
+  /* =========================================================
+     8. 幾何の衛生
+     ========================================================= */
+  sizeCanvas();
+  renderRoast(STILL ? .62 : 0);
+  seqProgress(1);   /* 本番 : 連番のデコード数で駆動 */
+
+  applyRoute(true);
+
+  var rt = null;
+  window.addEventListener("resize", function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){
+      sizeCanvas();
+      ScrollTrigger.refresh();
+    }, 180);
+  }, { passive:true });
+
+  window.addEventListener("orientationchange", function(){
+    setTimeout(function(){ sizeCanvas(); ScrollTrigger.refresh(); }, 260);
+  }, { passive:true });
+
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){ sizeCanvas(); ScrollTrigger.refresh(); });
+  }
+})();
+</script>
