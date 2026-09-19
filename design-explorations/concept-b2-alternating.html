@@ -724,6 +724,46 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
    ============================================================ */
 body.still #ground-a, body.still #ground-b,
 body.still #light, body.still .grain{ display:none; }
+/* 未確定事項の印。プロトタイプ上で「まだ決めていない」ことを隠さないための印で、
+   本番では出現しないことが完成の条件になります。 */
+.todo{ color:var(--on-3); border-bottom:1px dotted var(--hair); padding-bottom:1px; }
+.todo::before{ content:"▲ "; letter-spacing:.2em; }
+
+/* 粗利の試算 — カードにも枠にもしません。罫線と文字組みだけで組みます。 */
+.calc{ margin-top:clamp(26px,4vh,44px); }
+.calc-in{ display:grid; gap:0; border-top:1px solid var(--hair); }
+.calc-in label{
+  display:grid; grid-template-columns:1fr auto; align-items:center; gap:16px;
+  padding:15px 2px; border-bottom:1px solid var(--hair-f);
+  font-size:.78rem; letter-spacing:.09em; color:var(--on-2);
+}
+.calc-in input, .calc-in select{
+  font:inherit; font-size:.86rem; color:var(--on); background:none;
+  border:0; border-bottom:1px solid var(--hair); padding:5px 2px;
+  width:clamp(120px,32vw,210px); text-align:right;
+  transition:border-color .4s var(--ease);
+}
+.calc-in select{ text-align:left; }
+.calc-in input:focus-visible, .calc-in select:focus-visible{
+  outline:2px solid var(--focus); outline-offset:3px; border-bottom-color:transparent;
+}
+.calc-pre{ display:flex; flex-wrap:wrap; gap:9px; margin-top:20px; }
+.calc-pre button{
+  font:inherit; font-size:.7rem; letter-spacing:.14em; color:var(--on-2);
+  background:none; border:1px solid var(--hair); padding:8px 15px; cursor:pointer;
+  transition:border-color .4s var(--ease), color .4s var(--ease);
+}
+.calc-pre button:hover{ border-color:var(--on-3); color:var(--on); }
+.calc-out{ margin-top:clamp(30px,5vh,52px); border-top:1px solid var(--hair); }
+.calc-out > div{
+  display:grid; grid-template-columns:1fr auto; align-items:baseline; gap:16px;
+  padding:16px 2px; border-bottom:1px solid var(--hair-f);
+}
+.calc-out dt{ font-size:.76rem; letter-spacing:.11em; color:var(--on-3); }
+.calc-out dd{ margin:0; font-size:clamp(1.05rem,2.6vw,1.5rem); letter-spacing:.06em; font-weight:var(--w-display); font-variant-numeric:tabular-nums; }
+.calc-out > div.lead dd{ font-size:clamp(1.4rem,4vw,2.2rem); color:var(--accent); }
+.calc-note{ margin-top:22px; font-size:.7rem; line-height:2.2; color:var(--on-3); }
+
 body.still .chapter[data-ground="dark"], body.still #site-footer{ background:var(--katsu); }
 body.still .chapter[data-ground="light"]{ background:var(--white); }
 body.still .turn[data-to="light"]{ background:linear-gradient(var(--katsu),var(--white)); }
@@ -783,7 +823,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     <a class="b2b-btn" href="#/wholesale" data-route="#/wholesale" id="b2b-header">法人向けはこちら</a>
     <!-- 決済は Square オンラインビジネス。このサイトに買い物かごはありません。 -->
     <a class="store-min ext" id="store-header"
-       href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=header&amp;utm_campaign=always_on&amp;utm_content=header_store"
+       href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=header&amp;utm_campaign=always_on&amp;utm_content=header_store"
        target="_blank" rel="noopener noreferrer">オンラインストア<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
   </nav>
 </header>
@@ -864,7 +904,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
     <div class="ch-body wrap">
       <div id="hero-inner">
-        <p class="kicker">Soigné Coffee Roastery — Tokyo, Aobadai</p>
+        <p class="kicker">Soigné Coffee Roastery — 東京都江戸川区</p>
         <p id="wordmark" data-t="Soigné"></p>
         <div id="hero-rule-wrap">
           <div class="rule-c" id="hero-rule"></div>
@@ -899,50 +939,49 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       <div class="sec-head axis">
         <p class="kicker">章二 · 珈琲</p>
         <h2 id="beans-h2">今、棚にある豆</h2>
-        <p class="sub">どの豆が棚にあるかは週で変わります。ここは文字だけで組んであります。<br>在庫も焙煎度も価格も、書き換えるのは一行です。撮り直しは発生しません。</p>
+        <p class="sub">棚から三点だけを選んでご紹介しています。ここは文字だけで組んであります。<br>銘柄も価格も、書き換えるのは一行です。撮り直しは発生しません。</p>
       </div>
 
       <div class="axis">
+        <!-- 掲載する3点は data/products.json が情報源です。Squareの「LP掲載」
+             カテゴリから /update-products スキルで取得し、承認を経て更新します。
+             ここを手で書き換えないでください。価格の税内外はSquare側の設定に
+             依存するため、公開前に要確認。 -->
         <article class="bean">
-          <div class="top"><span class="no">01</span><h3>エチオピア イルガチェフェ／コンガ</h3></div>
-          <p class="orig">Ethiopia · Yirgacheffe · Washed · 1,950 m</p>
-          <div class="meta"><span>白桃・ベルガモット・紅茶</span><span>浅煎り</span><span class="price">¥1,980 / 200g</span></div>
-          <a class="store-min ext go" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_yirgacheffe_konga" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          <div class="top"><span class="no">01</span><h3>コスタリカ ラ・カンデリージャ／ホワイトハニー</h3></div>
+          <p class="orig">CostaRica · Tarrazú · White Honey · Caturra, Catuai</p>
+          <div class="meta"><span>三温糖・甘栗・ミルクチョコレート</span><span>White Honey</span><span class="price">¥1,720 / 150g</span></div>
+          <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_costarica_candelilla" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
         </article>
 
         <article class="bean">
-          <div class="top"><span class="no">02</span><h3>グアテマラ アンティグア／エル・ソコロ</h3></div>
-          <p class="orig">Guatemala · Antigua · Fully washed · 1,650 m</p>
-          <div class="meta"><span>焦がしカラメル・胡桃・黒糖</span><span>中煎り</span><span class="price">¥1,760 / 200g</span></div>
-          <a class="store-min ext go" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_antigua_socorro" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          <div class="top"><span class="no">02</span><h3>エチオピア イルガチェフェ／アリーチャ G1</h3></div>
+          <p class="orig">Ethiopia · Yirgacheffe Aricha · Washed · Heirloom</p>
+          <div class="meta"><span>さくらんぼ・くちなし・清らかな余韻</span><span>Washed</span><span class="price">¥1,810 / 150g</span></div>
+          <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_ethiopia_aricha" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
         </article>
 
         <article class="bean">
-          <div class="top"><span class="no">03</span><h3>ケニア ニエリ／カリンダ AA</h3></div>
-          <p class="orig">Kenya · Nyeri · Washed, SL28 · 1,780 m</p>
-          <div class="meta"><span>黒すぐり・レモングラス・蜜</span><span>中浅煎り</span><span class="price">¥2,420 / 200g</span></div>
-          <a class="store-min ext go" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_nyeri_karinda" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
-        </article>
-
-        <article class="bean">
-          <div class="top"><span class="no">04</span><h3>ブレンド／夜のための一杯</h3></div>
-          <p class="orig">Blend · Brazil &amp; Colombia · 中深煎り</p>
-          <div class="meta"><span>ビターチョコ・干し葡萄・杉</span><span>中深煎り</span><span class="price">¥1,540 / 200g</span></div>
-          <a class="store-min ext go" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_blend_yoru" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          <div class="top"><span class="no">03</span><h3>ボリビア カントゥタニ／ゲイシャ</h3></div>
+          <p class="orig">Bolivia · La Paz Caranavi · Anaerobic Natural · Geisha</p>
+          <div class="meta"><span>赤しそ・ぶどう・華やかな余韻</span><span>Anaerobic Natural</span><span class="price">¥4,320 / 150g</span></div>
+          <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_bolivia_geisha" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
         </article>
 
         <!-- 今週の棚 — 週に一度、焙煎士が書き換える唯一のブロック。
              A12ではここが季節ごとの再撮影でした。文字に移しました。 -->
         <div class="shelf">
-          <p class="when">2026.09.14 更新</p>
+          <p class="when"><span class="todo">※ 更新日は公開時に記入</span></p>
           <div>
             <h3>今週の棚</h3>
-            <p>朝の気温が下がってきたので、夏のあいだ棚から外していた中浅煎りを戻しました。ニエリは今週から新しいロットです。前のロットより酸が穏やかで、蜜の印象が強く出ています。</p>
+            <p><span class="todo">※ 焙煎士が週に一度書き換えるブロックです。下は書き方の見本で、
+              公開前に実際の文面へ差し替えてください。</span>
+              棚に並べているのは三点です。カンデリージャは甘さを主役に、アリーチャは
+              酸の輪郭を、カントゥタニのゲイシャは香りの華やかさを見ていただく並びにしています。</p>
             <ul>
-              <li><span>イルガチェフェ／コンガ</span><span>在庫あり</span></li>
-              <li><span>アンティグア／エル・ソコロ</span><span>残りわずか</span></li>
-              <li><span>ニエリ／カリンダ AA</span><span>9/12 入荷</span></li>
-              <li><span>ブレンド／夜のための一杯</span><span>在庫あり</span></li>
+              <li><span>ラ・カンデリージャ／ホワイトハニー</span><span>オンラインストアでご確認ください</span></li>
+              <li><span>アリーチャ G1／ウォッシュド</span><span>オンラインストアでご確認ください</span></li>
+              <li><span>カントゥタニ／ゲイシャ</span><span>オンラインストアでご確認ください</span></li>
             </ul>
           </div>
         </div>
@@ -1082,7 +1121,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           <div class="hd">
             <p class="kicker">焙煎日誌 — 最新</p>
             <h3 id="piece-oct-h">十月の火のこと</h3>
-            <p class="by">2026.10.02 ／ 焙煎士 中村 佳乃 ／ 読了 約6分</p>
+            <p class="by">2026.10.02 ／ 焙煎士 高岩 慧 ／ 読了 約6分</p>
           </div>
 
           <div class="prose">
@@ -1118,7 +1157,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
           <div class="end">
             <p class="label">この記事で触れた豆はオンラインストアにあります</p>
-            <a class="store-min ext" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=journal&amp;utm_campaign=always_on&amp;utm_content=post_202610_hi" target="_blank" rel="noopener noreferrer">ニエリ／カリンダ AA を見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+            <a class="store-min ext" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=journal&amp;utm_campaign=always_on&amp;utm_content=post_202610_hi" target="_blank" rel="noopener noreferrer">ニエリ／カリンダ AA を見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
           </div>
         </article>
 
@@ -1222,7 +1261,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
       <!-- ページ中で縦組みを使うのは、ここ一箇所だけです。 -->
       <div class="tategaki">
-        <div class="sig-v">焙煎士　中村 佳乃</div>
+        <div class="sig-v">焙煎士　高岩 慧</div>
         <p class="vert" id="vert-letter">週に一度しか火を入れないのは、<span class="mk">待てる量</span>しか焼かないと決めたからです。急いで焼いた豆は、急いで飲まれてしまう。</p>
         <h3 class="vert title">火の量</h3>
       </div>
@@ -1255,14 +1294,14 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           <!-- 主導線。外部リンクであることを、見た目・挙動・読み上げの
                三つで示します。target/rel、↗、そして視覚的に隠した一文。 -->
           <a class="store-cta ext drawn" id="cta-main"
-             href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=cta&amp;utm_campaign=always_on&amp;utm_content=ch6_primary"
+             href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=cta&amp;utm_campaign=always_on&amp;utm_content=ch6_primary"
              target="_blank" rel="noopener noreferrer">
             オンラインストアへ<span class="arw" aria-hidden="true">↗</span>
             <span class="note">Square オンラインビジネス · 別タブで開きます</span>
             <span class="vh">（外部サイト・新しいタブで開きます）</span>
           </a>
           <a class="store-min ext"
-             href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=cta&amp;utm_campaign=always_on&amp;utm_content=ch6_tasting_set"
+             href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=cta&amp;utm_campaign=always_on&amp;utm_content=ch6_tasting_set"
              target="_blank" rel="noopener noreferrer">100g×3種 テイスティングセット ¥2,860（送料込）<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
           <a class="b2b-btn" href="#/wholesale" data-route="#/wholesale">法人向けはこちら — 卸販売のご案内</a>
         </div>
@@ -1308,11 +1347,11 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       <div class="axis">
         <p class="kicker">法人のお客さまへ</p>
         <h1 id="w-h1">卸販売のご案内</h1>
-        <p class="lede">カフェ・喫茶店、レストラン、ホテル・旅館、オフィス、小売店さま向けに、焙煎した豆を卸価格でお納めしています。焙煎日から二日以内の発送、少量からの定期納品、抽出のご相談まで一貫して対応します。</p>
+        <p class="lede">飲食店さま向けに、お店ごとに豆を選び、お店専用の焙煎で卸しています。既製のラインナップからお選びいただくのではありません。ご提供の場面とお料理を伺い、三〜五種をご提案し、試飲を重ねて一杯を決めます。<br>ホテル・旅館、オフィス、小売店さま、OEMのご相談も承ります。</p>
         <dl class="w-keys">
-          <div><dt>最低ロット</dt><dd>2kg／回<small>単一銘柄でも、複数銘柄の合計でも構いません。</small></dd></div>
-          <div><dt>納期</dt><dd>中2営業日<small>定期便は曜日固定。スポットは受注から中2営業日で出荷。</small></dd></div>
-          <div><dt>提供形態</dt><dd>豆・挽き・1kg袋<small>ドリップバッグ、OEM小分けも承ります。</small></dd></div>
+          <div><dt>最低ロット</dt><dd>1kg／回<small>およそ62杯分です。まずは一袋から試していただけます。</small></dd></div>
+          <div><dt>卸価格</dt><dd>¥4,500／kg〜<small>1杯（16g）あたり約72円から。選定する生豆で決まります。</small></dd></div>
+          <div><dt>はじめかた</dt><dd>香りを嗅ぐ5分から<small>試飲までは無償です。お店に伺います。</small></dd></div>
         </dl>
         <p class="label" style="margin-top:28px">B2-01（再利用）· Roastery room · 21:9 crop · silent · 追加撮影なし</p>
       </div>
@@ -1326,62 +1365,95 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     <div class="ch-body wrap">
       <div class="axis">
 
+        <!-- 論証は要約だけを置きます。全文（提案資料）はPDFで配布し、
+             この節からは要点三つと出典だけを示します。 -->
         <section class="w-sec">
-          <h3 id="w-flow-h">取引の流れ</h3>
-          <p>初回のご相談から初回納品まで、通常10営業日ほどです。サンプルの送付までは無償で承ります。</p>
+          <h3 id="w-flow-h">なぜ、食後の一杯なのか</h3>
+          <p>お酒を飲まない人が増えました。国内で「ほとんど飲まない・やめた」と答える人は<strong>27.6%</strong>に達します。その一方で、多くの飲食店において<strong>粗利の大きな部分を担っているのは料理ではなく飲料</strong>です。食後にお出しできる一杯がないということは、席が空くまでの時間を、粗利を生まずに過ごしているということでもあります。</p>
+          <p>そしてもうひとつ。人は体験の全体ではなく、<strong>頂点と終わりで記憶します</strong>。食後の一杯は、お店の記憶がかたちを結ぶ最後の場面にあたります。ここが平凡であることの損失は、その一杯の粗利にとどまりません。</p>
+          <p>私たちがお納めするのは豆ですが、設計しているのは<strong>この一杯が置かれる場面</strong>です。だからお店ごとに豆を選び、お店ごとに焙煎します。</p>
+          <p class="label" style="margin-top:26px"><span class="todo">※ 統計の出典一覧は提案資料（PDF）に収録。配布方法は未確定</span></p>
+        </section>
+
+        <section class="w-sec">
+          <h3>取引の流れ</h3>
+          <p>香りを嗅いでいただくところから、初回の納品まで。試飲までは無償で承ります。</p>
           <ol class="flow">
-            <li><span class="st">お問い合わせ</span><span class="dt">ページ下部のフォーム、またはお電話で。ご業態、想定使用量、抽出方法をお知らせください。</span></li>
-            <li><span class="st">サンプル送付</span><span class="dt">ご相談の内容に合わせて2〜3種類を200gずつ無償でお送りします（送料も当店負担）。</span></li>
-            <li><span class="st">試飲・ご選定</span><span class="dt">ご希望があれば焙煎士が訪問し、実際の器具で抽出しながらお選びいただきます（東京23区内は無償）。</span></li>
-            <li><span class="st">お見積り・お取引条件</span><span class="dt">銘柄、月間使用量、納品頻度、提供形態を確定し、単価と支払条件を書面でご提示します。</span></li>
-            <li><span class="st">初回納品・定期開始</span><span class="dt">初回納品後、納品曜日を固定します。銘柄・数量の変更は納品日の3営業日前まで随時。</span></li>
+            <li><span class="st">本日 — 香りを嗅ぐ</span><span class="dt">5分。何種類かお持ちします。お店の場面を伺いながら、方向だけを決めます。</span></li>
+            <li><span class="st">数日以内 — 抽出・試飲</span><span class="dt">30分、無償。実際の器具・水・グラインダーで抽出し、お出しする形のまま味を見ていただきます。</span></li>
+            <li><span class="st">1週間 — 焙煎設計</span><span class="dt">三〜五種から絞り、お店専用の焙煎プロファイルを組みます。必要なら試作を重ねます。</span></li>
+            <li><span class="st">以降 — 1kgから納品</span><span class="dt">使う速さに合わせてお届けします。銘柄も量も、途中で変えて構いません。</span></li>
+            <li><span class="st">納品後 — 伴走</span><span class="dt">ロットが替わればレシピを調整します。スタッフ研修、器具の選定相談も、お取引のある期間は無償です。</span></li>
           </ol>
         </section>
 
         <section class="w-sec">
-          <h3>最低ロットと価格帯の考え方</h3>
-          <p>卸価格は月間の合計使用量で決まります。銘柄ごとではなく合計で判断しますので、複数銘柄を少量ずつお使いいただいても条件は変わりません。</p>
-          <p>下表は目安です。生豆相場・為替・輸送費の変動により、年に1〜2回改定することがあります。改定は必ず2か月前にご連絡します。</p>
+          <h3>価格</h3>
+          <p><strong>お客様ごとに豆を選定するため、同じ豆を店舗によって異なる価格でお出しすることはありません。</strong>価格を決めるのは、選定する生豆です。下表は生豆の構成ごとの目安で、ご予算からの設計も承ります。</p>
           <div class="tbl-scroll">
             <table class="tbl">
-              <caption>卸価格帯の目安（税抜・100gあたり／2026年9月現在）</caption>
-              <thead><tr><th scope="col">月間使用量</th><th scope="col">スタンダード</th><th scope="col">シングルオリジン</th><th scope="col">最低ロット</th></tr></thead>
+              <caption>卸価格の目安（税抜・2026年9月現在／1杯は16g換算・1kgあたり約62杯）</caption>
+              <thead><tr><th scope="col">生豆の構成</th><th scope="col">1kgあたり</th><th scope="col">1杯あたり原価</th><th scope="col">考え方</th></tr></thead>
               <tbody>
-                <tr><th scope="row">2〜5kg</th><td class="num">¥520</td><td class="num">¥690〜¥840</td><td class="num">2kg／回</td></tr>
-                <tr><th scope="row">5〜20kg</th><td class="num">¥480</td><td class="num">¥640〜¥780</td><td class="num">2kg／回</td></tr>
-                <tr><th scope="row">20〜50kg</th><td class="num">¥440</td><td class="num">¥590〜¥720</td><td class="num">5kg／回</td></tr>
-                <tr><th scope="row">50kg以上</th><td class="num">個別見積</td><td class="num">個別見積</td><td class="num">10kg／回</td></tr>
+                <tr><th scope="row">ブレンド</th><td class="num">¥4,500〜</td><td class="num">約 ¥72</td><td>お店専用に配合します。安定した供給と原価を優先する設計。</td></tr>
+                <tr><th scope="row">シングルオリジン</th><td class="num">¥6,000〜</td><td class="num">約 ¥96</td><td>産地・農園を指定します。味の輪郭を出す設計。</td></tr>
+                <tr><th scope="row">マイクロロット</th><td class="num">¥8,000〜</td><td class="num">約 ¥128</td><td>希少ロット。限定のご提供やハイエンドの一杯に。</td></tr>
               </tbody>
             </table>
           </div>
-          <p>シングルオリジンは銘柄ごとに原価が異なるため幅があります。ブレンドはご要望に応じて専用配合の設計も承ります（月間10kg以上、設計料なし）。</p>
+          <p>上表は代表的な構成です。実際にはご予算とご希望から逆算して選定しますので、まずはお使いになれる金額をお聞かせください。生豆相場・為替・輸送費の変動により改定することがあります。</p>
+          <p><span class="todo">※ 大量発注時の条件、および数量に応じた調整は商談時に個別にご提示します（公開条件は未確定）</span></p>
         </section>
 
+        <!-- 試算ツール — Deck2の業態別試算をWeb上で動かせる形にしたもの。
+             バックエンドはありません。入力値はどこへも送信されません。
+             初期値は保守的に置いています（楽観的な試算は導入後の落差になります）。 -->
         <section class="w-sec">
-          <h3>納期と配送</h3>
-          <div class="tbl-scroll">
-            <table class="tbl">
-              <caption>納期・配送条件</caption>
-              <thead><tr><th scope="col">項目</th><th scope="col">条件</th></tr></thead>
-              <tbody>
-                <tr><th scope="row">焙煎日</th><td>毎週火曜・金曜。定期便は納品曜日から逆算して割り当てます。</td></tr>
-                <tr><th scope="row">出荷</th><td>焙煎の翌営業日。受注から中2営業日で出荷します。</td></tr>
-                <tr><th scope="row">配送</th><td>宅配便（常温）。東京23区内は10kg以上で当店配送も可（追加費用なし）。</td></tr>
-                <tr><th scope="row">送料</th><td>月間20kg以上は無償。20kg未満は実費（1回あたり¥900〜¥1,500）。</td></tr>
-                <tr><th scope="row">変更・追加</th><td>納品日の3営業日前17時まで。それ以降はスポット出荷として承ります。</td></tr>
-                <tr><th scope="row">支払</th><td>月末締め翌月末払い（銀行振込）。初回3回までは前払いをお願いしています。</td></tr>
-              </tbody>
-            </table>
+          <h3 id="w-calc-h">粗利の試算</h3>
+          <p>お店の条件を入れると、コーヒーが生む年間の粗利を概算します。入力した数値はどこにも送信されません。</p>
+          <div class="calc">
+            <div class="calc-pre" role="group" aria-label="業態の例から入力する">
+              <button type="button" data-pre="20,600,26,4500">コースに含める</button>
+              <button type="button" data-pre="12,700,26,6000">アラカルト単品</button>
+              <button type="button" data-pre="30,300,22,4500">ランチセット</button>
+            </div>
+            <div class="calc-in">
+              <label for="c-cups">1日にお出しする杯数<input type="number" id="c-cups" value="20" min="1" max="2000" step="1" inputmode="numeric"></label>
+              <label for="c-price">1杯の販売価格（税抜・円）<input type="number" id="c-price" value="600" min="0" max="20000" step="10" inputmode="numeric"></label>
+              <label for="c-days">月間の営業日数<input type="number" id="c-days" value="26" min="1" max="31" step="1" inputmode="numeric"></label>
+              <label for="c-kg">卸価格（円／kg）<select id="c-kg">
+                <option value="4500">ブレンド ¥4,500</option>
+                <option value="6000">シングルオリジン ¥6,000</option>
+                <option value="8000">マイクロロット ¥8,000</option>
+              </select></label>
+            </div>
+            <dl class="calc-out">
+              <div class="lead"><dt>年間の粗利</dt><dd id="o-year">—</dd></div>
+              <div><dt>月間の粗利</dt><dd id="o-month">—</dd></div>
+              <div><dt>1杯あたりの粗利</dt><dd id="o-cup">—</dd></div>
+              <div><dt>原価率</dt><dd id="o-rate">—</dd></div>
+              <div><dt>月間の使用量</dt><dd id="o-kg">—</dd></div>
+            </dl>
           </div>
+          <p class="calc-note">※ 1杯16g、1kgあたり約62杯として計算しています。豆の原価のみを差し引いた概算であり、水道光熱費、人件費、カップ・砂糖・ミルク等の副資材は含みません。本試算は仮定に基づく参考値であり、実測データではありません。</p>
         </section>
 
         <section class="w-sec">
-          <h3>導入形態の例</h3>
+          <h3>導入の実績</h3>
+          <p>公開できる範囲で、実際の数字をそのまま記載します。</p>
           <ul class="cases">
-            <li><span class="who">カフェ（席数20）</span><span class="how">シングルオリジン2種＋ブレンド1種。週1回・計6kg納品。ブレンドはエスプレッソ用に専用配合。抽出レシピを四半期ごとに見直し。</span></li>
-            <li><span class="who">ホテル（客室80）</span><span class="how">客室用ドリップバッグ月5,000袋＋ラウンジ用1kg袋を月12kg。包材は客室備品に合わせて無地／名入れを選択。</span></li>
-            <li><span class="who">オフィス（在籍60名）</span><span class="how">中煎りブレンド1kg袋を月8kg、隔週納品。豆のまま納品し、設置のグラインダーで都度挽いていただく形。</span></li>
-            <li><span class="who">小売・物販</span><span class="how">200g袋を掛率で。棚札・POP用の原稿と写真データを無償提供。委託ではなく買取です。</span></li>
+            <li><span class="who">ベーカリーカフェ（2店舗）</span><span class="how">ペルーの単一農園を選定。6週間で計100kg、週あたり約2.5kgをお納めしました。焼き菓子との相性から、甘さが前に出る焙煎に振っています。</span></li>
+            <li><span class="who">企業オフィス（デジタルインフラ系）</span><span class="how">月8kgで開始し、社内での定着に伴い月12kgへ。<strong>50%の増量</strong>となりました。</span></li>
+            <li><span class="who">企業オフィス（エンジニア系）</span><span class="how">総量50kg。社内アンケートでのリピート意向は<strong>80%超</strong>。</span></li>
+          </ul>
+          <p><span class="todo">※ 飲食店の事例は現時点で1件です。主戦場である飲食店の事例が薄いことは、この節の弱点として認識しています。取引先の了解が得られ次第、追加してください。</span></p>
+        </section>
+
+        <section class="w-sec">
+          <h3>お取引の条件</h3>
+          <p>以下は現在整理中です。お問い合わせいただければ個別にご回答します。</p>
+          <ul class="cases">
+            <li><span class="who">検討中の項目</span><span class="how"><span class="todo">発注締切と焙煎日 ／ リードタイム ／ 配送エリアと送料 ／ 支払条件 ／ 返品・交換 ／ 賞味期限と保管方法 ／ インボイス登録番号 ／ 規格書・アレルゲン情報 ／ 契約書の要否 ／ 長期休業期間 ／ 問い合わせの返信目安</span></span></li>
           </ul>
         </section>
 
@@ -1448,6 +1520,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         <section class="w-sec">
           <h3 id="w-sup-h">抽出サポートと研修</h3>
           <p>豆をお納めするだけでは、同じ味はお店に届きません。導入時と、その後も必要に応じて、抽出の設計をご一緒します。いずれも豆のお取引がある期間は無償です。</p>
+          <p>焙煎と品質管理を担当するのは <strong>高岩 慧</strong>（Head Roaster &amp; QC）です。焙煎プロファイルの設計、ロット替わりの調整、抽出レシピの構築まで、一人が通して見ます。</p>
           <ul class="cases">
             <li><span class="who">導入時レシピ設計</span><span class="how">実際の器具・水・グラインダーで抽出し、粉量・湯温・時間を書面に落とします。所要2〜3時間。</span></li>
             <li><span class="who">スタッフ研修</span><span class="how">2時間×1回。抽出の手順と、味がぶれたときの原因の切り分け方。最大8名まで。</span></li>
@@ -1457,20 +1530,33 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         </section>
 
         <section class="w-sec">
+          <h3>OEM・受託焙煎</h3>
+          <p>貴社ブランドとしてのコーヒーを、コンセプトの設計から豆の選定・焙煎・パッケージまで一貫してお作りします。他ブランドさま、宿泊施設のお土産ライン、小売店さまのプライベートブランドなど。</p>
+          <ul class="cases">
+            <li><span class="who">最低ロット</span><span class="how">50袋から。お客様専用の焙煎を組むため、小ロットでお受けしています。</span></li>
+            <li><span class="who">分納</span><span class="how">50袋で最大2回、250袋で最大10回に分けてお届けできます。店頭での売れ方に合わせてご相談ください。</span></li>
+            <li><span class="who">表記</span><span class="how">食品表示法に準ずる最小限の表記のみ。当店のロゴや社名の露出は不要です。貴社ブランドとして展開いただけます。</span></li>
+            <li><span class="who">ブランド開発</span><span class="how">パッケージを含むブランディングもあわせてご提案できます。</span></li>
+          </ul>
+          <p>価格は個別のお見積りです。フォームの「ご業態」で OEM・受託焙煎 をお選びください。</p>
+        </section>
+
+        <section class="w-sec">
           <h3>よくあるご質問</h3>
           <div class="faq">
-            <details><summary>最低ロットの2kgは、1銘柄あたりですか。</summary><p class="a">合計です。500gずつ4銘柄でも構いません。ただし1銘柄あたり500g未満のご注文は、焙煎の精度が落ちるためお受けしていません。</p></details>
-            <details><summary>スポットで少量だけ試したいのですが。</summary><p class="a">サンプルとして2〜3種類を200gずつ無償でお送りします。送料も当店負担です。まずはフォームからご相談ください。</p></details>
-            <details><summary>個人向けのオンラインストアと価格が違うのはなぜですか。</summary><p class="a">包材・小分け・出荷回数が異なるためです。月間5kg未満であれば、オンラインストアからのご購入のほうがお安くなる場合もあります。その場合は正直にそうお伝えします。</p></details>
-            <details><summary>専用ブレンドの設計は有料ですか。</summary><p class="a">月間10kg以上のお取引であれば設計料はいただきません。3回程度の試作を経て確定します。レシピは貴店に帰属します。</p></details>
-            <details><summary>納品が間に合わなくなった場合は。</summary><p class="a">焙煎設備の不調など当店起因の遅延が生じた場合、代替銘柄のご提案と、当日中のご連絡を必ず行います。過去2年の納期遵守率は99.4%です。</p></details>
-            <details><summary>取引開始にあたって必要な書類はありますか。</summary><p class="a">初回にお取引条件確認書を1通取り交わします。与信の都合で、初回3回までは前払いをお願いしています。</p></details>
+            <details><summary>本当に1kgから頼めますか。</summary><p class="a">はい。1kgはおよそ62杯分です。お店専用に焙煎しますので、まず一袋お使いいただき、合うかどうかを判断していただくのが一番確かだと考えています。合わなければ次はありません。</p></details>
+            <details><summary>同じ豆でも、店によって価格が違うのですか。</summary><p class="a">違いません。価格を決めるのは選定する生豆です。お客様ごとに豆を選定しますので、同じ豆を店舗によって異なる価格でお出しすることはありません。</p></details>
+            <details><summary>予算が限られています。</summary><p class="a">ご予算からの設計を承ります。先にお使いになれる金額をお聞かせいただければ、その範囲で組みます。ご予算に届かない場合は、その旨を正直にお伝えします。</p></details>
+            <details><summary>個人向けのオンラインストアと価格が違うのはなぜですか。</summary><p class="a">包材・小分け・出荷回数が異なるためです。ご使用量が少ない場合は、オンラインストアからのご購入のほうがお安くなることもあります。その場合は正直にそうお伝えします。</p></details>
+            <details><summary>専用ブレンドの設計は有料ですか。</summary><p class="a">設計料はいただいていません。三〜五種のご提案から試飲を重ねて確定します。組み上げたレシピは貴店に帰属します。</p></details>
+            <details><summary>コーヒーの専門知識がありません。</summary><p class="a">それで構いません。豆選び、器具の選定、抽出レシピ、スタッフへの伝え方まで、こちらで引き受けます。器具の販売はしていないため、中立にお選びいただけます。</p></details>
+            <details><summary>納期や支払条件を知りたいのですが。</summary><p class="a"><span class="todo">※ この項目は整理中です。公開前に記載してください。</span></p></details>
           </div>
         </section>
 
         <section class="w-sec">
           <h3>お問い合わせ</h3>
-          <p>2営業日以内に、焙煎士または担当者からご返信します。お急ぎの場合は 03-0000-0000（平日 11:00–18:00）へ。</p>
+          <p>焙煎士または担当者からご返信します。<span class="todo">※ 返信の目安と電話番号は未確定</span></p>
 
           <!-- ─────────────────────────────────────────────────────────
                本番配線について（このプロトタイプにバックエンドはありません）
@@ -1528,11 +1614,13 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
               <label for="f-type">ご業態<span class="req">必須</span></label>
               <select id="f-type" name="business_type" required aria-describedby="err-type">
                 <option value="">選択してください</option>
-                <option>カフェ・喫茶店</option>
                 <option>レストラン・バー</option>
+                <option>カフェ・喫茶店</option>
+                <option>ベーカリー</option>
                 <option>ホテル・旅館</option>
                 <option>オフィス・社内利用</option>
                 <option>小売・物販</option>
+                <option>OEM・受託焙煎</option>
                 <option>その他</option>
               </select>
               <p class="err" id="err-type">ご業態をお選びください。</p>
@@ -1542,10 +1630,10 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
               <label for="f-vol">月間のおおよその使用量<span class="req">必須</span></label>
               <select id="f-vol" name="monthly_volume" required aria-describedby="err-vol">
                 <option value="">選択してください</option>
-                <option>〜2kg</option>
-                <option>2〜5kg</option>
-                <option>5〜20kg</option>
-                <option>20〜50kg</option>
+                <option>1〜3kg</option>
+                <option>3〜10kg</option>
+                <option>10〜30kg</option>
+                <option>30〜50kg</option>
                 <option>50kg以上</option>
                 <option>未定・相談したい</option>
               </select>
@@ -1558,7 +1646,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
                 <label><input type="checkbox" name="form_type" value="beans">豆のまま</label>
                 <label><input type="checkbox" name="form_type" value="ground">挽き</label>
                 <label><input type="checkbox" name="form_type" value="bag1kg">業務用1kg袋</label>
-                <label><input type="checkbox" name="form_type" value="retail200g">小売用200g袋</label>
+                <label><input type="checkbox" name="form_type" value="retail150g">小売用150g袋</label>
                 <label><input type="checkbox" name="form_type" value="drip">ドリップバッグ</label>
               </div>
             </fieldset>
@@ -1591,7 +1679,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
   <div class="ch-body f-grid">
     <div>
       <p class="fmark">Soigné</p>
-      <p style="margin-top:12px;">ソワニエ コーヒーロースタリー<br>東京都目黒区青葉台 1-2-3<br>11:00–18:00 ／ 水曜定休<br>03-0000-0000</p>
+      <p style="margin-top:12px;">ソワニエ コーヒーロースタリー<br>東京都江戸川区<br><span class="todo">※ 番地・営業時間・電話番号は未確定</span></p>
     </div>
     <ul>
       <li><a href="#ch-beans">今、棚にある豆</a></li>
@@ -1603,7 +1691,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       <li><a href="#/wholesale" data-route="#/wholesale">法人向け卸販売</a></li>
       <li><a href="#ch-buy">特定商取引法に基づく表記</a></li>
       <li><a href="#ch-buy">プライバシーポリシー</a></li>
-      <li><a class="ext" href="https://example.square.site/?utm_source=soigne_lp&amp;utm_medium=footer&amp;utm_campaign=always_on&amp;utm_content=footer_store" target="_blank" rel="noopener noreferrer">オンラインストア<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a></li>
+      <li><a class="ext" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=footer&amp;utm_campaign=always_on&amp;utm_content=footer_store" target="_blank" rel="noopener noreferrer">オンラインストア<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a></li>
     </ul>
     <div>
       <a class="b2b-btn" href="#/wholesale" data-route="#/wholesale" id="b2b-footer">法人向けはこちら</a>
@@ -1907,6 +1995,75 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         検証と焦点移動とエラー表示だけが本番と同じ形です。
         本番配線はフォーム直上のコメントに書いてあります。
      ========================================================= */
+  /* =========================================================
+     5b. 粗利の試算 — 完全にクライアント側で完結します。入力値は
+         どこへも送信されず、保存もされません。豆の原価だけを
+         差し引いた概算で、副資材と人件費は含みません。
+     ========================================================= */
+  var calcCups = document.getElementById("c-cups");
+  if (calcCups){
+    var CUPS_PER_KG = 1000 / 16;                      /* 1杯16g → 約62.5杯 */
+    var calcPrice = document.getElementById("c-price"),
+        calcDays  = document.getElementById("c-days"),
+        calcKg    = document.getElementById("c-kg"),
+        outYear   = document.getElementById("o-year"),
+        outMonth  = document.getElementById("o-month"),
+        outCup    = document.getElementById("o-cup"),
+        outRate   = document.getElementById("o-rate"),
+        outKg     = document.getElementById("o-kg");
+
+    function num(el, min, max, fallback){
+      var v = parseFloat(el.value);
+      if (!isFinite(v)) return fallback;
+      return Math.min(max, Math.max(min, v));
+    }
+    function yen(v){
+      return "¥" + Math.round(v).toLocaleString("ja-JP");
+    }
+
+    function runCalc(){
+      var cups  = num(calcCups, 1, 2000, 20),
+          price = num(calcPrice, 0, 20000, 600),
+          days  = num(calcDays, 1, 31, 26),
+          perKg = num(calcKg, 1, 100000, 4500);
+
+      var costPerCup  = perKg / CUPS_PER_KG,
+          grossPerCup = price - costPerCup,
+          monthly     = grossPerCup * cups * days,
+          kgPerMonth  = (cups * days) / CUPS_PER_KG;
+
+      /* 販売価格が未入力（0円）のあいだは粗利も原価率も定義できません。
+         大きな負の金額を出すとかえって誤解を招くので、伏せます。
+         価格が原価を下回る場合は負のまま表示します（それが事実だからです）。 */
+      outKg.textContent = (Math.round(kgPerMonth * 10) / 10).toLocaleString("ja-JP") + " kg";
+      if (price > 0){
+        outCup.textContent   = yen(grossPerCup);
+        outMonth.textContent = yen(monthly);
+        outYear.textContent  = yen(monthly * 12);
+        outRate.textContent  = (Math.round(costPerCup / price * 1000) / 10).toLocaleString("ja-JP") + " %";
+      } else {
+        outCup.textContent = outMonth.textContent = outYear.textContent = outRate.textContent = "—";
+      }
+    }
+
+    [calcCups, calcPrice, calcDays, calcKg].forEach(function(el){
+      el.addEventListener("input", runCalc);
+      el.addEventListener("change", runCalc);
+    });
+
+    /* 業態の例。Deck2の三パターンを初期値として流し込みます。 */
+    Array.prototype.forEach.call(document.querySelectorAll(".calc-pre button"), function(btn){
+      btn.addEventListener("click", function(){
+        var v = btn.getAttribute("data-pre").split(",");
+        calcCups.value = v[0]; calcPrice.value = v[1];
+        calcDays.value = v[2]; calcKg.value   = v[3];
+        runCalc();
+      });
+    });
+
+    runCalc();
+  }
+
   var wform = document.getElementById("w-form");
   if (wform){
     var status = document.getElementById("form-status");
