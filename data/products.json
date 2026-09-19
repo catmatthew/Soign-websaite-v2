@@ -1,0 +1,70 @@
+{
+  "_comment": "LPに掲載する商品データ。Squareカタログを唯一の情報源とし、/update-products スキル経由でのみ更新する。手で編集しないこと。",
+  "source": {
+    "system": "Square Catalog",
+    "store_url": "https://soign-coffee-roastery.square.site/",
+    "curation_category_name": "LP掲載",
+    "curation_category_id": null,
+    "curation_category_status": "NOT_CREATED",
+    "fallback": "カテゴリ未作成のあいだは featured[].id の固定リストを情報源とする"
+  },
+  "fetched_at": "2026-09-19",
+  "fetched_by": "Square MCP connector (read-only, ITEMS_READ)",
+  "price_note": "price_jpy はSquareに登録された金額をそのまま保持する。税の内外はSquare側の設定に依存するため、表示前に要確認(未検証)。",
+  "featured": [
+    {
+      "id": "C5JHXJ32SUV7VEBF4DY67OQ2",
+      "name": "CostaRica La Candellila / White Honey",
+      "name_ja": "コスタリカ ラ・カンデリージャ ホワイトハニー",
+      "price_jpy": 1720,
+      "unit": "150g",
+      "country": "CostaRica",
+      "area": "Tarrazu",
+      "farm": "La Candellila",
+      "variety": "Caturra, Catuai",
+      "process": "White Honey",
+      "impression": "Sweet chestnut",
+      "note_short": "三温糖のようなコクのある甘さと、甘栗を思わせるやさしい甘み。",
+      "ecom_visibility": "VISIBLE",
+      "square_url": null
+    },
+    {
+      "id": "S6SXYBRI23BRYGXIMGDOVDAB",
+      "name": "Ethiopia Yirgacheffe Aricha G1 / Washed",
+      "name_ja": "エチオピア イルガチェフェ アリーチャ G1 ウォッシュド",
+      "price_jpy": 1810,
+      "unit": "150g",
+      "country": "Ethiopia",
+      "area": "Aricha",
+      "farm": null,
+      "variety": "Heirloom",
+      "process": "Washed",
+      "impression": "cherry, Cape Jasmine",
+      "note_short": "熟したさくらんぼの上品な酸味と、くちなしの花のような華やかな香り。",
+      "ecom_visibility": "VISIBLE",
+      "square_url": null
+    },
+    {
+      "id": "64BBHM5XCIZLUGL4URCEVQPC",
+      "name": "Bolivia Kantutani Geisha / Anaerobic Natural",
+      "name_ja": "ボリビア カントゥタニ ゲイシャ アナエロビックナチュラル",
+      "price_jpy": 4320,
+      "unit": "150g",
+      "country": "Bolivia",
+      "area": "La Paz, Carnival",
+      "farm": "Kantutani",
+      "variety": "Geisha",
+      "process": "Anaerobic Natural",
+      "impression": "Grape juice, red perilla",
+      "note_short": "ゲイシャ種特有の華やかさ。赤しそのような酸味と、ぶどうジュースの飲みごたえ。",
+      "ecom_visibility": "VISIBLE",
+      "square_url": null
+    }
+  ],
+  "not_featured": [
+    { "id": "7YCHFVQO4E5YMCNKQ6V7AAH2", "name": "Ethiopia Yirgacheffe Gersi Peaberry / Natural", "price_jpy": 2610, "unit": "150g" },
+    { "id": "B6MSXBBNSJLSF2GFMMO2IJS7", "name": "Bolivia Kantutani / Anaerobic Washed", "price_jpy": 2640, "unit": "150g" },
+    { "id": "KLXYETMYQ6EMOR56EJPDEWO5", "name": "Bolivia Sajima / Washed", "price_jpy": 2560, "unit": "150g" },
+    { "id": "L2REMFML4GR2R45PM56UTT3W", "name": "Daily Coffee Pack -500g-", "price_jpy": 5000, "unit": "500g" }
+  ]
+}
