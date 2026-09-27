@@ -727,6 +727,8 @@ body.still #light, body.still .grain{ display:none; }
 /* 未確定事項の印。プロトタイプ上で「まだ決めていない」ことを隠さないための印で、
    本番では出現しないことが完成の条件になります。 */
 .todo{ color:var(--on-3); border-bottom:1px dotted var(--hair); padding-bottom:1px; }
+/* 価格の税表記。消費者向けは総額表示義務があるため税込、卸は税別で組みます。 */
+.bean .price small{ margin-left:.5em; font-size:.82em; letter-spacing:.1em; color:var(--on-3); }
 .todo::before{ content:"▲ "; letter-spacing:.2em; }
 
 /* 粗利の試算 — カードにも枠にもしません。罫線と文字組みだけで組みます。 */
@@ -945,26 +947,26 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       <div class="axis">
         <!-- 掲載する3点は data/products.json が情報源です。Squareの「LP掲載」
              カテゴリから /update-products スキルで取得し、承認を経て更新します。
-             ここを手で書き換えないでください。価格の税内外はSquare側の設定に
-             依存するため、公開前に要確認。 -->
+             ここを手で書き換えないでください。価格はSquare側の消費税設定が
+             INCLUSIVE（10%）であることを確認済みのため、税込で表示しています。 -->
         <article class="bean">
           <div class="top"><span class="no">01</span><h3>コスタリカ ラ・カンデリージャ／ホワイトハニー</h3></div>
           <p class="orig">CostaRica · Tarrazú · White Honey · Caturra, Catuai</p>
-          <div class="meta"><span>三温糖・甘栗・ミルクチョコレート</span><span>White Honey</span><span class="price">¥1,720 / 150g</span></div>
+          <div class="meta"><span>三温糖・甘栗・ミルクチョコレート</span><span>White Honey</span><span class="price">¥1,720 / 150g<small>税込</small></span></div>
           <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_costarica_candelilla" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
         </article>
 
         <article class="bean">
           <div class="top"><span class="no">02</span><h3>エチオピア イルガチェフェ／アリーチャ G1</h3></div>
           <p class="orig">Ethiopia · Yirgacheffe Aricha · Washed · Heirloom</p>
-          <div class="meta"><span>さくらんぼ・くちなし・清らかな余韻</span><span>Washed</span><span class="price">¥1,810 / 150g</span></div>
+          <div class="meta"><span>さくらんぼ・くちなし・清らかな余韻</span><span>Washed</span><span class="price">¥1,810 / 150g<small>税込</small></span></div>
           <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_ethiopia_aricha" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
         </article>
 
         <article class="bean">
           <div class="top"><span class="no">03</span><h3>ボリビア カントゥタニ／ゲイシャ</h3></div>
           <p class="orig">Bolivia · La Paz Caranavi · Anaerobic Natural · Geisha</p>
-          <div class="meta"><span>赤しそ・ぶどう・華やかな余韻</span><span>Anaerobic Natural</span><span class="price">¥4,320 / 150g</span></div>
+          <div class="meta"><span>赤しそ・ぶどう・華やかな余韻</span><span>Anaerobic Natural</span><span class="price">¥4,320 / 150g<small>税込</small></span></div>
           <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_bolivia_geisha" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
         </article>
 
@@ -1392,7 +1394,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           <p><strong>お客様ごとに豆を選定するため、同じ豆を店舗によって異なる価格でお出しすることはありません。</strong>価格を決めるのは、選定する生豆です。下表は生豆の構成ごとの目安で、ご予算からの設計も承ります。</p>
           <div class="tbl-scroll">
             <table class="tbl">
-              <caption>卸価格の目安（税抜・2026年9月現在／1杯は16g換算・1kgあたり約62杯）</caption>
+              <caption>卸価格の目安（<strong>税別</strong>・2026年9月現在／1杯は16g換算・1kgあたり約62杯）</caption>
               <thead><tr><th scope="col">生豆の構成</th><th scope="col">1kgあたり</th><th scope="col">1杯あたり原価</th><th scope="col">考え方</th></tr></thead>
               <tbody>
                 <tr><th scope="row">ブレンド</th><td class="num">¥4,500〜</td><td class="num">約 ¥72</td><td>お店専用に配合します。安定した供給と原価を優先する設計。</td></tr>
@@ -1402,6 +1404,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
             </table>
           </div>
           <p>上表は代表的な構成です。実際にはご予算とご希望から逆算して選定しますので、まずはお使いになれる金額をお聞かせください。生豆相場・為替・輸送費の変動により改定することがあります。</p>
+          <p>卸価格は<strong>税別</strong>で表記しています。オンラインストアの個人向け価格は<strong>税込</strong>です（総額表示義務によるもので、同じ豆でも表記の基準が異なります）。</p>
           <p><span class="todo">※ 大量発注時の条件、および数量に応じた調整は商談時に個別にご提示します（公開条件は未確定）</span></p>
         </section>
 
@@ -1419,7 +1422,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
             </div>
             <div class="calc-in">
               <label for="c-cups">1日にお出しする杯数<input type="number" id="c-cups" value="20" min="1" max="2000" step="1" inputmode="numeric"></label>
-              <label for="c-price">1杯の販売価格（税抜・円）<input type="number" id="c-price" value="600" min="0" max="20000" step="10" inputmode="numeric"></label>
+              <label for="c-price">1杯の販売価格（税別・円）<input type="number" id="c-price" value="600" min="0" max="20000" step="10" inputmode="numeric"></label>
               <label for="c-days">月間の営業日数<input type="number" id="c-days" value="26" min="1" max="31" step="1" inputmode="numeric"></label>
               <label for="c-kg">卸価格（円／kg）<select id="c-kg">
                 <option value="4500">ブレンド ¥4,500</option>
@@ -1435,7 +1438,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
               <div><dt>月間の使用量</dt><dd id="o-kg">—</dd></div>
             </dl>
           </div>
-          <p class="calc-note">※ 1杯16g、1kgあたり約62杯として計算しています。豆の原価のみを差し引いた概算であり、水道光熱費、人件費、カップ・砂糖・ミルク等の副資材は含みません。本試算は仮定に基づく参考値であり、実測データではありません。</p>
+          <p class="calc-note">※ 金額はすべて税別です。1杯16g、1kgあたり約62杯として計算しています。豆の原価のみを差し引いた概算であり、水道光熱費、人件費、カップ・砂糖・ミルク等の副資材は含みません。本試算は仮定に基づく参考値であり、実測データではありません。</p>
         </section>
 
         <section class="w-sec">
