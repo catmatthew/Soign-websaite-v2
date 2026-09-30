@@ -13,9 +13,21 @@
 
 ## 見方
 
-各HTMLは単体で完結しています。ブラウザで直接開いてください。
+ブラウザで開ける公開版（Artifact、非公開リンク）を用意しています。
+
+| 案 | リンク |
+|---|---|
+| A 余白の雑誌 | https://claude.ai/artifact/R9bNy6ggQR4cQgbDoXUQT6 |
+| B 索引が主役 | https://claude.ai/artifact/XUG8uyf3VG4ub31dCTCBMK |
+| C 写真が全面 | https://claude.ai/artifact/MhdR5yuGdeYu6zY2QCFqwD |
+
 モーションはスクロールに連動するため、実機（できればiPhone）と
 デスクトップの両方でご確認ください。
+
+各HTMLは単体でも完結しているため、ファイルをダウンロードして
+ブラウザで直接開くこともできます。公開版は同じ内容から生成した複製で、
+`<title>` を一覧での識別用に変えている点と、端末のセーフエリア分だけ
+ヘッダーを下げている点のみが異なります。
 
 ## 3案に共通する前提
 
