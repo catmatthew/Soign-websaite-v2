@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>myamo chocolate | チョコレートとお菓子の記録</title>
+<meta name="description" content="myamo chocolate は、チョコレートとお菓子、カフェ、贈りもの、旅の甘いものの記録です。訪ねたショコラトリーと投稿を、国や都市から探せます。">
+<meta property="og:title" content="myamo chocolate">
+<meta property="og:description" content="チョコレートとお菓子の記録。訪ねたショコラトリーと投稿を、国や都市から探せます。">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Shippori+Mincho+B1:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   案B-2「検索が全面に出る」 myamo chocolate
+   採用案Bの意匠を据え置き、「探し方」と「Instagramへの出し方」だけを変えた案。
+   検索と絞り込みは実際に動作します。掲載はすべて SAMPLE DATA です。
+   ========================================================= */
+
+/* 案Bの意匠をそのまま継承。異なるのは探し方とInstagramへの出し方だけ */
+:root{
+  --paper:      #F1EFEA;
+  --paper-2:    #E7E4DD;
+  --surface:    #FFFFFF;
+  --ink:        #22201D;
+  --ink-soft:   #65605A;
+  --ink-faint:  #8E8880;
+  --rule:       #DEDAD2;
+  --accent:     #8A6A4F;
+  --accent-deep:#6E5440;
+
+  --jp:       "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --jp-mincho:"Shippori Mincho B1", "Hiragino Mincho ProN", serif;
+  --latin:    "Jost", "Zen Kaku Gothic New", sans-serif;
+
+  --s1:.5rem; --s2:1rem; --s3:1.5rem; --s4:2rem; --s5:3rem; --s6:4.5rem; --s7:6.5rem;
+  --gutter:1.25rem;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --r-card:12px;
+  --r-pill:999px;
+  --shadow:0 1px 2px rgba(34,32,29,.04), 0 8px 24px rgba(34,32,29,.06);
+  --shadow-lift:0 2px 4px rgba(34,32,29,.05), 0 16px 36px rgba(34,32,29,.10);
+}
+@media (min-width:768px){ :root{ --gutter:2.5rem; } }
+@media (min-width:1200px){ :root{ --gutter:3.5rem; } }
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--jp); font-size:16px; line-height:1.85;
+  font-feature-settings:"palt" 1; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+img{ max-width:100%; display:block; }
+/* display を持つ要素にも hidden を効かせる（重ね画面が本文を覆うのを防ぐ） */
+[hidden]{ display:none !important; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.wrap{ width:100%; max-width:1240px; margin-inline:auto; padding-inline:var(--gutter); }
+.sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+/* ---- ヘッダー ---- */
+.head{
+  position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid transparent;
+  transition:border-color .4s var(--ease);
+}
+.head[data-stuck="true"]{ border-bottom-color:var(--rule); }
+.head__in{ height:58px; display:flex; align-items:center; justify-content:space-between; gap:var(--s3); }
+@media (min-width:768px){ .head__in{ height:70px; } }
+.mark{ font-family:var(--latin); font-weight:400; font-size:1.0625rem; letter-spacing:.1em; white-space:nowrap; }
+.mark b{ font-weight:500; color:var(--accent); }
+.nav{ display:none; }
+@media (min-width:900px){
+  .nav{ display:flex; align-items:center; gap:var(--s4); font-size:.8125rem; letter-spacing:.06em; }
+  .nav a{ color:var(--ink-soft); padding-block:.35rem; transition:color .3s var(--ease); }
+  .nav a:hover{ color:var(--ink); }
+  .nav a[data-key]{ color:var(--accent); font-weight:500; }
+}
+
+/* ---- Instagramボタン（3案で見え方を変える基礎） ---- */
+.ig{
+  display:inline-flex; align-items:center; justify-content:center; gap:.45rem;
+  min-height:40px; padding:.5rem 1rem; border-radius:var(--r-pill);
+  font-size:.8125rem; letter-spacing:.04em; white-space:nowrap;
+  transition:background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .2s var(--ease);
+}
+.ig:active{ transform:translateY(1px); }
+.ig svg{ width:15px; height:15px; flex:none; }
+.ig--quiet{ border:1px solid var(--rule); background:var(--surface); color:var(--ink-soft); }
+.ig--quiet:hover{ border-color:var(--accent); color:var(--accent); }
+.ig--solid{ background:var(--accent); color:#FFFDFA; }
+.ig--solid:hover{ background:var(--accent-deep); }
+.ig--line{ color:var(--accent); padding-inline:0; min-height:36px; }
+.ig--line span{ border-bottom:1px solid currentColor; padding-bottom:1px; }
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem; min-height:50px;
+  padding:.85rem 1.5rem; border-radius:var(--r-pill); font-size:.9375rem; letter-spacing:.04em;
+  white-space:nowrap; border:0; cursor:pointer;
+  transition:background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), transform .2s var(--ease);
+}
+.btn:active{ transform:translateY(1px); }
+.btn--key{ background:var(--ink); color:#FAF8F4; }
+.btn--key:hover{ background:#3A3630; }
+.btn--quiet{ border:1px solid var(--rule); background:var(--surface); color:var(--ink); }
+.btn--quiet:hover{ border-color:var(--ink-soft); }
+.btn svg{ width:16px; height:16px; }
+
+/* ---- 写真枠（プレースホルダ） ---- */
+.ph{ position:relative; overflow:hidden; background:var(--paper-2); }
+.ph::before{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(110% 80% at 26% 14%, rgba(255,255,255,.66), transparent 56%),
+    linear-gradient(152deg, #E4DCD1 0%, #D5C8B8 48%, #BFAE99 100%);
+  transition:transform .9s var(--ease);
+}
+.ph__note{
+  position:absolute; left:0; right:0; bottom:0; z-index:2; padding:.45rem .6rem;
+  font-size:.625rem; letter-spacing:.04em; line-height:1.5; color:#6A5B4B;
+  background:linear-gradient(to top, rgba(255,254,252,.9), rgba(255,254,252,0));
+}
+
+/* ---- チップ（絞り込み） ---- */
+.chip{
+  flex:none; min-height:40px; display:inline-flex; align-items:center; gap:.4rem;
+  padding:.45rem .9rem; border:1px solid var(--rule); border-radius:var(--r-pill);
+  background:var(--surface); color:var(--ink-soft); font-size:.8125rem; letter-spacing:.03em;
+  cursor:pointer; white-space:nowrap;
+  transition:border-color .25s var(--ease), color .25s var(--ease), background .25s var(--ease);
+}
+.chip:hover{ border-color:var(--ink-soft); color:var(--ink); }
+.chip[aria-pressed="true"]{ background:var(--accent); border-color:var(--accent); color:#FFFDFA; }
+.chip b{ font-family:var(--latin); font-weight:400; font-size:.75rem; opacity:.68; }
+.chip[aria-pressed="true"] b{ opacity:.8; }
+.chip[data-empty="true"]{ opacity:.34; cursor:not-allowed; }
+
+/* ---- 検索欄 ---- */
+.field{
+  display:flex; align-items:center; gap:.7rem; min-height:54px; background:var(--surface);
+  border:1px solid var(--rule); border-radius:var(--r-pill); padding:.3rem .4rem .3rem 1.1rem;
+  transition:border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+.field:focus-within{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(138,106,79,.10); }
+.field > svg{ width:18px; height:18px; color:var(--ink-faint); flex:none; }
+.field input{
+  flex:1 1 auto; min-width:0; border:0; background:transparent; font:inherit; font-size:.9375rem;
+  padding-block:.5rem; color:var(--ink);
+}
+.field input::placeholder{ color:#857F77; }
+.field input:focus{ outline:none; }
+/* 標準の消去ボタンは自前のものと二重になるため隠す */
+.field input[type="search"]::-webkit-search-cancel-button{ -webkit-appearance:none; appearance:none; }
+.field__clear{
+  flex:none; width:32px; height:32px; display:none; place-items:center; border:0; border-radius:50%;
+  background:var(--paper-2); color:var(--ink-soft); cursor:pointer;
+}
+.field__clear svg{ width:14px; height:14px; }
+.field[data-filled="true"] .field__clear{ display:grid; }
+
+/* ---- 結果カード ---- */
+.card{
+  background:var(--surface); border-radius:var(--r-card); overflow:hidden; box-shadow:var(--shadow);
+  display:flex; flex-direction:column; position:relative;
+  transition:transform .4s var(--ease), box-shadow .4s var(--ease);
+}
+.card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-lift); }
+.card:hover .ph::before{ transform:scale(1.04); }
+.card__ph{ aspect-ratio:4/3; }
+.card__in{ padding:var(--s3) var(--s3) 1.1rem; display:flex; flex-direction:column; gap:.55rem; flex:1; }
+.card__tags{ display:flex; flex-wrap:wrap; gap:.3rem; }
+.tag{
+  font-size:.6875rem; letter-spacing:.04em; color:var(--ink-soft);
+  background:var(--paper); border-radius:var(--r-pill); padding:.15rem .6rem; white-space:nowrap;
+}
+.tag--type{ background:var(--paper-2); color:var(--ink); }
+.card__n{ font-family:var(--jp-mincho); font-size:1.0625rem; line-height:1.55; margin:0; letter-spacing:.02em; }
+.card__d{ font-size:.8125rem; line-height:1.9; color:var(--ink-soft); margin:0; flex:1; }
+.card__foot{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding-top:.35rem; }
+.card__sample{ font-size:.5625rem; letter-spacing:.12em; color:var(--ink-faint); }
+.card__site{ font-size:.75rem; letter-spacing:.04em; color:var(--ink-soft); border-bottom:1px solid var(--rule); padding-bottom:1px; }
+.card__site:hover{ color:var(--ink); border-color:var(--ink-soft); }
+mark{ background:rgba(138,106,79,.16); color:inherit; border-radius:2px; padding:0 .1em; }
+
+/* ---- 空の状態 ---- */
+.empty{
+  grid-column:1/-1; text-align:center; padding:var(--s5) var(--s3);
+  border:1px dashed var(--rule); border-radius:var(--r-card); color:var(--ink-soft);
+}
+.empty p{ margin:0 0 var(--s2); font-size:.9375rem; }
+.empty__q{ font-family:var(--jp-mincho); color:var(--ink); }
+
+.count{ font-size:.8125rem; letter-spacing:.04em; color:var(--ink-soft); }
+.count b{ font-family:var(--latin); font-weight:500; font-size:1.0625rem; color:var(--ink); margin-inline:.15rem; }
+
+.sec__t{ font-family:var(--jp-mincho); font-weight:500; font-size:clamp(1.375rem,4.4vw,1.875rem); line-height:1.55; letter-spacing:.03em; margin:0 0 .6rem; }
+.sec__b{ font-size:.875rem; line-height:1.95; color:var(--ink-soft); margin:0; max-width:34rem; }
+
+/* ---- 見本の終わり ---- */
+.stop{ padding-block:var(--s5) var(--s6); border-top:1px solid var(--rule); text-align:center; }
+.stop p{ margin:0 auto; max-width:34rem; font-size:.8125rem; line-height:2; color:var(--ink-faint); letter-spacing:.04em; }
+
+
+/* ---- 案B-2 固有 ---- */
+.hero{ padding-block:var(--s5) var(--s4); }
+@media (min-width:768px){ .hero{ padding-block:var(--s6) var(--s5); } }
+.hero__k{ font-family:var(--latin); font-size:.75rem; letter-spacing:.26em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 var(--s2); }
+.hero__t{ font-family:var(--jp-mincho); font-weight:500; font-size:clamp(1.5rem,6.1vw,2.75rem); line-height:1.45; margin:0 0 var(--s2); letter-spacing:.01em; }
+.hero__t .en{ display:block; font-family:var(--latin); font-weight:300; letter-spacing:.04em; font-size:clamp(2rem,8.4vw,3.75rem); line-height:1.05; margin-bottom:.3rem; }
+.hero__l{ font-size:.9375rem; line-height:2; color:var(--ink-soft); max-width:32rem; margin:0 0 var(--s4); }
+
+/* 検索の入口。押すと検索専用の画面が開く */
+.opener{
+  width:100%; max-width:38rem; display:flex; align-items:center; gap:.75rem; min-height:60px;
+  padding:.5rem .6rem .5rem 1.2rem; border:1px solid var(--rule); border-radius:var(--r-pill);
+  background:var(--surface); box-shadow:var(--shadow); cursor:text; text-align:left;
+  transition:border-color .25s var(--ease), box-shadow .25s var(--ease), transform .2s var(--ease);
+}
+.opener:hover{ border-color:var(--accent); box-shadow:var(--shadow-lift); }
+.opener:active{ transform:translateY(1px); }
+.opener svg{ width:19px; height:19px; color:var(--ink-faint); flex:none; }
+.opener span{ flex:1 1 auto; min-width:0; color:#857F77; font-size:.9375rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.opener kbd{
+  display:none; font-family:var(--latin); font-size:.6875rem; letter-spacing:.06em; color:var(--ink-faint);
+  border:1px solid var(--rule); border-radius:6px; padding:.2rem .45rem; background:var(--paper);
+}
+@media (min-width:900px){ .opener kbd{ display:inline-block; } }
+.hero__hint{ margin:.9rem 0 0; font-size:.75rem; color:var(--ink-faint); letter-spacing:.04em; }
+
+/* Instagramの帯：ヒーロー直後に大きく置く */
+.feed{ background:var(--paper-2); padding-block:var(--s5); }
+@media (min-width:768px){ .feed{ padding-block:var(--s6); } }
+.feed__head{ display:flex; align-items:flex-end; justify-content:space-between; gap:var(--s3); flex-wrap:wrap; margin-bottom:var(--s3); }
+.feed__handle{ font-family:var(--latin); font-size:.875rem; letter-spacing:.1em; color:var(--accent); margin:0 0 .35rem; }
+.feed__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
+@media (min-width:768px){ .feed__grid{ grid-template-columns:repeat(6,1fr); gap:.75rem; } }
+.feed__tile{ position:relative; display:block; border-radius:8px; overflow:hidden; }
+.feed__tile .ph{ aspect-ratio:1/1; }
+.feed__tile .ph__note{ display:none; }
+.feed__tile::after{
+  content:""; position:absolute; inset:0; background:rgba(34,32,29,.28); opacity:0;
+  transition:opacity .3s var(--ease);
+}
+.feed__tile:hover::after, .feed__tile:focus-visible::after{ opacity:1; }
+.feed__tile svg{
+  position:absolute; inset:0; margin:auto; width:22px; height:22px; color:#FFFDFA; z-index:2;
+  opacity:0; transition:opacity .3s var(--ease);
+}
+.feed__tile:hover svg, .feed__tile:focus-visible svg{ opacity:1; }
+.feed__cta{ margin-top:var(--s3); display:flex; justify-content:center; }
+.feed__cta .ig{ min-height:50px; padding-inline:1.6rem; font-size:.9375rem; }
+
+/* 一覧 */
+.browse{ padding-block:var(--s5) var(--s6); }
+.browse__head{ margin-bottom:var(--s3); }
+.rows{ display:flex; flex-direction:column; gap:.6rem; margin-bottom:var(--s3); }
+.row{ display:flex; gap:.5rem; overflow-x:auto; scrollbar-width:none; padding-bottom:.2rem; }
+.row::-webkit-scrollbar{ display:none; }
+@media (min-width:768px){ .row{ flex-wrap:wrap; overflow:visible; } }
+.row__k{ flex:none; align-self:center; min-width:3.2rem; font-size:.6875rem; letter-spacing:.12em; color:var(--ink-faint); }
+.res__head{ display:flex; align-items:baseline; justify-content:space-between; gap:var(--s2); flex-wrap:wrap; margin-bottom:var(--s3); }
+.grid{ display:grid; gap:var(--s3); }
+@media (min-width:600px){ .grid{ grid-template-columns:repeat(2,1fr); } }
+@media (min-width:1024px){ .grid{ grid-template-columns:repeat(3,1fr); } }
+.card__meta{ font-size:.75rem; color:var(--ink-faint); letter-spacing:.04em; margin:0; }
+
+/* 検索専用画面 */
+.layer{ position:fixed; inset:0; z-index:70; display:flex; flex-direction:column; background:var(--paper); }
+.layer__top{
+  flex:none; border-bottom:1px solid var(--rule); background:var(--surface);
+  padding:calc(.75rem + env(safe-area-inset-top, 0px)) var(--gutter) .75rem;
+}
+.layer__bar{ display:flex; align-items:center; gap:.6rem; max-width:48rem; margin-inline:auto; }
+.layer__bar .field{ flex:1 1 auto; min-width:0; }
+.layer__x{ flex:none; min-height:44px; padding:.5rem .9rem; border:0; border-radius:var(--r-pill); background:var(--paper-2); color:var(--ink-soft); font-size:.8125rem; cursor:pointer; }
+.layer__x:hover{ background:var(--rule); color:var(--ink); }
+.layer__body{ flex:1 1 auto; overflow-y:auto; padding:var(--s3) var(--gutter) calc(var(--s5) + env(safe-area-inset-bottom, 0px)); }
+.layer__in{ max-width:48rem; margin-inline:auto; }
+.sug__t{ font-size:.6875rem; letter-spacing:.14em; color:var(--ink-faint); margin:0 0 .6rem; }
+.sug{ display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:var(--s4); }
+.hits{ display:flex; flex-direction:column; }
+.hits__g{ font-size:.6875rem; letter-spacing:.14em; color:var(--ink-faint); margin:var(--s3) 0 .5rem; }
+.hits__g:first-child{ margin-top:0; }
+.hit{
+  display:flex; align-items:center; gap:.9rem; padding:.7rem .6rem; border-radius:10px;
+  background:none; border:0; width:100%; text-align:left; cursor:pointer;
+  transition:background .18s var(--ease);
+}
+.hit:hover, .hit[data-cursor="true"]{ background:var(--surface); }
+.hit .ph{ width:52px; height:52px; border-radius:8px; flex:none; }
+.hit__b{ min-width:0; flex:1; }
+/* span を行として扱う。block にしないと省略記号が効かず、行がはみ出す */
+.hit__n{ display:block; font-family:var(--jp-mincho); font-size:.9375rem; line-height:1.5; margin:0 0 .1rem; letter-spacing:.02em;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hit__m{ display:block; font-size:.75rem; color:var(--ink-faint); letter-spacing:.03em; margin:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hit__t{ flex:none; font-size:.625rem; letter-spacing:.08em; color:var(--ink-soft); background:var(--paper-2); border-radius:var(--r-pill); padding:.15rem .55rem; }
+.layer__foot{ margin-top:var(--s4); }
+
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="head" id="head">
+  <div class="wrap head__in">
+    <a class="mark" href="#top">myamo <b>chocolate</b></a>
+    <nav class="nav" aria-label="主要ナビゲーション">
+      <a href="#browse" data-key>チョコレートマップ</a>
+      <a href="#feed">Instagram</a>
+      <a href="#about">このサイトについて</a>
+    </nav>
+    <a class="ig ig--solid" href="https://www.instagram.com/myamo_chocolate/" rel="me noopener" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg> Instagramを見る</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero wrap">
+    <p class="hero__k">Chocolate / Sweets / Café / Travel</p>
+    <h1 class="hero__t"><span class="en">myamo chocolate</span>探すところから始めるサイト</h1>
+    <p class="hero__l">食べたチョコレートと訪ねた店の記録です。店名でも、都市でも、思い出した言葉のどれからでも辿れます。</p>
+
+    <button class="opener" type="button" id="opener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <span id="openerLabel">ショコラティエ・ブランド・都市などで検索</span>
+      <kbd>/</kbd>
+    </button>
+    <p class="hero__hint">例：Pierre Hermé　/　Paris　/　Tokyo　/　贈りもの</p>
+  </section>
+
+  <!-- Instagram：第一画面のすぐ下に大きく置く -->
+  <section class="feed" id="feed">
+    <div class="wrap">
+      <div class="feed__head">
+        <div>
+          <p class="feed__handle">@myamo_chocolate</p>
+          <h2 class="sec__t" style="margin-bottom:.4rem">新しいものは、こちらに先に出ます</h2>
+          <p class="sec__b">その日に食べたものと、買ったもの。サイトはあとから探すための場所です。</p>
+        </div>
+      </div>
+      <div class="feed__grid" id="feedGrid"></div>
+      <div class="feed__cta">
+        <a class="ig ig--solid" href="https://www.instagram.com/myamo_chocolate/" rel="me noopener" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg> Instagramを見る</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="browse wrap" id="browse">
+    <div class="browse__head">
+      <h2 class="sec__t">国と種類から見る</h2>
+      <p class="sec__b">絞り込みだけでも辿れます。細かく探すときは上の検索へ。</p>
+    </div>
+
+    <div class="rows" id="rows">
+      <div class="row" data-key="type" aria-label="種別で絞り込む"><span class="row__k">種別</span></div>
+      <div class="row" data-key="country" aria-label="国で絞り込む"><span class="row__k">国</span></div>
+      <div class="row" data-key="area" aria-label="都市で絞り込む" hidden><span class="row__k">都市</span></div>
+      <div class="row" data-key="cat" aria-label="種類で絞り込む"><span class="row__k">種類</span></div>
+    </div>
+
+    <div class="res__head">
+      <p class="count" id="count" aria-live="polite" role="status"></p>
+      <button class="btn btn--quiet" type="button" id="clearAll" style="min-height:40px;padding:.4rem 1rem;font-size:.8125rem" hidden>条件をすべて解除</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="stop" id="about">
+    <div class="wrap">
+      <p>ここまでが見本の範囲です。この先には店舗・投稿の詳細ページ、「このサイトについて」、フッターが続きます。検索と絞り込みは実際に動作します。掲載はすべて SAMPLE DATA です。</p>
+    </div>
+  </section>
+</main>
+
+<!-- 検索専用画面 -->
+<div class="layer" id="layer" role="dialog" aria-modal="true" aria-label="検索" hidden>
+  <div class="layer__top">
+    <div class="layer__bar">
+      <label class="sr" for="q">店名・ブランド・都市で探す</label>
+      <div class="field" id="field">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="ショコラティエ・ブランド・都市などで検索" autocomplete="off">
+        <button class="field__clear" type="button" id="qclear" aria-label="検索語を消す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <button class="layer__x" type="button" id="layerClose">閉じる</button>
+    </div>
+  </div>
+  <div class="layer__body">
+    <div class="layer__in">
+      <p class="sug__t">よく探されるもの</p>
+      <div class="sug" id="sug"></div>
+      <div class="hits" id="hits" aria-live="polite"></div>
+      <div class="layer__foot">
+        <a class="ig ig--line" href="https://www.instagram.com/myamo_chocolate/" rel="me noopener" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg><span>見つからないときはInstagramを見る</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+var REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ============================================================
+   SAMPLE DATA。contents.md の Shop Data Model に従った仮データです。
+   実在の店舗情報および実在URLは一切含みません（外部リンクはすべて "#"）。
+   ============================================================ */
+var SHOPS = [
+  { id:'s1', type:'店', name:'サンプル・ショコラトリー A', country:'フランス', city:'パリ', area:'パリ',
+    cat:['ショコラトリー','チョコレート'], price:'¥¥¥',
+    desc:'カカオの産地ごとに味の輪郭がはっきり違う店。板チョコを一枚ずつ買えます。',
+    kw:'France Paris chocolaterie chocolate' },
+  { id:'s2', type:'店', name:'サンプル・パティスリー B', country:'日本', city:'東京', area:'東京',
+    cat:['パティスリー','カフェ'], price:'¥¥',
+    desc:'ガトーショコラが目当て。平日の午後なら座って食べられます。',
+    kw:'Japan Tokyo patisserie cafe' },
+  { id:'s3', type:'店', name:'サンプル・ショコラ C', country:'ベルギー', city:'ブリュッセル', area:'ブリュッセル',
+    cat:['チョコレート','贈りもの'], price:'¥¥',
+    desc:'箱の意匠がきれいで、手土産にしています。小箱でも見栄えがします。',
+    kw:'Belgium Brussels chocolate gift' },
+  { id:'s4', type:'店', name:'サンプル・カフェ D', country:'フランス', city:'リヨン', area:'リヨン',
+    cat:['カフェ'], price:'¥¥',
+    desc:'ショコラショーが濃く、冬に寄りたくなる一軒。席は少なめです。',
+    kw:'France Lyon cafe chocolat chaud' },
+  { id:'s5', type:'店', name:'サンプル・ショコラトリー E', country:'日本', city:'札幌', area:'北海道',
+    cat:['ショコラトリー','贈りもの'], price:'¥¥',
+    desc:'乳の味がはっきり出るミルク系。空港では買えないものが並びます。',
+    kw:'Japan Sapporo Hokkaido chocolaterie gift' },
+  { id:'s6', type:'店', name:'サンプル・チョコレート F', country:'スイス', city:'チューリッヒ', area:'チューリッヒ',
+    cat:['チョコレート'], price:'¥¥¥',
+    desc:'定番の板チョコがとにかく安定しています。滞在中に二度行きました。',
+    kw:'Switzerland Zurich chocolate' },
+  { id:'s7', type:'店', name:'サンプル・パティスリー G', country:'イタリア', city:'トリノ', area:'トリノ',
+    cat:['パティスリー','チョコレート'], price:'¥¥',
+    desc:'ジャンドゥーヤの店。焼き菓子も一緒に買うのがおすすめです。',
+    kw:'Italy Torino Turin patisserie gianduja chocolate' },
+  { id:'s8', type:'店', name:'サンプル・ショコラトリー H', country:'フランス', city:'ブルターニュ', area:'ブルターニュ',
+    cat:['ショコラトリー'], price:'¥¥',
+    desc:'塩バターのキャラメルを合わせた一粒。土地の味がします。',
+    kw:'France Bretagne Brittany chocolaterie' },
+  { id:'s9', type:'店', name:'サンプル・ギフト I', country:'日本', city:'大阪', area:'大阪',
+    cat:['贈りもの','チョコレート'], price:'¥',
+    desc:'駅で買えて外さない箱。急ぎの手土産のときに使っています。',
+    kw:'Japan Osaka gift chocolate' },
+  { id:'s10', type:'店', name:'サンプル・カフェ J', country:'日本', city:'東京', area:'東京',
+    cat:['カフェ','パティスリー'], price:'¥¥',
+    desc:'朝から開いていて、ひと皿だけ食べたい日に寄ります。',
+    kw:'Japan Tokyo cafe patisserie morning' }
+];
+
+var POSTS = [
+  { id:'p1', type:'投稿', name:'冬のボンボンショコラを四種', shop:'サンプル・ショコラトリー A',
+    country:'フランス', city:'パリ', area:'パリ', cat:['ショコラトリー','チョコレート'], date:'2026.02.14',
+    desc:'四種を並べて食べ比べ。いちばん好きだったのは柑橘のもの。',
+    kw:'France Paris bonbon chocolat' },
+  { id:'p2', type:'投稿', name:'東京で買えるタブレットのこと', shop:'サンプル・パティスリー B',
+    country:'日本', city:'東京', area:'東京', cat:['チョコレート','パティスリー'], date:'2026.02.02',
+    desc:'産地違いを三枚。日本で手に入るものだけで揃えました。',
+    kw:'Japan Tokyo tablet chocolate' },
+  { id:'p3', type:'投稿', name:'贈りものに選んだ小箱', shop:'サンプル・ショコラ C',
+    country:'ベルギー', city:'ブリュッセル', area:'ブリュッセル', cat:['贈りもの','チョコレート'], date:'2026.01.21',
+    desc:'四粒入りの小箱。渡しやすい大きさでした。',
+    kw:'Belgium Brussels gift box' },
+  { id:'p4', type:'投稿', name:'午後のカフェでひと皿', shop:'サンプル・カフェ D',
+    country:'フランス', city:'リヨン', area:'リヨン', cat:['カフェ'], date:'2026.01.09',
+    desc:'ショコラショーと焼き菓子。雨の日の記録です。',
+    kw:'France Lyon cafe' },
+  { id:'p5', type:'投稿', name:'北海道の乳の味', shop:'サンプル・ショコラトリー E',
+    country:'日本', city:'札幌', area:'北海道', cat:['ショコラトリー'], date:'2025.12.18',
+    desc:'ミルクの比率が高いもの。地のものだと納得する味でした。',
+    kw:'Japan Sapporo Hokkaido milk' },
+  { id:'p6', type:'投稿', name:'トリノのジャンドゥーヤ', shop:'サンプル・パティスリー G',
+    country:'イタリア', city:'トリノ', area:'トリノ', cat:['パティスリー','チョコレート'], date:'2025.12.02',
+    desc:'ヘーゼルナッツの香りが強いもの。焼き菓子も持ち帰りました。',
+    kw:'Italy Torino gianduja' }
+];
+
+var ITEMS = SHOPS.concat(POSTS);
+
+var COUNTRIES  = ['日本','フランス','ベルギー','スイス','イタリア'];
+var CATEGORIES = ['ショコラトリー','チョコレート','パティスリー','カフェ','贈りもの'];
+var AREAS = {
+  '日本':    ['東京','北海道','大阪'],
+  'フランス':['パリ','リヨン','ブルターニュ'],
+  'ベルギー':['ブリュッセル'],
+  'スイス':  ['チューリッヒ'],
+  'イタリア':['トリノ']
+};
+
+
+/* ---- 検索と絞り込みの中核。3案で共通。UIだけが違う ---- */
+function normalize(s){
+  return String(s || '').toLowerCase()
+    .replace(/[ァ-ヶ]/g, function(c){ return String.fromCharCode(c.charCodeAt(0) - 0x60); })
+    .replace(/[！-～]/g, function(c){ return String.fromCharCode(c.charCodeAt(0) - 0xfee0); })
+    .replace(/[\s　]+/g, '');
+}
+function haystack(it){
+  return normalize([it.name, it.shop, it.country, it.city, it.area, (it.cat||[]).join(' '), it.desc, it.kw, it.type].join(' '));
+}
+ITEMS.forEach(function(it){ it._h = haystack(it); });
+
+var state = { q:'', type:'', country:'', area:'', cat:'' };
+
+function match(it, st){
+  if (st.type    && it.type    !== st.type)    return false;
+  if (st.country && it.country !== st.country) return false;
+  if (st.area    && it.area    !== st.area)    return false;
+  if (st.cat     && (it.cat || []).indexOf(st.cat) < 0) return false;
+  var q = normalize(st.q);
+  if (q && it._h.indexOf(q) < 0) return false;
+  return true;
+}
+function results(st){ return ITEMS.filter(function(it){ return match(it, st || state); }); }
+
+/* ある絞り込み値を選んだ場合の件数。0件の選択肢を先に伝えるために使う */
+function countIf(key, value){
+  var probe = Object.assign({}, state); probe[key] = value;
+  return ITEMS.filter(function(it){ return match(it, probe); }).length;
+}
+function activeFilters(){
+  var out = [];
+  if (state.type)    out.push({ key:'type',    label:state.type });
+  if (state.country) out.push({ key:'country', label:state.country });
+  if (state.area)    out.push({ key:'area',    label:state.area });
+  if (state.cat)     out.push({ key:'cat',     label:state.cat });
+  if (state.q)       out.push({ key:'q',       label:'「' + state.q + '」' });
+  return out;
+}
+function esc(s){
+  return String(s).replace(/[&<>"]/g, function(c){
+    return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' })[c];
+  });
+}
+/* 一致箇所の強調。表記ゆれの正規化は検索のみに使い、表示は原文のまま扱う */
+function hl(text){
+  var t = esc(text);
+  if (!state.q) return t;
+  var q = state.q.trim();
+  if (!q) return t;
+  var i = normalize(text).indexOf(normalize(q));
+  if (i < 0) return t;
+  var raw = String(text);
+  return esc(raw.slice(0, i)) + '<mark>' + esc(raw.slice(i, i + q.length)) + '</mark>' + esc(raw.slice(i + q.length));
+}
+
+
+var $ = function(s, r){ return (r || document).querySelector(s); };
+var $$ = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+var SUGGEST = ['Paris','Tokyo','贈りもの','ショコラトリー','カフェ','北海道'];
+var OPTIONS = { type:['店','投稿'], country:COUNTRIES, area:[], cat:CATEGORIES };
+
+/* ---- Instagramの帯 ---- */
+$('#feedGrid').innerHTML = POSTS.concat(POSTS).slice(0, 6).map(function(p, i){
+  return '<a class="feed__tile" href="https://www.instagram.com/myamo_chocolate/" rel="noopener" target="_blank" aria-label="' + esc(p.name) + ' をInstagramで見る">' +
+    '<div class="ph"></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg></a>';
+}).join('');
+
+/* ---- 一覧の絞り込み ---- */
+function renderRows(){
+  OPTIONS.area = state.country ? (AREAS[state.country] || []) : [];
+  $$('.row').forEach(function(row){
+    var key = row.dataset.key;
+    if (key === 'area') row.hidden = OPTIONS.area.length === 0;
+    row.querySelectorAll('.chip').forEach(function(c){ c.remove(); });
+    OPTIONS[key].forEach(function(v){
+      var n = countIf(key, v), on = state[key] === v;
+      var b = document.createElement('button');
+      b.className = 'chip'; b.type = 'button';
+      b.dataset.key = key; b.dataset.value = v;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (n === 0 && !on){ b.dataset.empty = 'true'; b.disabled = true; }
+      b.innerHTML = esc(v) + '<b>' + n + '</b>';
+      row.appendChild(b);
+    });
+  });
+}
+
+function cardHTML(it){
+  var meta = it.type === '投稿'
+    ? esc(it.shop) + '　/　' + esc(it.city) + '　/　' + esc(it.date)
+    : esc(it.country) + '・' + esc(it.city) + (it.price ? '　/　' + esc(it.price) : '');
+  return '<article class="card">' +
+    '<div class="ph card__ph" role="img" aria-label="写真が入ります"><span class="ph__note">写真枠　4:3／1200×900px</span></div>' +
+    '<div class="card__in">' +
+      '<div class="card__tags"><span class="tag tag--type">' + esc(it.type) + '</span>' +
+        (it.cat || []).map(function(c){ return '<span class="tag">' + esc(c) + '</span>'; }).join('') + '</div>' +
+      '<h3 class="card__n">' + hl(it.name) + '</h3>' +
+      '<p class="card__meta">' + meta + '</p>' +
+      '<p class="card__d">' + hl(it.desc) + '</p>' +
+      '<div class="card__foot">' +
+        '<a class="ig ig--line" href="https://www.instagram.com/myamo_chocolate/" rel="noopener" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg><span>Instagramで見る</span></a>' +
+        '<span class="card__sample">SAMPLE DATA</span>' +
+      '</div>' +
+    '</div></article>';
+}
+
+function render(){
+  renderRows();
+  var list = results();
+  var n = activeFilters().length;
+  $('#count').innerHTML = '<b>' + list.length + '</b>件' + (n ? '（絞り込み中）' : '');
+  $('#clearAll').hidden = n === 0;
+  $('#openerLabel').textContent = state.q ? state.q : 'ショコラティエ・ブランド・都市などで検索';
+  $('#openerLabel').style.color = state.q ? 'var(--ink)' : '';
+  $('#grid').innerHTML = list.length
+    ? list.map(cardHTML).join('')
+    : '<div class="empty"><p>条件に合うものが見つかりませんでした。</p>' +
+      '<p><button class="btn btn--quiet" type="button" id="emptyReset">条件をすべて解除</button></p></div>';
+  if (window.gsap && !REDUCE){
+    gsap.fromTo('#grid > *', { opacity:0, y:10 }, { opacity:1, y:0, duration:.42, ease:'power2.out', stagger:.035, overwrite:true });
+  }
+}
+
+/* ---- 検索専用画面 ---- */
+var layer = $('#layer'), qEl = $('#q'), fieldEl = $('#field'), cursor = -1, lastFocus = null;
+
+$('#sug').innerHTML = SUGGEST.map(function(s){
+  return '<button class="chip" type="button" data-sug="' + esc(s) + '">' + esc(s) + '</button>';
+}).join('');
+
+function hitRows(){
+  var q = qEl.value.trim();
+  var probe = Object.assign({}, state, { q:q });
+  return ITEMS.filter(function(it){ return match(it, probe); });
+}
+function renderHits(){
+  var list = hitRows(), q = qEl.value.trim();
+  fieldEl.dataset.filled = q ? 'true' : 'false';
+  if (!q && !activeFilters().length){
+    $('#hits').innerHTML = '<p class="hits__g">すべて（' + ITEMS.length + '件）</p>' + rowsHTML(ITEMS.slice(0, 6));
+    cursor = -1; return;
+  }
+  if (!list.length){
+    $('#hits').innerHTML = '<div class="empty"><p>「' + esc(q) + '」に合うものはありませんでした。</p>' +
+      '<p class="empty__q">都市名や「贈りもの」などでもお試しください。</p></div>';
+    cursor = -1; return;
+  }
+  var shops = list.filter(function(i){ return i.type === '店'; });
+  var posts = list.filter(function(i){ return i.type === '投稿'; });
+  var html = '';
+  if (shops.length) html += '<p class="hits__g">店（' + shops.length + '件）</p>' + rowsHTML(shops);
+  if (posts.length) html += '<p class="hits__g">投稿（' + posts.length + '件）</p>' + rowsHTML(posts);
+  $('#hits').innerHTML = html;
+  cursor = -1;
+}
+function rowsHTML(list){
+  return list.map(function(it){
+    var meta = it.type === '投稿'
+      ? esc(it.shop) + '　/　' + esc(it.city) + '　/　' + esc(it.date)
+      : esc(it.country) + '・' + esc(it.city) + '　/　' + (it.cat || []).join('・');
+    return '<button class="hit" type="button" data-id="' + it.id + '">' +
+      '<span class="ph" aria-hidden="true"></span>' +
+      '<span class="hit__b"><span class="hit__n">' + hlq(it.name) + '</span>' +
+      '<span class="hit__m">' + meta + '</span></span>' +
+      '<span class="hit__t">' + esc(it.type) + '</span></button>';
+  }).join('');
+}
+/* 検索層では入力中の語で強調する（stateはまだ更新していないため） */
+function hlq(text){
+  var q = qEl.value.trim(); if (!q) return esc(text);
+  var i = normalize(text).indexOf(normalize(q));
+  if (i < 0) return esc(text);
+  var raw = String(text);
+  return esc(raw.slice(0, i)) + '<mark>' + esc(raw.slice(i, i + q.length)) + '</mark>' + esc(raw.slice(i + q.length));
+}
+function openLayer(on){
+  if (on){
+    lastFocus = document.activeElement;
+    layer.hidden = false; document.body.style.overflow = 'hidden';
+    qEl.value = state.q; renderHits(); qEl.focus(); qEl.select();
+  } else {
+    state.q = qEl.value.trim();
+    layer.hidden = true; document.body.style.overflow = '';
+    render();
+    if (lastFocus) lastFocus.focus();
+  }
+}
+function moveCursor(d){
+  var hits = $$('.hit');
+  if (!hits.length) return;
+  cursor = Math.max(0, Math.min(hits.length - 1, cursor + d));
+  hits.forEach(function(h, i){ h.dataset.cursor = (i === cursor) ? 'true' : 'false'; });
+  hits[cursor].scrollIntoView({ block:'nearest' });
+}
+
+qEl.addEventListener('input', renderHits);
+$('#qclear').addEventListener('click', function(){ qEl.value = ''; renderHits(); qEl.focus(); });
+qEl.addEventListener('keydown', function(e){
+  if (e.key === 'ArrowDown'){ e.preventDefault(); moveCursor(1); }
+  else if (e.key === 'ArrowUp'){ e.preventDefault(); moveCursor(-1); }
+  else if (e.key === 'Enter'){ e.preventDefault(); openLayer(false); document.getElementById('browse').scrollIntoView(); }
+});
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape' && !layer.hidden){ openLayer(false); return; }
+  if (e.key === '/' && layer.hidden && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)){
+    e.preventDefault(); openLayer(true);
+  }
+});
+
+document.addEventListener('click', function(e){
+  if (e.target.closest('#opener')){ openLayer(true); return; }
+  if (e.target.closest('#layerClose')){ openLayer(false); return; }
+  var sug = e.target.closest('[data-sug]');
+  if (sug){ qEl.value = sug.dataset.sug; renderHits(); qEl.focus(); return; }
+  var hit = e.target.closest('.hit');
+  if (hit){ openLayer(false); document.getElementById('browse').scrollIntoView(); return; }
+  var opt = e.target.closest('[data-key][data-value]');
+  if (opt && !opt.disabled){
+    var k = opt.dataset.key;
+    state[k] = (state[k] === opt.dataset.value) ? '' : opt.dataset.value;
+    if (k === 'country') state.area = '';
+    render(); return;
+  }
+  if (e.target.closest('#clearAll') || e.target.closest('#emptyReset')){
+    state = { q:'', type:'', country:'', area:'', cat:'' };
+    render(); return;
+  }
+});
+
+render();
+
+if (window.gsap && window.ScrollTrigger && !REDUCE){
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.from('.hero > *', { opacity:0, y:14, duration:.8, ease:'power2.out', stagger:.1 });
+  gsap.from('.feed__tile', { opacity:0, y:12, duration:.5, ease:'power2.out', stagger:.05,
+    scrollTrigger:{ trigger:'.feed', start:'top 85%', once:true } });
+  ScrollTrigger.create({ trigger:'main', start:'top+=8 top',
+    onEnter:function(){ $('#head').dataset.stuck='true'; },
+    onLeaveBack:function(){ $('#head').dataset.stuck='false'; } });
+}
+
+
+/* 検索欄のプレースホルダは画面幅に応じて短縮する（狭い画面での途中切れを避ける） */
+(function(){
+  var q = document.getElementById('q');
+  if (!q) return;
+  var full = q.placeholder, short = 'ブランド・都市で検索';
+  var mq = window.matchMedia('(max-width: 560px)');
+  var apply = function(){ q.placeholder = mq.matches ? short : full; };
+  apply(); mq.addEventListener('change', apply);
+})();
+
+/* 保険：3秒経っても隠れたままの要素は完成状態に戻す。
+   描画ループが進まない環境やGSAPの部分的な読み込み失敗でも本文が消えません */
+setTimeout(function(){
+  var vh = window.innerHeight;
+  Array.prototype.forEach.call(document.querySelectorAll('body *'), function(el){
+    if (el.style && el.style.opacity !== '' && parseFloat(el.style.opacity) < 0.98){
+      var r = el.getBoundingClientRect();
+      if (r.top < vh){ el.style.opacity = 1; el.style.transform = 'none'; }
+    }
+  });
+}, 3000);
+
+})();
+</script>
+</body>
+</html>
