@@ -408,12 +408,21 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
     radial-gradient(70% 58% at 50% 46%, rgba(24,27,57,0), rgba(24,27,57,.55) 100%);
 }
 #hero-inner{ display:grid; align-content:center; text-align:center; }
+/* ブランド名は固有の綴り。ここだけ全大文字化を解除します。 */
+#hero-inner .kicker{ text-transform:none; letter-spacing:.18em; }
 #wordmark{
   font-family:var(--mincho); font-weight:600;
   font-size:clamp(2.9rem,11vw,7rem); line-height:1.04;
   letter-spacing:.12em; text-indent:.12em;
 }
 #wordmark .ch{ display:inline-block; will-change:transform,opacity; }
+/* 読み。ワードマークに従属する小さな一行で、competing させません。 */
+#wordmark-ruby{
+  margin-top:10px; text-align:center;
+  font-family:var(--gothic); font-weight:var(--w-label);
+  font-size:clamp(9.5px,1vw,11px); letter-spacing:.42em; text-indent:.42em;
+  color:var(--on-3);
+}
 #ch-hero h1{
   margin-top:clamp(26px,5.5vh,56px);
   font-size:clamp(.92rem,2.1vw,1.3rem); font-weight:500;
@@ -504,6 +513,9 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 #seqbar span{ position:absolute; inset:0; background:var(--on-3); transform-origin:left; transform:scaleX(0); transition:transform .4s linear; }
 .readout{ margin-top:clamp(36px,7vh,80px); display:flex; justify-content:center; gap:clamp(20px,5vw,64px); flex-wrap:wrap; align-items:baseline; }
 .readout .rd{ display:flex; align-items:baseline; gap:9px; }
+/* 焙煎時間・ドラム温度の上限に達したら読みを伏せます。すべての焙煎が
+   18分・212度で固定だと誤解されないための処置です。 */
+.readout .rd.capped{ visibility:hidden; }
 .readout .k{ font-family:var(--latin); font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--on-3); }
 .readout .v{ font-family:var(--mincho); font-weight:500; font-size:clamp(1.05rem,2.3vw,1.55rem); letter-spacing:.1em; font-variant-numeric:tabular-nums; color:var(--on-2); }
 .echelle{ margin:clamp(30px,5vh,64px) auto 0; max-width:680px; display:grid; gap:16px; }
@@ -734,9 +746,9 @@ body.still #light, body.still .grain{ display:none; }
    明朝で級数を上げ、尺と同じ幅のなかで中央に置きます。 */
 .echelle-note{
   margin-top:14px; text-align:center;
-  font-family:var(--mincho); font-weight:var(--w-display);
-  font-size:clamp(.82rem,1.6vw,1rem); letter-spacing:.16em; text-indent:.16em;
-  line-height:2; color:var(--on-2);
+  font-family:var(--mincho); font-weight:var(--w-body);
+  font-size:clamp(.68rem,1.1vw,.8rem); letter-spacing:.14em; text-indent:.14em;
+  line-height:2; color:var(--on-3);
 }
 .todo{ color:var(--on-3); border-bottom:1px dotted var(--hair); padding-bottom:1px; }
 /* 価格の税表記。消費者向けは総額表示義務があるため税込、卸は税別で組みます。 */
@@ -920,6 +932,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       <div id="hero-inner">
         <p class="kicker">Soigné Tokyo Coffee Roastery</p>
         <p id="wordmark" data-t="Soigné"></p>
+        <p id="wordmark-ruby">ソワイエ</p>
         <div id="hero-rule-wrap">
           <div class="rule-c" id="hero-rule"></div>
         </div>
@@ -928,7 +941,6 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           <span class="ln" data-t="空間と食体験を完成させるための"></span>
           <span class="ln" data-t="コーヒーを。"></span>
         </h1>
-        <p class="lede">少量焙煎。週に一度、火を入れます。<br>その日に出会えた豆のことだけを考えて。</p>
       </div>
 
       <div id="hero-foot">
@@ -954,7 +966,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       <div class="sec-head axis">
         <p class="kicker">章二 · 珈琲</p>
         <h2 id="beans-h2">今、棚にある豆</h2>
-        <p class="sub">現在のラインナップからおすすめを3つチョイスしました。あなたの生活がより豊かになりますように。</p>
+        <p class="sub">現在のラインナップからおすすめの3つ。</p>
       </div>
 
       <div class="axis">
@@ -1189,7 +1201,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     <div class="ch-body wrap">
       <div class="sec-head axis">
         <p class="kicker">章五 · 手</p>
-        <h2 id="hands-h2">手のこと</h2>
+        <h2 id="hands-h2">抽出</h2>
       </div>
 
       <!-- ─────────────────────────────────────────────────────────
@@ -1294,15 +1306,14 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     <div class="ch-body wrap">
       <div class="sec-head axis">
         <p class="kicker">章六 · 購う</p>
-        <h2 id="buy-h2">買う場所について</h2>
-        <p class="sub">ご購入は Square オンラインビジネスの当店ストアで承っています。<br>このページは豆を紹介する場所で、決済は行いません。</p>
+        <h2 id="buy-h2">ご購入場所について</h2>
+        <p class="sub">ご購入は Square オンラインビジネスの当店ストアで承っています。このページは豆を紹介する場所で、決済は行いません。</p>
       </div>
 
       <div class="axis">
         <dl class="facts">
-          <div class="fact"><dt>発送</dt><dd>焙煎日から二日以内に発送します。焙煎日は毎週火曜と金曜です。</dd></div>
-          <div class="fact"><dt>送料</dt><dd>全国一律 ¥520。¥5,000 以上のお買い上げで無料。ネコポス対応。</dd></div>
-          <div class="fact"><dt>定期便</dt><dd>月に一度、二種類をお選びいただけます。ストア内で設定・停止ができます。</dd></div>
+          <div class="fact"><dt>発送</dt><dd>焙煎したての豊かな香りをお手元へ届けるため、受注焙煎を行っております。発送開始目安は最大7日程度となっています。</dd></div>
+          <div class="fact"><dt>送料</dt><dd>離島を除き、基本的に送料無料。</dd></div>
         </dl>
 
         <div class="act">
@@ -1321,7 +1332,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           <a class="b2b-btn" href="#/wholesale" data-route="#/wholesale">法人向けはこちら — 卸販売のご案内</a>
         </div>
 
-        <p class="fine">カフェ・飲食店・ホテル・オフィス・小売店さまへの卸販売は、上の法人向けページをご覧ください。個人のお客さまと同じストアからのご注文も可能ですが、月間5kg以上をお使いの場合は卸価格のほうがお安くなります。</p>
+        <p class="fine">カフェ・飲食店・ホテル・オフィス・小売店さまへの卸販売は、上の法人向けページをご覧ください。個人のお客さまと同じストアからのご注文も可能ですが、1kg以上の単位でお買い求めの場合は卸価格のほうがお安くなる傾向にあります。</p>
       </div>
     </div>
   </section>
@@ -1695,7 +1706,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
   <div class="ch-body f-grid">
     <div>
       <p class="fmark">Soigné</p>
-      <p style="margin-top:12px;">ソワニエ コーヒーロースタリー<br>東京都江戸川区<br><span class="todo">※ 番地・営業時間・電話番号は未確定</span></p>
+      <p style="margin-top:12px;">Soigné Tokyo Coffee Roastery<br>ソワイエトウキョウコーヒーロースタリー<br>東京都江戸川区<br><span class="todo">※ 番地・営業時間・電話番号は未確定</span></p>
     </div>
     <ul>
       <li><a href="#ch-beans">今、棚にある豆</a></li>
@@ -1857,8 +1868,12 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       seed.style.transform = "translateX("+(track.offsetWidth*t)+"px) rotate(45deg)";
     }
     var secs = Math.round(t*18*60);
+    var temp = Math.round(22 + t*190);
     rTime.textContent = pad(Math.floor(secs/60))+":"+pad(secs%60);
-    rTemp.textContent = Math.round(22 + t*190) + "°C";
+    rTemp.textContent = temp + "°C";
+    /* 上限に達したら伏せる。18分・212度は到達点であって規定値ではありません。 */
+    rTime.parentNode.classList.toggle("capped", secs >= 18*60);
+    rTemp.parentNode.classList.toggle("capped", temp >= 212);
     var idx = Math.min(3, Math.floor(t*3.999));
     rStage.textContent = stageNames[idx];
     for (var k=0;k<ticks.length;k++) ticks[k].classList.toggle("on", k<=idx && t>.02);
@@ -2240,13 +2255,13 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       /* #/wholesale への直リンク。幕は最初から無く、章一は完成状態です。 */
       veil.style.display = "none";
       gsap.set("#wordmark .ch, #hero-h1 .ch", { opacity:1, y:0, filter:"blur(0px)" });
-      gsap.set(["header", "#hero-rule-wrap", "#ch-hero .lede", "#hero-foot", "#hero-cap"], { opacity:1, y:0 });
+      gsap.set(["header", "#hero-rule-wrap", "#wordmark-ruby", "#hero-foot", "#hero-cap"], { opacity:1, y:0 });
       gsap.set("#hero-media", { opacity:1, scale:1 });
       gsap.set("#hero-rule", { scaleX:1 });
     } else {
       gsap.set("#wordmark .ch", { opacity:0, y:".10em", filter:"blur(4px)" });
       gsap.set("#hero-h1 .ch", { opacity:0, y:".16em", filter:"blur(4px)" });
-      gsap.set(["header", "#hero-rule-wrap", "#ch-hero .lede", "#hero-foot", "#hero-cap"], { opacity:0, y:12 });
+      gsap.set(["header", "#hero-rule-wrap", "#wordmark-ruby", "#hero-foot", "#hero-cap"], { opacity:0, y:12 });
       gsap.set("#hero-media", { opacity:0, scale:1.04 });
     }
 
@@ -2258,11 +2273,11 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       .to("#veil", { opacity:0, duration:1.3, ease:"power2.inOut",
                      onComplete:function(){ veil.style.display="none"; } }, .95)
       .to("#wordmark .ch", { opacity:1, y:0, filter:"blur(0px)", duration:2.2, ease:"power2.out", stagger:.1 }, 1.1)
+      .to("#wordmark-ruby", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 1.9)
       .to("#hero-rule-wrap", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 2.2)
       .to("#hero-rule", { scaleX:1, duration:2.6, ease:"power2.inOut" }, 2.4)
       .to("#hero-h1 .ch", { opacity:1, y:0, filter:"blur(0px)", duration:2.0, ease:"power2.out", stagger:.07 }, 2.6)
       .to("header", { opacity:1, y:0, duration:2.0, ease:"power2.out" }, 3.0)
-      .to("#ch-hero .lede", { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.4)
       .to(["#hero-foot", "#hero-cap"], { opacity:1, y:0, duration:2.4, ease:"power2.out" }, 3.8);
 
     /* ヒーローの映像は、画面にあるあいだずっと極緩やかに寄り続けます */
