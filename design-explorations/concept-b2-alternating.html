@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Soigné — 明暗 / 勝色と白の章</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -199,7 +203,7 @@ a{ color:inherit; text-decoration:none; }
 }
 .sec-head .sub{
   margin-top:18px; font-size:.82rem; line-height:2.5; letter-spacing:.1em;
-  color:var(--on-2); max-width:44ch;
+  color:var(--on-2); max-width:min(100%, 34em);
 }
 
 /* ============================================================
@@ -412,12 +416,12 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 #wordmark .ch{ display:inline-block; will-change:transform,opacity; }
 #ch-hero h1{
   margin-top:clamp(26px,5.5vh,56px);
-  font-size:clamp(1rem,2.4vw,1.42rem); font-weight:500;
-  line-height:2.6; letter-spacing:.34em; text-indent:.34em;
+  font-size:clamp(.92rem,2.1vw,1.3rem); font-weight:500;
+  line-height:2.5; letter-spacing:.2em; text-indent:.2em;
 }
 #ch-hero h1 .ln{ display:block; }
 #ch-hero .lede{
-  margin:clamp(26px,5vh,52px) auto 0; max-width:34ch;
+  margin:clamp(26px,5vh,52px) auto 0; max-width:min(100%, 30em);
   font-size:clamp(.8rem,1.4vw,.9rem); line-height:2.6; letter-spacing:.12em; color:var(--on-2);
 }
 #hero-foot{
@@ -726,6 +730,14 @@ body.still #ground-a, body.still #ground-b,
 body.still #light, body.still .grain{ display:none; }
 /* 未確定事項の印。プロトタイプ上で「まだ決めていない」ことを隠さないための印で、
    本番では出現しないことが完成の条件になります。 */
+/* 焙煎尺の下に置く一文。欧文ラベルの組みでは和文が読めないため、
+   明朝で級数を上げ、尺と同じ幅のなかで中央に置きます。 */
+.echelle-note{
+  margin-top:14px; text-align:center;
+  font-family:var(--mincho); font-weight:var(--w-display);
+  font-size:clamp(.82rem,1.6vw,1rem); letter-spacing:.16em; text-indent:.16em;
+  line-height:2; color:var(--on-2);
+}
 .todo{ color:var(--on-3); border-bottom:1px dotted var(--hair); padding-bottom:1px; }
 /* 価格の税表記。消費者向けは総額表示義務があるため税込、卸は税別で組みます。 */
 .bean .price small{ margin-left:.5em; font-size:.82em; letter-spacing:.1em; color:var(--on-3); }
@@ -906,14 +918,15 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
     <div class="ch-body wrap">
       <div id="hero-inner">
-        <p class="kicker">Soigné Coffee Roastery — 東京都江戸川区</p>
+        <p class="kicker">Soigné Tokyo Coffee Roastery</p>
         <p id="wordmark" data-t="Soigné"></p>
         <div id="hero-rule-wrap">
           <div class="rule-c" id="hero-rule"></div>
         </div>
         <h1 id="hero-h1">
-          <span class="ln" data-t="静かな一杯を、"></span>
-          <span class="ln" data-t="焙煎する。"></span>
+          <span class="ln" data-t="食のプロフェッショナルに選ばれる、"></span>
+          <span class="ln" data-t="空間と食体験を完成させるための"></span>
+          <span class="ln" data-t="コーヒーを。"></span>
         </h1>
         <p class="lede">少量焙煎。週に一度、火を入れます。<br>その日に出会えた豆のことだけを考えて。</p>
       </div>
@@ -941,7 +954,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       <div class="sec-head axis">
         <p class="kicker">章二 · 珈琲</p>
         <h2 id="beans-h2">今、棚にある豆</h2>
-        <p class="sub">棚から三点だけを選んでご紹介しています。ここは文字だけで組んであります。<br>銘柄も価格も、書き換えるのは一行です。撮り直しは発生しません。</p>
+        <p class="sub">現在のラインナップからおすすめを3つチョイスしました。あなたの生活がより豊かになりますように。</p>
       </div>
 
       <div class="axis">
@@ -1047,7 +1060,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           <figcaption class="cap">B2-02 · <b>Scrub sequence 16:9 · 60 frames · 1280×720 AVIF ≈ 1.2 MB</b> · silent · scroll-driven, never autoplayed</figcaption>
         </figure>
 
-        <p class="body">十八分。生豆の水分が抜け、香りが立ちのぼるまでの時間です。焙煎士にできるのは、その時間を急かさないことだけ。数字は記録しますが、最後に信じるのはドラムの音と、立ちのぼる香りの変わり目です。この区間だけは、読む速さをあなたに預けます。スクロールが、火の進み方です。</p>
+        <p class="body">焙煎進行を温度データとして可視化し、数え切れないほど検証した焙煎士の香り感覚を信じて。季節／気候／湿度、その日の条件からベストな火力を品質に落とし込む。この姿勢が食にこだわるお客様に選ばれる理由です。この区間だけは、読む速さをあなたに預けます。スクロールが、火の進み方です。</p>
 
         <div class="readout">
           <span class="rd"><span class="k">時間</span><span class="v" id="rTime">00:00</span></span>
@@ -1058,7 +1071,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         <div class="echelle" id="echelle">
           <div class="track"><span class="fill"></span><span class="seed"></span></div>
           <div class="ticks"><span data-k="0">生豆</span><span data-k="1">乾燥</span><span data-k="2">一ハゼ</span><span data-k="3">焙煎止め</span></div>
-          <p class="label" style="text-align:center;margin-top:2px">焙煎曲線 — 18 min</p>
+          <p class="echelle-note">焙煎こそが、私たちの核です。</p>
         </div>
       </div>
     </div>
@@ -2157,9 +2170,21 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
                 .to(hz, { opacity:0, duration:.24, ease:"none" }, .78);
       if (lz) tl.fromTo(lz, { opacity:0 }, { opacity:.9, duration:.24, ease:"none" }, .38)
                 .to(lz, { opacity:0, duration:.2, ease:"none" }, .74);
-      if (nextBody) tl.fromTo(nextBody, { opacity:0, filter:"blur(2px)" },
-                                        { opacity:1, filter:"blur(0px)", duration:.30, ease:"none" }, .70);
       groundTriggers.push(tl.scrollTrigger);
+
+      /* 次章の立ち上がりは、転換帯ではなく「次章そのもの」に連動させます。
+         転換帯の終端（bottom 36%）に紐づけていたときは、次章が画面の大半を
+         占めてもまだ立ち上がりが始まっておらず、前章は既に沈んだあとなので、
+         上下とも透明な帯が数百px分できていました（章五で最も目立つ症状）。
+         章の上端が画面の55%に達する時点で必ず不透明になるよう保証します。 */
+      if (nextBody){
+        var nt = gsap.fromTo(nextBody,
+          { opacity:0, filter:"blur(2px)" },
+          { opacity:1, filter:"blur(0px)", ease:"none",
+            scrollTrigger:{ trigger:next, start:"top 96%", end:"top 55%",
+                            scrub:.45, invalidateOnRefresh:true } });
+        groundTriggers.push(nt.scrollTrigger);
+      }
 
       /* ヘッダだけは連続値ではなく、真ん中で一度だけ切り替えます */
       groundTriggers.push(ScrollTrigger.create({
@@ -2329,3 +2354,4 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
   }
 })();
 </script>
+</html>
