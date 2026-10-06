@@ -60,8 +60,8 @@
       "note_source": "Square商品説明の文言（「飲み飽きのこない、すっきりとクリーンな味わいに仕上げました」）から。こちらで書き起こしてはいない。",
       "category": "デイリーパック",
       "ecom_visibility": "VISIBLE",
-      "square_url": null,
-      "square_url_note": "商品個別URLはSquare APIが返さず、ストアのページも取得できなかった。店舗トップで代用中。"
+      "square_url": "https://soign-coffee-roastery.square.site/product/daily-coffee-pack-500g-/L2REMFML4GR2R45PM56UTT3W",
+      "square_url_note": "ユーザーが提供（2026-10）。形式は …/product/<名称のスラッグ>/<カタログの商品ID>。"
     }
   ],
   "not_featured": [

@@ -593,6 +593,23 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .prose .lead{ text-indent:0; color:var(--on-2); }
 .prose blockquote{ margin:2.2em 0 2.2em 1.4em; padding-left:1.2em; border-left:1px solid var(--hair); color:var(--on-2); font-size:.94em; }
 .prose blockquote p{ text-indent:0; }
+/* 折り畳み — 最新の記事は冒頭だけ見せ、矢印で全文を開く */
+.piece{ scroll-margin-top:96px; }
+.fold{ max-width:38em; }
+.fold > summary, .fold-end{
+  list-style:none; cursor:pointer; display:inline-flex; align-items:center; gap:12px;
+  margin:clamp(24px,4vh,40px) 0 0; padding:7px 0; background:none; border:0; border-bottom:1px solid var(--hair);
+  font-family:var(--latin); font-size:11px; font-weight:400; letter-spacing:.16em; color:var(--on-2);
+  transition:color .5s var(--ease), border-color .5s var(--ease);
+}
+.fold > summary::-webkit-details-marker{ display:none; }
+.fold > summary:hover, .fold-end:hover{ color:var(--on); border-bottom-color:var(--on-3); }
+.fold .t-close{ display:none; }
+.fold[open] > summary .t-close{ display:inline; }
+.fold[open] > summary .t-open{ display:none; }
+.chev{ display:inline-block; width:7px; height:7px; border-right:1px solid currentColor; border-bottom:1px solid currentColor;
+  transform:rotate(45deg) translate(-2px,-2px); transition:transform .5s var(--ease); }
+.fold[open] > summary .chev, .fold-end .chev{ transform:rotate(-135deg) translate(-2px,-2px); }
 .piece .end{ margin-top:clamp(36px,6vh,68px); padding-top:26px; border-top:1px solid var(--hair-f); display:flex; flex-wrap:wrap; gap:18px 30px; align-items:baseline; justify-content:space-between; }
 .j-more{ margin-top:clamp(40px,7vh,80px); }
 
@@ -654,6 +671,10 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 #site-footer ul{ list-style:none; margin:0; padding:0; }
 #site-footer ul a{ color:var(--on-2); transition:color .7s var(--ease); }
 #site-footer ul a:hover{ color:var(--on); }
+#site-footer .fcontact{ margin-top:14px; }
+#site-footer .fcontact span{ display:inline-block; min-width:8.6em; font-family:var(--latin); font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--on-3); }
+#site-footer .fcontact a{ border-bottom:1px solid var(--hair); padding-bottom:1px; transition:color .7s var(--ease), border-color .7s var(--ease); }
+#site-footer .fcontact a:hover{ color:var(--on); border-bottom-color:var(--on-3); }
 #site-footer .legal{ margin-top:46px; font-family:var(--latin); font-size:9px; letter-spacing:.16em; color:var(--on-3); text-transform:uppercase; }
 
 /* ============================================================
@@ -1066,8 +1087,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
             <h3>デイリーコーヒーパック／500g</h3>
             <p class="orig">Daily Coffee Pack · 500g · Roasted by Soigné Tokyo</p>
             <div class="meta"><span>飲み飽きのこない、すっきりとクリーンな味わい</span><span>デイリーパック</span><span class="price">¥5,000 / 500g<small>税込</small></span></div>
-            <!-- ▲URL：デイリーパックの商品ページURLに差し替え（現在は店舗トップ）。docs/square-product-sync.md 参照 -->
-            <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_daily_pack" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+<a class="store-min ext go" href="https://soign-coffee-roastery.square.site/product/daily-coffee-pack-500g-/L2REMFML4GR2R45PM56UTT3W?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_daily_pack" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
           </div>
         </article>
 
@@ -1229,6 +1249,14 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
           <div class="prose">
             <p class="lead">十月に入って、窯の立ち上がりが二分ほど早くなりました。同じ設定、同じ豆量で火を入れているのに、予熱の到達が早い。理由ははっきりしていて、焙煎室の気温が下がったからです。夏のあいだ三十二度あった室温が、今朝は二十一度でした。</p>
+          </div>
+
+          <!-- 最新の記事は、冒頭の段落だけを見せて折り畳みます。長い全文がページの長さを
+               決めてしまわないようにするためです。<details> なので、キーボードでも開き、
+               JSが無くても開閉できます（JSは、高さが変わったあとの位置の測り直しだけ）。 -->
+          <details class="fold" id="piece-oct-fold">
+            <summary><span class="t-open">続きを読む</span><span class="t-close">たたむ</span><i class="chev" aria-hidden="true"></i></summary>
+            <div class="prose">
 
             <p>十一度の差は、豆にとっては別の日と言っていい差です。数字だけを見ていると、これは「早くなった」という話に見えます。けれど実際に起きているのは、豆が水分を手放していく速さが変わった、ということです。早く温まるということは、外側だけが先に乾くということでもある。同じ十八分で止めても、中身は同じ状態になっていません。</p>
 
@@ -1256,12 +1284,14 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
             <p>焙煎の記録をこうして公開しはじめて二年になります。書いていて気づいたのは、読んでくださる方が知りたいのは「正解」ではないらしい、ということでした。むしろ、迷ったところ、直したところ、去年と変えたところを書いたときのほうが、返事をいただきます。</p>
 
             <p>豆の説明だけなら、袋の裏に書いてあります。ここに書くのは、袋の裏に入りきらなかったことです。来月もまた、窯の前で考えたことを書きます。</p>
-          </div>
+            </div>
 
           <div class="end">
             <p class="label">この記事で触れた豆はオンラインストアにあります</p>
             <a class="store-min ext" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=journal&amp;utm_campaign=always_on&amp;utm_content=post_202610_hi" target="_blank" rel="noopener noreferrer">ニエリ／カリンダ AA を見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
           </div>
+            <button type="button" class="fold-end">たたむ<i class="chev" aria-hidden="true"></i></button>
+          </details>
         </article>
 
         <p class="j-more label">過去の記事は月別に一覧できます（本番では /journal/ 以下に静的生成）</p>
@@ -1402,9 +1432,8 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
             <span class="note">Square オンラインビジネス · 別タブで開きます</span>
             <span class="vh">（外部サイト・新しいタブで開きます）</span>
           </a>
-          <!-- ▲URL：デイリーパックの商品ページURLに差し替え（現在は店舗トップ）。docs/square-product-sync.md 参照 -->
-          <a class="store-min ext"
-             href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=cta&amp;utm_campaign=always_on&amp;utm_content=ch6_daily_pack"
+<a class="store-min ext"
+             href="https://soign-coffee-roastery.square.site/product/daily-coffee-pack-500g-/L2REMFML4GR2R45PM56UTT3W?utm_source=soigne_lp&amp;utm_medium=cta&amp;utm_campaign=always_on&amp;utm_content=ch6_daily_pack"
              target="_blank" rel="noopener noreferrer">デイリーコーヒーパック 500g ¥5,000（税込）<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
           <a class="b2b-btn" href="#/wholesale" data-route="#/wholesale">法人向けはこちら — 卸販売のご案内</a>
         </div>
@@ -1689,7 +1718,8 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
   <div class="ch-body f-grid">
     <div>
       <p class="fmark">Soigné</p>
-      <p style="margin-top:12px;">Soigné Tokyo Coffee Roastery<br>ソワイエトウキョウコーヒーロースタリー<br>東京都江戸川区<br><span class="todo">※ 番地・営業時間・電話番号は未確定</span></p>
+      <p style="margin-top:12px;">Soigné Tokyo Coffee Roastery<br>ソワイエトウキョウコーヒーロースタリー<br>東京都江戸川区</p>
+      <p class="fcontact"><span>Mail</span><a href="mailto:soigne.coffeeroastery@gmail.com">soigne.coffeeroastery@gmail.com</a><br><span>Instagram</span>@soigne.coffee</p>
     </div>
     <ul>
       <li><a href="#ch-beans">今、棚にある豆</a></li>
@@ -2003,6 +2033,21 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
   }
 
   window.addEventListener("hashchange", function(){ readHash(false); });
+
+  /* =========================================================
+     5d. 記事の折り畳み。開閉そのものは <details> が行います。ここは、
+         高さが変わったあとに章の転換などの位置を測り直すことと、
+         読み終えて閉じたとき、記事の頭へ戻すことだけです。
+     ========================================================= */
+  [].forEach.call(document.querySelectorAll("details.fold"), function(d){
+    var piece = d.closest(".piece");
+    d.addEventListener("toggle", function(){
+      if (window.ScrollTrigger) ScrollTrigger.refresh();
+      if (!d.open && piece && piece.getBoundingClientRect().top < 0) piece.scrollIntoView({ block:"start" });
+    });
+    var endBtn = d.querySelector(".fold-end");
+    if (endBtn) endBtn.addEventListener("click", function(){ d.open = false; });
+  });
 
   /* =========================================================
      5b. 粗利の試算 — 完全にクライアント側で完結します。入力値は
