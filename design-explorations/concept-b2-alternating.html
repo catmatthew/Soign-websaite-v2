@@ -467,26 +467,60 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
    章二 · 珈琲 — 白 / 読む。ここに映像はありません。
    在庫も季節も文字が運びます。撮り直しの要らない領域です。
    ============================================================ */
-.bean{ display:block; position:relative; padding-block:clamp(26px,4vh,42px); border-top:1px solid var(--hair-f); }
+/* 番号 | 写真 | 本文 の三列。写真は 1:1 の枠を先に確保するので、画像の読み込みで
+   行の高さは動きません。番号は本文の見出しの基線に合わせます。 */
+.bean{
+  display:grid; position:relative; align-items:start;
+  grid-template-columns:auto clamp(112px,16vw,208px) minmax(0,1fr);
+  column-gap:clamp(12px,2.2vw,24px);
+  padding-block:clamp(26px,4vh,42px); border-top:1px solid var(--hair-f);
+}
 .bean:last-of-type{ border-bottom:1px solid var(--hair-f); }
-.bean .top{ display:flex; align-items:baseline; gap:clamp(12px,2.2vw,24px); }
 .bean .no{
   font-family:var(--latin); font-weight:500; font-size:11px; letter-spacing:.2em;
-  color:var(--on-3); flex:0 0 auto; padding-top:.45em;
+  color:var(--on-3); align-self:baseline;
 }
+.bean .body{ align-self:baseline; min-width:0; }
 .bean h3{ font-size:clamp(1rem,2.1vw,1.38rem); letter-spacing:.14em; line-height:2; }
 .bean .orig{
-  margin-top:8px; margin-left:calc(11px + clamp(12px,2.2vw,24px));
+  margin-top:8px;
   font-family:var(--latin); font-size:.72rem; letter-spacing:.14em; color:var(--on-3);
 }
 .bean .meta{
-  margin-top:14px; margin-left:calc(11px + clamp(12px,2.2vw,24px));
+  margin-top:14px;
   display:flex; flex-wrap:wrap; gap:4px 22px;
   font-size:.77rem; letter-spacing:.1em; line-height:2.3; color:var(--on-2);
 }
 .bean .meta .price{ color:var(--on); }
-.bean .go{ margin-top:16px; margin-left:calc(11px + clamp(12px,2.2vw,24px)); display:inline-block; }
-@media (max-width:540px){ .bean .orig,.bean .meta,.bean .go{ margin-left:0; } }
+.bean .go{ margin-top:16px; display:inline-block; }
+
+/* 商品写真 — 二枚重ね。ポインタが乗る、またはタップ／Enterで二枚目に替わります。
+   二枚目は押したままにも固定できます（aria-pressed）。 */
+.pthumb{
+  position:relative; display:block; width:100%; aspect-ratio:1/1; overflow:hidden;
+  margin:0; padding:0; font:inherit; color:inherit; text-align:inherit;
+  appearance:none; -webkit-appearance:none; cursor:pointer;
+  background:var(--plate); border:1px solid var(--hair-f);
+  -webkit-tap-highlight-color:transparent;
+}
+.pthumb .pf{ position:absolute; inset:0; display:block; transition:opacity .7s var(--ease); }
+.pthumb .pf2{ opacity:0; }
+.pthumb[aria-pressed="true"] .pf2{ opacity:1; }
+@media (hover:hover){ .pthumb:hover .pf2{ opacity:1; } }
+.pthumb:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
+.pthumb .pf > img{ display:block; width:100%; height:100%; object-fit:cover; }
+/* 仮の絵は、写真が入った時点でまるごと消えます。 */
+.pthumb .pl{
+  position:absolute; left:9px; bottom:7px; z-index:2; pointer-events:none;
+  font-family:var(--latin); font-size:8.5px; font-style:normal; letter-spacing:.14em;
+  text-transform:uppercase; color:rgba(226,233,248,.62);
+}
+@media (max-width:600px){
+  .bean{ grid-template-columns:auto minmax(0,1fr); }
+  .bean .no{ align-self:start; padding-top:.45em; }
+  .bean .pthumb{ width:min(100%,240px); }
+  .bean .body{ grid-column:1 / -1; align-self:start; margin-top:18px; }
+}
 
 /* 今週の棚 — the block the roaster edits weekly. Text, never footage. */
 .shelf{
@@ -974,25 +1008,69 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
              カテゴリから /update-products スキルで取得し、承認を経て更新します。
              ここを手で書き換えないでください。価格はSquare側の消費税設定が
              INCLUSIVE（10%）であることを確認済みのため、税込で表示しています。 -->
+        <!-- ─────────────────────────────────────────────────────────
+             商品写真の差し替え方（三行とも同じ手順）
+
+             各行の <span class="pf pf1"> と <span class="pf pf2"> の「中身」を、
+             仮の絵（.ph-field・svg・.pl）ごと次の <img> に置き換えてください。
+             枠・切替・ホバーは、そのまま動きます。
+
+               <span class="pf pf1"><img src="/media/products/costarica-candelilla-1.jpg"
+                    width="1200" height="1200" alt="" loading="lazy" decoding="async"></span>
+               <span class="pf pf2"><img src="/media/products/costarica-candelilla-2.jpg"
+                    width="1200" height="1200" alt="" loading="lazy" decoding="async"></span>
+
+             · 比率は 1:1。1200×1200 px で十分です（表示は最大 208 CSS px の 2x）。
+             · 形式は AVIF／WebP／JPEG のどれでも。目安は 1枚 100KB 前後。
+             · alt を空にしているのは、ボタン側の aria-label が商品名を伝えるためです。
+             · width／height を必ず書いてください。比率は枠が先に確保しますが、
+               書いておくと読み込み中に行の高さが動きません。
+             · 二枚目はホバーで現れ、タッチ端末ではタップで切り替わります。
+               一枚しか無い商品は .pf2 を丸ごと削除すれば、切替の無い写真になります。
+             ───────────────────────────────────────────────────────── -->
         <article class="bean">
-          <div class="top"><span class="no">01</span><h3>コスタリカ ラ・カンデリージャ／ホワイトハニー</h3></div>
-          <p class="orig">CostaRica · Tarrazú · White Honey · Caturra, Catuai</p>
-          <div class="meta"><span>三温糖・甘栗・ミルクチョコレート</span><span>White Honey</span><span class="price">¥1,720 / 150g<small>税込</small></span></div>
-          <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_costarica_candelilla" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          <span class="no">01</span>
+          <!-- 写真スロット P-01 · costarica-candelilla · 1:1 · 二枚（一枚目／ホバーで二枚目） -->
+          <button type="button" class="pthumb" id="slot-bean-01" data-media="bean-costarica-candelilla" aria-pressed="false" aria-label="二枚目の写真を表示（コスタリカ ラ・カンデリージャ／ホワイトハニー）">
+            <span class="pf pf1"><span class="ph-field"></span><svg viewBox="0 0 200 200" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%"><g fill="none" stroke="rgba(226,233,248,.30)" stroke-width="1.2" stroke-linejoin="round"><path d="M64 54 L136 54 L144 160 L56 160 Z"/><path d="M64 54 C 80 42, 120 42, 136 54"/><path d="M78 98 L122 98 M78 110 L112 110"/></g><ellipse cx="100" cy="132" rx="26" ry="9" fill="rgba(192,135,60,.20)"/></svg><i class="pl">写真 1 · 1:1</i></span>
+            <span class="pf pf2"><span class="ph-field"></span><svg viewBox="0 0 200 200" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%"><g fill="none" stroke="rgba(226,233,248,.30)" stroke-width="1.2"><circle cx="100" cy="102" r="50"/><circle cx="100" cy="102" r="38"/><path d="M150 90 C 170 90, 170 116, 150 116"/></g><circle cx="100" cy="102" r="30" fill="rgba(192,135,60,.26)"/><g fill="rgba(226,233,248,.22)"><ellipse cx="48" cy="160" rx="7" ry="4.6" transform="rotate(-24 48 160)"/><ellipse cx="64" cy="170" rx="7" ry="4.6" transform="rotate(18 64 170)"/><ellipse cx="38" cy="174" rx="7" ry="4.6" transform="rotate(40 38 174)"/></g></svg><i class="pl">写真 2 · 1:1</i></span>
+          </button>
+          <div class="body">
+            <h3>コスタリカ ラ・カンデリージャ／ホワイトハニー</h3>
+            <p class="orig">CostaRica · Tarrazú · White Honey · Caturra, Catuai</p>
+            <div class="meta"><span>三温糖・甘栗・ミルクチョコレート</span><span>White Honey</span><span class="price">¥1,720 / 150g<small>税込</small></span></div>
+            <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_costarica_candelilla" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          </div>
         </article>
 
         <article class="bean">
-          <div class="top"><span class="no">02</span><h3>エチオピア イルガチェフェ／アリーチャ G1</h3></div>
-          <p class="orig">Ethiopia · Yirgacheffe Aricha · Washed · Heirloom</p>
-          <div class="meta"><span>さくらんぼ・くちなし・清らかな余韻</span><span>Washed</span><span class="price">¥1,810 / 150g<small>税込</small></span></div>
-          <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_ethiopia_aricha" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          <span class="no">02</span>
+          <!-- 写真スロット P-02 · ethiopia-aricha · 1:1 · 二枚（一枚目／ホバーで二枚目） -->
+          <button type="button" class="pthumb" id="slot-bean-02" data-media="bean-ethiopia-aricha" aria-pressed="false" aria-label="二枚目の写真を表示（エチオピア イルガチェフェ／アリーチャ G1）">
+            <span class="pf pf1"><span class="ph-field"></span><svg viewBox="0 0 200 200" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%"><g fill="none" stroke="rgba(226,233,248,.30)" stroke-width="1.2" stroke-linejoin="round"><path d="M64 54 L136 54 L144 160 L56 160 Z"/><path d="M64 54 C 80 42, 120 42, 136 54"/><path d="M78 98 L122 98 M78 110 L112 110"/></g><ellipse cx="100" cy="132" rx="26" ry="9" fill="rgba(192,135,60,.20)"/></svg><i class="pl">写真 1 · 1:1</i></span>
+            <span class="pf pf2"><span class="ph-field"></span><svg viewBox="0 0 200 200" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%"><g fill="none" stroke="rgba(226,233,248,.30)" stroke-width="1.2"><circle cx="100" cy="102" r="50"/><circle cx="100" cy="102" r="38"/><path d="M150 90 C 170 90, 170 116, 150 116"/></g><circle cx="100" cy="102" r="30" fill="rgba(192,135,60,.26)"/><g fill="rgba(226,233,248,.22)"><ellipse cx="48" cy="160" rx="7" ry="4.6" transform="rotate(-24 48 160)"/><ellipse cx="64" cy="170" rx="7" ry="4.6" transform="rotate(18 64 170)"/><ellipse cx="38" cy="174" rx="7" ry="4.6" transform="rotate(40 38 174)"/></g></svg><i class="pl">写真 2 · 1:1</i></span>
+          </button>
+          <div class="body">
+            <h3>エチオピア イルガチェフェ／アリーチャ G1</h3>
+            <p class="orig">Ethiopia · Yirgacheffe Aricha · Washed · Heirloom</p>
+            <div class="meta"><span>さくらんぼ・くちなし・清らかな余韻</span><span>Washed</span><span class="price">¥1,810 / 150g<small>税込</small></span></div>
+            <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_ethiopia_aricha" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          </div>
         </article>
 
         <article class="bean">
-          <div class="top"><span class="no">03</span><h3>ボリビア カントゥタニ／ゲイシャ</h3></div>
-          <p class="orig">Bolivia · La Paz Caranavi · Anaerobic Natural · Geisha</p>
-          <div class="meta"><span>赤しそ・ぶどう・華やかな余韻</span><span>Anaerobic Natural</span><span class="price">¥4,320 / 150g<small>税込</small></span></div>
-          <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_bolivia_geisha" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          <span class="no">03</span>
+          <!-- 写真スロット P-03 · bolivia-geisha · 1:1 · 二枚（一枚目／ホバーで二枚目） -->
+          <button type="button" class="pthumb" id="slot-bean-03" data-media="bean-bolivia-geisha" aria-pressed="false" aria-label="二枚目の写真を表示（ボリビア カントゥタニ／ゲイシャ）">
+            <span class="pf pf1"><span class="ph-field"></span><svg viewBox="0 0 200 200" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%"><g fill="none" stroke="rgba(226,233,248,.30)" stroke-width="1.2" stroke-linejoin="round"><path d="M64 54 L136 54 L144 160 L56 160 Z"/><path d="M64 54 C 80 42, 120 42, 136 54"/><path d="M78 98 L122 98 M78 110 L112 110"/></g><ellipse cx="100" cy="132" rx="26" ry="9" fill="rgba(192,135,60,.20)"/></svg><i class="pl">写真 1 · 1:1</i></span>
+            <span class="pf pf2"><span class="ph-field"></span><svg viewBox="0 0 200 200" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%"><g fill="none" stroke="rgba(226,233,248,.30)" stroke-width="1.2"><circle cx="100" cy="102" r="50"/><circle cx="100" cy="102" r="38"/><path d="M150 90 C 170 90, 170 116, 150 116"/></g><circle cx="100" cy="102" r="30" fill="rgba(192,135,60,.26)"/><g fill="rgba(226,233,248,.22)"><ellipse cx="48" cy="160" rx="7" ry="4.6" transform="rotate(-24 48 160)"/><ellipse cx="64" cy="170" rx="7" ry="4.6" transform="rotate(18 64 170)"/><ellipse cx="38" cy="174" rx="7" ry="4.6" transform="rotate(40 38 174)"/></g></svg><i class="pl">写真 2 · 1:1</i></span>
+          </button>
+          <div class="body">
+            <h3>ボリビア カントゥタニ／ゲイシャ</h3>
+            <p class="orig">Bolivia · La Paz Caranavi · Anaerobic Natural · Geisha</p>
+            <div class="meta"><span>赤しそ・ぶどう・華やかな余韻</span><span>Anaerobic Natural</span><span class="price">¥4,320 / 150g<small>税込</small></span></div>
+            <a class="store-min ext go" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=list&amp;utm_campaign=always_on&amp;utm_content=bean_bolivia_geisha" target="_blank" rel="noopener noreferrer">オンラインストアで見る<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+          </div>
         </article>
 
         <!-- 今週の棚 — 週に一度、焙煎士が書き換える唯一のブロック。
@@ -2094,6 +2172,16 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
     runCalc();
   }
+
+  /* =========================================================
+     5c. 商品写真の切替。ホバーでの切替はCSSだけで動きます。ここは
+         タップ／Enterで二枚目に固定する、タッチ端末とキーボード用です。
+     ========================================================= */
+  [].forEach.call(document.querySelectorAll(".pthumb"), function(btn){
+    btn.addEventListener("click", function(){
+      btn.setAttribute("aria-pressed", btn.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    });
+  });
 
   var wform = document.getElementById("w-form");
   if (wform){
