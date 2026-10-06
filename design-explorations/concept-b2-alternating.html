@@ -712,36 +712,36 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .cases .how{ font-size:.79rem; line-height:2.2; letter-spacing:.05em; color:var(--on-2); }
 .cases ul{ margin:0; padding:0; }
 
-/* 小さな注記。価格の注意書き、実績の脚注、出店の見出しで使う。 */
+/* 小さな注記。価格の注意書きと、実績の脚注で使う。 */
 .w-sec > p.note{ margin-top:10px; font-size:.7rem; line-height:2.2; letter-spacing:.06em; color:var(--on-3); }
 
 /* これまでのお取引 — 提案資料と同じ順（業態／ひとこと／数字／見出し／本文）。
-   箱にはせず、行と罫線だけで組みます。 */
+   寸法と色は、取引の流れ（.flow）・導入形態（.cases）・試算の結果（.calc-out）に
+   揃えています。箱にはせず、行と罫線だけで組みます。 */
 .w-sec > p.lead{
   margin-top:22px; font-family:var(--mincho); font-weight:var(--w-display);
-  font-size:clamp(1.05rem,2.4vw,1.4rem); letter-spacing:.14em; line-height:2; color:var(--on);
+  font-size:.98rem; letter-spacing:.12em; line-height:2.2; color:var(--on);   /* .flow .st と同じ級数 */
 }
 .results{ margin:clamp(22px,3.5vh,38px) 0 0; padding:0; }
-.results li{ list-style:none; padding-block:26px; border-bottom:1px solid var(--hair-f); display:grid; gap:10px 24px; }
+.results li{ list-style:none; padding-block:18px; border-bottom:1px solid var(--hair-f); display:grid; gap:4px 24px; }
 @media (min-width:720px){ .results li{ grid-template-columns:150px 1fr; } }
 .results .who{ font-family:var(--mincho); font-weight:var(--w-display); font-size:.92rem; letter-spacing:.12em; }
 .results .how{ display:block; font-size:.79rem; line-height:2.2; letter-spacing:.05em; color:var(--on-2); }
 .results .q{ display:block; font-family:var(--mincho); font-weight:var(--w-display);
-  font-size:clamp(.98rem,2vw,1.15rem); letter-spacing:.1em; line-height:2; color:var(--on); }
-.results .m{ display:block; margin-top:14px; }
+  font-size:.98rem; letter-spacing:.12em; line-height:2.1; color:var(--on); }
+.results .m{ display:block; margin-top:10px; }
 .results .m i{ display:block; font-style:normal; font-size:.72rem; letter-spacing:.14em; color:var(--on-3); }
+/* 主役の数字は、試算ツールの「年間の粗利」と同じ大きさ・同じ色の段階 */
 .results .m b{ display:block; font-family:var(--mincho); font-weight:var(--w-display);
-  font-size:clamp(1.9rem,5vw,2.9rem); letter-spacing:.04em; line-height:1.3; color:var(--on);
+  font-size:clamp(1.4rem,4vw,2.2rem); letter-spacing:.06em; line-height:1.4; color:var(--accent);
   font-variant-numeric:tabular-nums; }
-.results .m b small{ font-size:.42em; margin-left:.12em; letter-spacing:.06em; }
-.results .mh{ display:block; margin-top:8px; font-weight:500; font-size:.84rem; letter-spacing:.08em; color:var(--on); }
-.results .tx{ display:block; margin-top:6px; }
-.w-sec > p.common{
-  margin-top:clamp(28px,4vh,44px); padding-top:18px; border-top:1px solid var(--hair);
-  font-size:.86rem; line-height:2.4; color:var(--on); max-width:none;
-}
-.common .label{ display:block; margin-bottom:6px; }
-.common strong{ font-weight:600; }
+.results .m b small{ font-size:.5em; margin-left:.12em; letter-spacing:.06em; }
+.results .mh{ display:block; margin-top:4px; font-weight:500; font-size:.79rem; letter-spacing:.06em; color:var(--on); }
+.results .tx{ display:block; margin-top:2px; }
+/* 本文の段落（.w-sec > p）と同じ寸法。上に細罫を一本だけ引く */
+.w-sec > p.common{ margin-top:clamp(22px,3.5vh,38px); padding-top:16px; border-top:1px solid var(--hair); }
+.common .label{ display:block; margin-bottom:4px; }
+.common strong{ font-weight:600; color:var(--on); }
 
 /* 問い合わせ先 */
 .w-contact{ margin:22px 0 0; padding:0; border-top:1px solid var(--hair); }
@@ -1498,7 +1498,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         <dl class="w-keys">
           <div><dt>最低ロット</dt><dd>1kg／回<small>およそ62杯分です。まずは一袋から試していただけます。</small></dd></div>
           <div><dt>卸価格</dt><dd>¥4,500／kg〜<small>1杯（16g）あたり約72円から。選定する生豆で決まります。</small></dd></div>
-          <div><dt>はじめかた</dt><dd>香りを嗅ぐ5分から<small>試飲までは無償です。お店に伺います。</small></dd></div>
+          <div><dt>はじめかた</dt><dd>香りを試す5分から<small>試飲までは無償です。お店に伺います。</small></dd></div>
         </dl>
         <p class="label" style="margin-top:28px">B2-01（再利用）· Roastery room · 21:9 crop · silent · 追加撮影なし</p>
       </div>
@@ -1550,7 +1550,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
               </tbody>
             </table>
           </div>
-          <p>上表は代表的な構成です。実際にはご予算とご希望から逆算して選定しますので、まずはお使いになれる金額をお聞かせください。生豆相場・為替・輸送費の変動により改定することがあります。</p>
+          <p>上表は代表的な構成です。実際にはご予算とご希望から逆算して選定しますので、まずはお使いになれる金額をお聞かせください。</p>
           <p>卸価格は<strong>税別</strong>で表記しています。オンラインストアの個人向け価格は<strong>税込</strong>です（総額表示義務によるもので、同じ豆でも表記の基準が異なります）。</p>
           <p><span class="todo">※ 大量発注時の条件、および数量に応じた調整は商談時に個別にご提示します（公開条件は未確定）</span></p>
         </section>
@@ -1614,7 +1614,6 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           <p class="note">お取引先のご意向により、店舗名・法人名は伏せています。2026年8月時点の実績。</p>
           <p class="common"><span class="label">共通点</span>いずれも、はじまりは<strong>一本のご相談</strong>でした。そして<strong>始まったあとも、続いています。</strong><br><strong>私たちは継続した信頼関係を重視しています。</strong></p>
           <p><span class="todo">※ 飲食店の事例は現時点で1件です。主戦場である飲食店の事例が薄いことは、この節の弱点として認識しています。取引先の了解が得られ次第、追加してください。</span></p>
-          <p class="note">当店の出店 <span class="todo">※ 出店の一覧は未記入。置き場所もご確認ください</span></p>
         </section>
 
         <section class="w-sec">
@@ -2465,7 +2464,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     /* 節の定位 — 長く、沈む方向へ。滑らせません。 */
     var revealSel = ".sec-head, .bean, .shelf, .j-row, .piece .hd, .piece .prose, .piece .end, " +
                     ".hands > div, .tategaki, .facts, #ch-buy .act, #ch-buy .fine, " +
-                    ".w-keys, .w-sec, .form, #site-footer .f-grid > *";
+                    ".w-keys, .w-sec, .results li, .form, #site-footer .f-grid > *";
     gsap.utils.toArray(revealSel).forEach(function(el){
       gsap.fromTo(el, { opacity:0, y:14 },
         { opacity:1, y:0, duration:1.8, ease:"power2.out",
