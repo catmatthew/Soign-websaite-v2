@@ -44,11 +44,11 @@ Square カタログ ──(読み取りのみ)──▶ /update-products ──�
 |---|---|---|
 | CostaRica La Candellila / White Honey | ¥1,720 | 入りやすい価格帯・甘さ主体 |
 | Ethiopia Yirgacheffe Aricha G1 / Washed | ¥1,810 | 華やかな酸・対照的な味づくり |
-| Bolivia Kantutani Geisha / Anaerobic Natural | ¥4,320 | 最上位。技術の証明 |
+| Daily Coffee Pack -500g- | ¥5,000（500g） | 毎日使いの一袋。2026-10にBolivia Kantutani Geishaから差し替え（ユーザー指示） |
 
 価格と味の方向を分散させ、3点で幅が伝わる構成にしている。**この3点は2026-09-27に承認済み。**
 
-価格はいずれも税込（150g）。
+価格はいずれも税込。上2点は150g、デイリーパックは500g。
 
 ---
 
@@ -89,7 +89,10 @@ Square側の消費税設定を確認しました。
 
 ## 未確認事項
 
-- **Square商品ページへの個別URL** — `square_url` は未設定。現在は店舗トップへのリンクで運用する
+- **Square商品ページへの個別URL** — `square_url` は未設定。現在は店舗トップへのリンクで運用する。
+  - 原因：Square APIは商品の個別URL（`ecom_uri`）を返さない。ストアのページ自体も、この環境からは取得できない（ネットワーク制限）。
+  - 個別URLは `…square.site/product/<名称>/<数字のID>` の形で、数字のIDはカタログのIDと別物のため、推測では作れない。
+  - 対処：ブラウザでデイリーコーヒーパックの商品ページを開き、アドレスバーのURLをお知らせください。差し替える箇所は、豆の行の三行目と、章六の1箇所。HTML内に `▲URL` のコメントで印をつけてある。
 
 ---
 

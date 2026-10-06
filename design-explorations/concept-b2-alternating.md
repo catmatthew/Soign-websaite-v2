@@ -70,9 +70,9 @@ UTMは `utm_source=soigne_lp` ／ `utm_campaign=always_on` を共通とし、導
 | 位置 | utm_medium | utm_content |
 |---|---|---|
 | ヘッダ | `header` | `header_store` |
-| 豆の行（4本） | `list` | `bean_yirgacheffe_konga` 他 |
+| 豆の行（3本） | `list` | `bean_costarica_candelilla` / `bean_ethiopia_aricha` / `bean_daily_pack` |
 | 章六 主導線 | `cta` | `ch6_primary` |
-| 章六 飲み比べ | `cta` | `ch6_tasting_set` |
+| 章六 デイリーパック | `cta` | `ch6_daily_pack` |
 | 記事末 | `journal` | `post_202610_hi` |
 | フッタ | `footer` | `footer_store` |
 

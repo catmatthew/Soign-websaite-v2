@@ -8,7 +8,7 @@
     "curation_category_status": "NOT_CREATED",
     "fallback": "カテゴリ未作成のあいだは featured[].id の固定リストを情報源とする。この3点の選定はユーザー承認済み (2026-09-27)。"
   },
-  "fetched_at": "2026-09-27",
+  "fetched_at": "2026-10-06",
   "fetched_by": "Square MCP connector (read-only, ITEMS_READ)",
   "price_note": "price_jpy はSquareに登録された金額をそのまま保持する。**税込**である。Square側の消費税設定 (id FT7YJW5O3PURQ5FXMBRDJTY6 / Consumption TAX / 10.0%) が inclusion_type=INCLUSIVE であることをAPIで確認済み (2026-09-27)。LP上も税込として表示する。",
   "featured": [
@@ -45,26 +45,49 @@
       "square_url": null
     },
     {
-      "id": "64BBHM5XCIZLUGL4URCEVQPC",
-      "name": "Bolivia Kantutani Geisha / Anaerobic Natural",
-      "name_ja": "ボリビア カントゥタニ ゲイシャ アナエロビックナチュラル",
-      "price_jpy_incl_tax": 4320,
-      "unit": "150g",
-      "country": "Bolivia",
-      "area": "La Paz, Carnival",
-      "farm": "Kantutani",
-      "variety": "Geisha",
-      "process": "Anaerobic Natural",
-      "impression": "Grape juice, red perilla",
-      "note_short": "ゲイシャ種特有の華やかさ。赤しそのような酸味と、ぶどうジュースの飲みごたえ。",
+      "id": "L2REMFML4GR2R45PM56UTT3W",
+      "name": "Daily Coffee Pack -500g-",
+      "name_ja": "デイリーコーヒーパック／500g",
+      "price_jpy_incl_tax": 5000,
+      "unit": "500g",
+      "country": null,
+      "area": null,
+      "farm": null,
+      "variety": null,
+      "process": null,
+      "impression": null,
+      "note_short": "飲み飽きのこない、すっきりとクリーンな味わい。",
+      "note_source": "Square商品説明の文言（「飲み飽きのこない、すっきりとクリーンな味わいに仕上げました」）から。こちらで書き起こしてはいない。",
+      "category": "デイリーパック",
       "ecom_visibility": "VISIBLE",
-      "square_url": null
+      "square_url": null,
+      "square_url_note": "商品個別URLはSquare APIが返さず、ストアのページも取得できなかった。店舗トップで代用中。"
     }
   ],
   "not_featured": [
-    { "id": "7YCHFVQO4E5YMCNKQ6V7AAH2", "name": "Ethiopia Yirgacheffe Gersi Peaberry / Natural", "price_jpy_incl_tax": 2610, "unit": "150g" },
-    { "id": "B6MSXBBNSJLSF2GFMMO2IJS7", "name": "Bolivia Kantutani / Anaerobic Washed", "price_jpy_incl_tax": 2640, "unit": "150g" },
-    { "id": "KLXYETMYQ6EMOR56EJPDEWO5", "name": "Bolivia Sajima / Washed", "price_jpy_incl_tax": 2560, "unit": "150g" },
-    { "id": "L2REMFML4GR2R45PM56UTT3W", "name": "Daily Coffee Pack -500g-", "price_jpy_incl_tax": 5000, "unit": "500g" }
+    {
+      "id": "64BBHM5XCIZLUGL4URCEVQPC",
+      "name": "Bolivia Kantutani Geisha / Anaerobic Natural",
+      "price_jpy_incl_tax": 4320,
+      "unit": "150g"
+    },
+    {
+      "id": "7YCHFVQO4E5YMCNKQ6V7AAH2",
+      "name": "Ethiopia Yirgacheffe Gersi Peaberry / Natural",
+      "price_jpy_incl_tax": 2610,
+      "unit": "150g"
+    },
+    {
+      "id": "B6MSXBBNSJLSF2GFMMO2IJS7",
+      "name": "Bolivia Kantutani / Anaerobic Washed",
+      "price_jpy_incl_tax": 2640,
+      "unit": "150g"
+    },
+    {
+      "id": "KLXYETMYQ6EMOR56EJPDEWO5",
+      "name": "Bolivia Sajima / Washed",
+      "price_jpy_incl_tax": 2560,
+      "unit": "150g"
+    }
   ]
 }
