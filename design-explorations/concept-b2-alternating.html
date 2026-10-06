@@ -712,6 +712,47 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .cases .how{ font-size:.79rem; line-height:2.2; letter-spacing:.05em; color:var(--on-2); }
 .cases ul{ margin:0; padding:0; }
 
+/* 小さな注記。価格の注意書き、実績の脚注、出店の見出しで使う。 */
+.w-sec > p.note{ margin-top:10px; font-size:.7rem; line-height:2.2; letter-spacing:.06em; color:var(--on-3); }
+
+/* これまでのお取引 — 提案資料と同じ順（業態／ひとこと／数字／見出し／本文）。
+   箱にはせず、行と罫線だけで組みます。 */
+.w-sec > p.lead{
+  margin-top:22px; font-family:var(--mincho); font-weight:var(--w-display);
+  font-size:clamp(1.05rem,2.4vw,1.4rem); letter-spacing:.14em; line-height:2; color:var(--on);
+}
+.results{ margin:clamp(22px,3.5vh,38px) 0 0; padding:0; }
+.results li{ list-style:none; padding-block:26px; border-bottom:1px solid var(--hair-f); display:grid; gap:10px 24px; }
+@media (min-width:720px){ .results li{ grid-template-columns:150px 1fr; } }
+.results .who{ font-family:var(--mincho); font-weight:var(--w-display); font-size:.92rem; letter-spacing:.12em; }
+.results .how{ display:block; font-size:.79rem; line-height:2.2; letter-spacing:.05em; color:var(--on-2); }
+.results .q{ display:block; font-family:var(--mincho); font-weight:var(--w-display);
+  font-size:clamp(.98rem,2vw,1.15rem); letter-spacing:.1em; line-height:2; color:var(--on); }
+.results .m{ display:block; margin-top:14px; }
+.results .m i{ display:block; font-style:normal; font-size:.72rem; letter-spacing:.14em; color:var(--on-3); }
+.results .m b{ display:block; font-family:var(--mincho); font-weight:var(--w-display);
+  font-size:clamp(1.9rem,5vw,2.9rem); letter-spacing:.04em; line-height:1.3; color:var(--on);
+  font-variant-numeric:tabular-nums; }
+.results .m b small{ font-size:.42em; margin-left:.12em; letter-spacing:.06em; }
+.results .mh{ display:block; margin-top:8px; font-weight:500; font-size:.84rem; letter-spacing:.08em; color:var(--on); }
+.results .tx{ display:block; margin-top:6px; }
+.w-sec > p.common{
+  margin-top:clamp(28px,4vh,44px); padding-top:18px; border-top:1px solid var(--hair);
+  font-size:.86rem; line-height:2.4; color:var(--on); max-width:none;
+}
+.common .label{ display:block; margin-bottom:6px; }
+.common strong{ font-weight:600; }
+
+/* 問い合わせ先 */
+.w-contact{ margin:22px 0 0; padding:0; border-top:1px solid var(--hair); }
+.w-contact div{ display:grid; gap:2px 24px; padding-block:14px; border-bottom:1px solid var(--hair-f); }
+@media (min-width:720px){ .w-contact div{ grid-template-columns:150px 1fr; align-items:baseline; } }
+.w-contact dt{ font-family:var(--latin); font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--on-3); }
+.w-contact dd{ margin:0; font-family:var(--mincho); font-weight:var(--w-display); font-size:.95rem; letter-spacing:.08em; color:var(--on); overflow-wrap:anywhere; }
+.w-contact a{ border-bottom:1px solid var(--hair); padding-bottom:1px; transition:border-color .5s var(--ease); }
+.w-contact a:hover{ border-bottom-color:var(--accent); }
+.w-contact a:focus-visible{ outline:2px solid var(--focus); outline-offset:3px; }
+
 /* FAQ — native details, no JS, keyboard-operable by the browser */
 .faq{ margin-top:clamp(22px,3.5vh,38px); }
 .faq details{ border-bottom:1px solid var(--hair-f); }
@@ -1476,16 +1517,17 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         <section class="w-sec">
           <h3 id="w-flow-h">なぜ、食後の一杯なのか</h3>
           <p>お酒を飲まない人が増えました。国内で「ほとんど飲まない・やめた」と答える人は<strong>27.6%</strong>に達します。その一方で、多くの飲食店において<strong>粗利の大きな部分を担っているのは料理ではなく飲料</strong>です。食後にお出しできる一杯がないということは、席が空くまでの時間を、粗利を生まずに過ごしているということでもあります。</p>
-          <p>そしてもうひとつ。人は体験の全体ではなく、<strong>頂点と終わりで記憶します</strong>。食後の一杯は、お店の記憶がかたちを結ぶ最後の場面にあたります。ここが平凡であることの損失は、その一杯の粗利にとどまりません。</p>
+          <p>そしてもうひとつ。人は体験の全体ではなく、<strong>頂点と終わりで記憶します</strong>。食後の一杯は、お店の記憶がかたちを結ぶ最後の場面にあたります。体験の終わりにこだわりを置いていないことの損失は、その一杯の粗利にとどまりません。</p>
           <p>私たちがお納めするのは豆ですが、設計しているのは<strong>この一杯が置かれる場面</strong>です。だからお店ごとに豆を選び、お店ごとに焙煎します。</p>
+          <p>食のプロフェッショナルに選ばれる、空間と食体験を完成させるためのコーヒーを。</p>
           <p class="label" style="margin-top:26px"><span class="todo">※ 統計の出典一覧は提案資料（PDF）に収録。配布方法は未確定</span></p>
         </section>
 
         <section class="w-sec">
           <h3>取引の流れ</h3>
-          <p>香りを嗅いでいただくところから、初回の納品まで。試飲までは無償で承ります。</p>
+          <p>香りを試していただくところから、初回の納品まで。試飲までは無償で承ります。</p>
           <ol class="flow">
-            <li><span class="st">本日 — 香りを嗅ぐ</span><span class="dt">5分。何種類かお持ちします。お店の場面を伺いながら、方向だけを決めます。</span></li>
+            <li><span class="st">初日 — 香りを試す</span><span class="dt">5分。何種類かお持ちします。お店の場面を伺いながら、方向だけを決めます。</span></li>
             <li><span class="st">数日以内 — 抽出・試飲</span><span class="dt">30分、無償。実際の器具・水・グラインダーで抽出し、お出しする形のまま味を見ていただきます。</span></li>
             <li><span class="st">1週間 — 焙煎設計</span><span class="dt">三〜五種から絞り、お店専用の焙煎プロファイルを組みます。必要なら試作を重ねます。</span></li>
             <li><span class="st">以降 — 1kgから納品</span><span class="dt">使う速さに合わせてお届けします。銘柄も量も、途中で変えて構いません。</span></li>
@@ -1496,6 +1538,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         <section class="w-sec">
           <h3>価格</h3>
           <p><strong>お客様ごとに豆を選定するため、同じ豆を店舗によって異なる価格でお出しすることはありません。</strong>価格を決めるのは、選定する生豆です。下表は生豆の構成ごとの目安で、ご予算からの設計も承ります。</p>
+          <p class="note">※ 生豆相場や為替、輸送費の変動により価格は変動することがございます。</p>
           <div class="tbl-scroll">
             <table class="tbl">
               <caption>卸価格の目安（<strong>税別</strong>・2026年9月現在／1杯は16g換算・1kgあたり約62杯）</caption>
@@ -1546,14 +1589,32 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         </section>
 
         <section class="w-sec">
-          <h3>導入の実績</h3>
-          <p>公開できる範囲で、実際の数字をそのまま記載します。</p>
-          <ul class="cases">
-            <li><span class="who">ベーカリーカフェ（2店舗）</span><span class="how">ペルーの単一農園を選定。6週間で計100kg、週あたり約2.5kgをお納めしました。焼き菓子との相性から、甘さが前に出る焙煎に振っています。</span></li>
-            <li><span class="who">企業オフィス（デジタルインフラ系）</span><span class="how">月8kgで開始し、社内での定着に伴い月12kgへ。<strong>50%の増量</strong>となりました。</span></li>
-            <li><span class="who">企業オフィス（エンジニア系）</span><span class="how">総量50kg。社内アンケートでのリピート意向は<strong>80%超</strong>。</span></li>
+          <h3>これまでのお取引</h3>
+          <p class="lead">お客様ごとに、合わせて設計してきました。</p>
+          <ul class="results">
+            <li><span class="who">ベーカリー系飲食店</span><span class="how">
+              <span class="q">「お店の顔になる一杯を、作って欲しい」</span>
+              <span class="m"><b>単一農園</b></span>
+              <span class="mh">単一農園を指定してのご契約</span>
+              <span class="tx">産地・精製から絞り込み、単一農園に決定。最初のご提案からカフェのペアリングを実施。いま継続して厚い信頼関係が続いています。</span>
+            </span></li>
+            <li><span class="who">ITインフラ系業界最大手オフィス</span><span class="how">
+              <span class="q">「自分たちのための特別な一杯を、専用でつくってほしい」</span>
+              <span class="m"><i>消費量</i><b>+50<small>%</small></b></span>
+              <span class="mh">CEOも絡む社内イベントで使用</span>
+              <span class="tx">オリジナルブレンドを設計。置いて終わりではなく、いただいたフィードバックから毎回ブラッシュアップしたブレンドを提供。その人気から社内消費が50%アップしました。</span>
+            </span></li>
+            <li><span class="who">インフラ系最大手オフィス</span><span class="how">
+              <span class="q">「アイスとホットで、別々にメニューを組んでほしい」</span>
+              <span class="m"><i>リアルな満足度</i><b>94.7<small>%</small></b></span>
+              <span class="mh">「こちらのほうが飲みたい」の声</span>
+              <span class="tx">社内試飲で「いままでのコーヒーより美味しい」「こちらのほうが飲みたくなる」と、9割を超える方から。アイス用とホット用を別々に設計し、総量50kgのご発注をいただきました。</span>
+            </span></li>
           </ul>
+          <p class="note">お取引先のご意向により、店舗名・法人名は伏せています。2026年8月時点の実績。</p>
+          <p class="common"><span class="label">共通点</span>いずれも、はじまりは<strong>一本のご相談</strong>でした。そして<strong>始まったあとも、続いています。</strong><br><strong>私たちは継続した信頼関係を重視しています。</strong></p>
           <p><span class="todo">※ 飲食店の事例は現時点で1件です。主戦場である飲食店の事例が薄いことは、この節の弱点として認識しています。取引先の了解が得られ次第、追加してください。</span></p>
+          <p class="note">当店の出店 <span class="todo">※ 出店の一覧は未記入。置き場所もご確認ください</span></p>
         </section>
 
         <section class="w-sec">
@@ -1664,6 +1725,10 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         <section class="w-sec">
           <h3>お問い合わせ</h3>
           <p>焙煎士または担当者からご返信します。<span class="todo">※ 返信の目安と電話番号は未確定</span></p>
+          <dl class="w-contact">
+            <div><dt>Instagram</dt><dd>@soigne.coffee</dd></div>
+            <div><dt>Mail</dt><dd><a href="mailto:soigne.coffeeroastery@gmail.com">soigne.coffeeroastery@gmail.com</a></dd></div>
+          </dl>
 
           <!-- ─────────────────────────────────────────────────────────
                本番配線について（このプロトタイプにバックエンドはありません）
