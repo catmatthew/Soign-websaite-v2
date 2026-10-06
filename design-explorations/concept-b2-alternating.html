@@ -716,32 +716,30 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .w-sec > p.note{ margin-top:10px; font-size:.7rem; line-height:2.2; letter-spacing:.06em; color:var(--on-3); }
 
 /* これまでのお取引 — 提案資料と同じ順（業態／ひとこと／数字／見出し／本文）。
-   寸法と色は、取引の流れ（.flow）・導入形態（.cases）・試算の結果（.calc-out）に
-   揃えています。箱にはせず、行と罫線だけで組みます。 */
-.w-sec > p.lead{
-  margin-top:22px; font-family:var(--mincho); font-weight:var(--w-display);
-  font-size:.98rem; letter-spacing:.12em; line-height:2.2; color:var(--on);   /* .flow .st と同じ級数 */
-}
+   フォントの役割は、取引の流れ（.flow）・導入形態（.cases）・試算（.calc-out）と
+   同じ三層に揃えています。
+     明朝（Shippori Mincho B1）… 名前・項目名だけ（.who）
+     本文（Noto Serif JP）………… 文章・数字・見出し以外のすべて、太さは 400 のみ
+     ラベル（Zen Kaku Gothic New）… 10px の小さな見出し
+   箱にはせず、行と罫線だけで組みます。 */
 .results{ margin:clamp(22px,3.5vh,38px) 0 0; padding:0; }
 .results li{ list-style:none; padding-block:18px; border-bottom:1px solid var(--hair-f); display:grid; gap:4px 24px; }
 @media (min-width:720px){ .results li{ grid-template-columns:150px 1fr; } }
 .results .who{ font-family:var(--mincho); font-weight:var(--w-display); font-size:.92rem; letter-spacing:.12em; }
 .results .how{ display:block; font-size:.79rem; line-height:2.2; letter-spacing:.05em; color:var(--on-2); }
-.results .q{ display:block; font-family:var(--mincho); font-weight:var(--w-display);
-  font-size:.98rem; letter-spacing:.12em; line-height:2.1; color:var(--on); }
+.results .q{ display:block; font-size:.98rem; letter-spacing:.08em; line-height:2.1; color:var(--on); }
 .results .m{ display:block; margin-top:10px; }
-.results .m i{ display:block; font-style:normal; font-size:.72rem; letter-spacing:.14em; color:var(--on-3); }
-/* 主役の数字は、試算ツールの「年間の粗利」と同じ大きさ・同じ色の段階 */
-.results .m b{ display:block; font-family:var(--mincho); font-weight:var(--w-display);
+.results .m i{ display:block; font-style:normal; font-family:var(--latin); font-size:10px; letter-spacing:.16em; color:var(--on-3); }
+/* 主役の数字は、試算ツールの「年間の粗利」と同じ書体・大きさ・色 */
+.results .m b{ display:block; font-weight:var(--w-display);
   font-size:clamp(1.4rem,4vw,2.2rem); letter-spacing:.06em; line-height:1.4; color:var(--accent);
   font-variant-numeric:tabular-nums; }
 .results .m b small{ font-size:.5em; margin-left:.12em; letter-spacing:.06em; }
-.results .mh{ display:block; margin-top:4px; font-weight:500; font-size:.79rem; letter-spacing:.06em; color:var(--on); }
+.results .mh{ display:block; margin-top:4px; font-size:.79rem; letter-spacing:.06em; color:var(--on); }
 .results .tx{ display:block; margin-top:2px; }
-/* 本文の段落（.w-sec > p）と同じ寸法。上に細罫を一本だけ引く */
+/* 本文の段落（.w-sec > p）と同じ寸法。上に細罫を一本だけ引く。太字は他の段落と同じ既定 */
 .w-sec > p.common{ margin-top:clamp(22px,3.5vh,38px); padding-top:16px; border-top:1px solid var(--hair); }
 .common .label{ display:block; margin-bottom:4px; }
-.common strong{ font-weight:600; color:var(--on); }
 
 /* 問い合わせ先 */
 .w-contact{ margin:22px 0 0; padding:0; border-top:1px solid var(--hair); }
@@ -1590,7 +1588,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
         <section class="w-sec">
           <h3>これまでのお取引</h3>
-          <p class="lead">お客様ごとに、合わせて設計してきました。</p>
+          <p>お客様ごとに、合わせて設計してきました。</p>
           <ul class="results">
             <li><span class="who">ベーカリー系飲食店</span><span class="how">
               <span class="q">「お店の顔になる一杯を、作って欲しい」</span>
