@@ -764,48 +764,6 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .faq details[open] summary{ color:var(--on); }
 .faq .a{ padding:0 0 22px 24px; font-size:.79rem; line-height:2.3; letter-spacing:.05em; color:var(--on-2); max-width:52em; }
 
-/* ---------- お問い合わせフォーム ------------------------------- */
-/* No backend in this prototype. The markup is production-shaped:
-   every control has a real <label for>, a real type, an autocomplete
-   token, required where required, aria-describedby pointing at the
-   error node that sits IMMEDIATELY AFTER the field, and aria-invalid
-   flipped on failure. Wiring is documented in the comment at the form. */
-.form{ margin-top:clamp(26px,4vh,46px); max-width:44em; }
-.fld{ margin-bottom:clamp(22px,3.4vh,34px); }
-.fld > label, .fset > legend{
-  display:block; font-family:var(--latin); font-size:11px; font-weight:500;
-  letter-spacing:.14em; color:var(--on-2); margin-bottom:10px; padding:0;
-}
-.req{ color:var(--alert); margin-left:.5em; font-size:10px; letter-spacing:.1em; }
-.opt{ color:var(--on-3); margin-left:.5em; font-size:10px; letter-spacing:.1em; }
-.fld input[type=text], .fld input[type=email], .fld input[type=tel], .fld select, .fld textarea{
-  width:100%; background:var(--lift); color:var(--on);
-  border:1px solid var(--hair); border-radius:0; padding:13px 14px;
-  font-family:var(--serif); font-weight:var(--w-body); font-size:.88rem; letter-spacing:.05em; line-height:1.9;
-  transition:border-color .3s linear;
-}
-.fld textarea{ min-height:150px; resize:vertical; line-height:2.1; }
-.fld select{ appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--on-3) 50%),linear-gradient(135deg,var(--on-3) 50%,transparent 50%); background-position:calc(100% - 20px) 50%,calc(100% - 15px) 50%; background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:44px; }
-.fld input:focus-visible, .fld select:focus-visible, .fld textarea:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; border-color:var(--on-3); }
-.fld .hint{ margin-top:9px; font-size:.72rem; line-height:2; letter-spacing:.05em; color:var(--on-3); }
-.err{ display:none; margin-top:9px; font-family:var(--latin); font-size:11.5px; letter-spacing:.06em; line-height:1.8; color:var(--alert); }
-.fld.bad .err{ display:block; }
-.fld.bad input, .fld.bad select, .fld.bad textarea{ border-color:var(--alert); }
-.fset{ border:0; margin:0 0 clamp(22px,3.4vh,34px); padding:0; }
-.checks{ display:flex; flex-wrap:wrap; gap:10px 26px; }
-.checks label, .agree label{ display:flex; align-items:flex-start; gap:10px; font-size:.8rem; letter-spacing:.05em; line-height:2; color:var(--on-2); cursor:pointer; }
-.checks input, .agree input{ width:16px; height:16px; margin-top:.55em; accent-color:var(--katsu); flex:0 0 auto; }
-.form .submit{
-  margin-top:8px; font-family:var(--mincho); font-weight:var(--w-display);
-  font-size:1rem; letter-spacing:.2em; text-indent:.2em; color:var(--on);
-  background:none; border:1px solid var(--on-3); padding:17px 34px; cursor:pointer;
-  transition:background-color .5s var(--ease), color .5s var(--ease), border-color .5s var(--ease);
-}
-.form .submit:hover{ background:var(--katsu); color:var(--white); border-color:var(--katsu); }
-#form-status{ margin-top:22px; font-size:.8rem; line-height:2.2; letter-spacing:.05em; color:var(--on-2); }
-#form-status[data-state="ok"]{ color:var(--on); }
-#form-status[data-state="bad"]{ color:var(--alert); }
-
 /* ============================================================
    静止 — prefers-reduced-motion と Save-Data は同じ場所に着きます。
    地色はセクションごとに直接塗られ、転換帯は二色のグラデーション
@@ -1721,119 +1679,12 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
         <section class="w-sec">
           <h3>お問い合わせ</h3>
-          <p>焙煎士または担当者からご返信します。<span class="todo">※ 返信の目安と電話番号は未確定</span></p>
+          <p>焙煎士、または担当者から近日中にご返信します。お問い合わせは以下の3つの中からご都合に合わせてお問い合わせください。</p>
           <dl class="w-contact">
             <div><dt>Instagram</dt><dd>@soigne.coffee</dd></div>
             <div><dt>Mail</dt><dd><a href="mailto:soigne.coffeeroastery@gmail.com">soigne.coffeeroastery@gmail.com</a></dd></div>
+            <div><dt>Form</dt><dd><a class="ext" href="https://forms.gle/r71mdNsUn3aBNsgw6" target="_blank" rel="noopener noreferrer">お問い合わせフォーム<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a></dd></div>
           </dl>
-
-          <!-- ─────────────────────────────────────────────────────────
-               本番配線について（このプロトタイプにバックエンドはありません）
-
-               1. <form method="post" action="/api/wholesale-inquiry"> とし、
-                  JS が無効でもサーバへ届く形を先に成立させます。JSは
-                  submit を preventDefault して fetch する上乗せだけです。
-               2. サーバ側（例：Cloudflare Workers / Vercel Functions）で
-                  a) 入力をサーバでも再検証（クライアント検証は補助です）
-                  b) Turnstile など不可視のボット対策トークンを検証
-                  c) 送信元IP単位で 5件/時 のレート制限
-                  d) 本文をサニタイズして info@ へ SMTP 送信（SPF/DKIM/DMARC
-                     設定済みの独立ドメインから）
-                  e) 同内容をスプレッドシートまたはCRMへ追記
-                  f) 送信者へ自動返信（内容の控え＋返信目安）
-               3. 応答は 303 リダイレクトで /wholesale/thanks へ。JS経路では
-                  #form-status に結果を書き、role="status" で読み上げます。
-               4. 保持期間は24か月。フォーム直下にプライバシーポリシーへの
-                  導線を置きます。
-               5. honeypot は name="company_url" の非表示テキスト欄。値が
-                  入っていれば静かに破棄します（下に実装済み）。
-               ───────────────────────────────────────────────────────── -->
-          <form class="form" id="w-form" novalidate>
-            <div class="fld" aria-hidden="true" style="position:absolute;left:-9999px">
-              <label for="company_url">この欄は入力しないでください</label>
-              <input type="text" id="company_url" name="company_url" tabindex="-1" autocomplete="off">
-            </div>
-
-            <div class="fld" id="fld-org">
-              <label for="f-org">会社名・店舗名<span class="req">必須</span></label>
-              <input type="text" id="f-org" name="organization" autocomplete="organization" required aria-describedby="err-org">
-              <p class="err" id="err-org">会社名・店舗名をご入力ください。</p>
-            </div>
-
-            <div class="fld" id="fld-name">
-              <label for="f-name">ご担当者名<span class="req">必須</span></label>
-              <input type="text" id="f-name" name="name" autocomplete="name" required aria-describedby="err-name">
-              <p class="err" id="err-name">ご担当者名をご入力ください。</p>
-            </div>
-
-            <div class="fld" id="fld-mail">
-              <label for="f-mail">メールアドレス<span class="req">必須</span></label>
-              <input type="email" id="f-mail" name="email" autocomplete="email" inputmode="email" required aria-describedby="err-mail hint-mail">
-              <p class="err" id="err-mail">メールアドレスの形式をご確認ください。</p>
-              <p class="hint" id="hint-mail">こちらのアドレスへ、控えと見積りをお送りします。</p>
-            </div>
-
-            <div class="fld" id="fld-tel">
-              <label for="f-tel">電話番号<span class="opt">任意</span></label>
-              <input type="tel" id="f-tel" name="tel" autocomplete="tel" inputmode="tel" aria-describedby="err-tel">
-              <p class="err" id="err-tel">電話番号の形式をご確認ください。</p>
-            </div>
-
-            <div class="fld" id="fld-type">
-              <label for="f-type">ご業態<span class="req">必須</span></label>
-              <select id="f-type" name="business_type" required aria-describedby="err-type">
-                <option value="">選択してください</option>
-                <option>レストラン・バー</option>
-                <option>カフェ・喫茶店</option>
-                <option>ベーカリー</option>
-                <option>ホテル・旅館</option>
-                <option>オフィス・社内利用</option>
-                <option>小売・物販</option>
-                <option>OEM・受託焙煎</option>
-                <option>その他</option>
-              </select>
-              <p class="err" id="err-type">ご業態をお選びください。</p>
-            </div>
-
-            <div class="fld" id="fld-vol">
-              <label for="f-vol">月間のおおよその使用量<span class="req">必須</span></label>
-              <select id="f-vol" name="monthly_volume" required aria-describedby="err-vol">
-                <option value="">選択してください</option>
-                <option>1〜3kg</option>
-                <option>3〜10kg</option>
-                <option>10〜30kg</option>
-                <option>30〜50kg</option>
-                <option>50kg以上</option>
-                <option>未定・相談したい</option>
-              </select>
-              <p class="err" id="err-vol">おおよそで構いませんのでお選びください。</p>
-            </div>
-
-            <fieldset class="fset">
-              <legend>ご希望の提供形態<span class="opt">任意・複数可</span></legend>
-              <div class="checks">
-                <label><input type="checkbox" name="form_type" value="beans">豆のまま</label>
-                <label><input type="checkbox" name="form_type" value="ground">挽き</label>
-                <label><input type="checkbox" name="form_type" value="bag1kg">業務用1kg袋</label>
-                <label><input type="checkbox" name="form_type" value="retail150g">小売用150g袋</label>
-                <label><input type="checkbox" name="form_type" value="drip">ドリップバッグ</label>
-              </div>
-            </fieldset>
-
-            <div class="fld" id="fld-msg">
-              <label for="f-msg">ご要望・ご質問<span class="opt">任意</span></label>
-              <textarea id="f-msg" name="message" autocomplete="off" aria-describedby="hint-msg"></textarea>
-              <p class="hint" id="hint-msg">抽出方法（ハンドドリップ／エスプレッソ／バッチブリュー等）、現在お使いの豆、開始希望時期をお書きいただけると、初回のご提案が具体的になります。</p>
-            </div>
-
-            <div class="fld agree" id="fld-agree">
-              <label for="f-agree"><input type="checkbox" id="f-agree" name="agree" required aria-describedby="err-agree">個人情報の取り扱いに同意します<span class="req">必須</span></label>
-              <p class="err" id="err-agree">送信には同意が必要です。</p>
-            </div>
-
-            <button type="submit" class="submit">ご相談内容を送信</button>
-            <p id="form-status" role="status" aria-live="polite"></p>
-          </form>
         </section>
 
       </div>
@@ -2164,11 +2015,6 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
   window.addEventListener("hashchange", function(){ readHash(false); });
 
   /* =========================================================
-     6. お問い合わせフォーム — バックエンドはありません。
-        検証と焦点移動とエラー表示だけが本番と同じ形です。
-        本番配線はフォーム直上のコメントに書いてあります。
-     ========================================================= */
-  /* =========================================================
      5b. 粗利の試算 — 完全にクライアント側で完結します。入力値は
          どこへも送信されず、保存もされません。豆の原価だけを
          差し引いた概算で、副資材と人件費は含みません。
@@ -2246,48 +2092,6 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       btn.setAttribute("aria-pressed", btn.getAttribute("aria-pressed") === "true" ? "false" : "true");
     });
   });
-
-  var wform = document.getElementById("w-form");
-  if (wform){
-    var status = document.getElementById("form-status");
-    function mark(fld, bad, node){
-      fld.classList.toggle("bad", bad);
-      if (node){ node.setAttribute("aria-invalid", bad ? "true" : "false"); }
-    }
-    wform.addEventListener("submit", function(e){
-      e.preventDefault();
-      if (document.getElementById("company_url").value){ return; }   /* honeypot */
-      var bad = [];
-      function check(id, fldId, test){
-        var n = document.getElementById(id), f = document.getElementById(fldId);
-        var ok = test(n);
-        mark(f, !ok, n);
-        if (!ok) bad.push(n);
-      }
-      check("f-org","fld-org", function(n){ return n.value.trim().length > 0; });
-      check("f-name","fld-name", function(n){ return n.value.trim().length > 0; });
-      check("f-mail","fld-mail", function(n){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(n.value.trim()); });
-      check("f-tel","fld-tel", function(n){ return n.value.trim() === "" || /^[0-9+\-() ]{9,}$/.test(n.value.trim()); });
-      check("f-type","fld-type", function(n){ return n.value !== ""; });
-      check("f-vol","fld-vol", function(n){ return n.value !== ""; });
-      check("f-agree","fld-agree", function(n){ return n.checked; });
-
-      if (bad.length){
-        status.setAttribute("data-state","bad");
-        status.textContent = bad.length + "件、ご確認をお願いします。最初の項目に移動しました。";
-        bad[0].focus();
-        return;
-      }
-      status.setAttribute("data-state","ok");
-      status.textContent = "送信しました。2営業日以内にご返信します。（このプロトタイプでは送信先がないため、実際には送信されていません）";
-      /* PRODUCTION:
-         fetch("/api/wholesale-inquiry", { method:"POST", body:new FormData(wform) })
-           .then(function(r){ return r.ok ? r.json() : Promise.reject(r); })
-           .then(function(){ status.textContent = "送信しました。控えをメールでお送りしました。"; wform.reset(); })
-           .catch(function(){ status.setAttribute("data-state","bad");
-             status.textContent = "送信できませんでした。お手数ですが 03-0000-0000 へご連絡ください。"; }); */
-    });
-  }
 
   /* =========================================================
      7. モーション
@@ -2462,7 +2266,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     /* 節の定位 — 長く、沈む方向へ。滑らせません。 */
     var revealSel = ".sec-head, .bean, .shelf, .j-row, .piece .hd, .piece .prose, .piece .end, " +
                     ".hands > div, .tategaki, .facts, #ch-buy .act, #ch-buy .fine, " +
-                    ".w-keys, .w-sec, .results li, .form, #site-footer .f-grid > *";
+                    ".w-keys, .w-sec, .results li, #site-footer .f-grid > *";
     gsap.utils.toArray(revealSel).forEach(function(el){
       gsap.fromTo(el, { opacity:0, y:14 },
         { opacity:1, y:0, duration:1.8, ease:"power2.out",
