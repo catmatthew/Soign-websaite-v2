@@ -707,6 +707,54 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .w-sec > p{ margin-top:22px; font-size:.83rem; line-height:2.35; letter-spacing:.06em; color:var(--on-2); max-width:50em; }
 .w-sec > p + p{ margin-top:14px; }
 
+/* ============================================================
+   私たちについて — 会社概要は置かず、物語と写真だけで組みます。
+   書体は他の view と同じ三層（明朝＝名前・項目名／本文／ラベル）。
+   ============================================================ */
+[data-view="about"] .chapter{ padding-block:clamp(84px,13vh,150px) clamp(96px,18vh,200px); }
+#a-hero{ min-height:auto; padding-top:clamp(120px,20vh,190px); }
+#a-hero h1{ margin-top:16px; font-size:clamp(1.55rem,4.6vw,2.9rem); letter-spacing:.2em; text-indent:.2em; line-height:1.9; }
+#a-hero .lede{ margin-top:22px; max-width:42em; font-size:.86rem; line-height:2.5; letter-spacing:.08em; color:var(--on-2); }
+.a-sec{ margin-top:clamp(64px,11vh,130px); }
+.a-sec:first-child{ margin-top:0; }
+.a-sec > h2{
+  font-size:clamp(1.06rem,2.3vw,1.36rem); letter-spacing:.18em; line-height:2;
+  padding-bottom:16px; border-bottom:1px solid var(--hair);
+}
+.a-sec > p{ margin-top:22px; font-size:.86rem; line-height:2.5; letter-spacing:.07em; color:var(--on-2); max-width:42em; }
+/* 大切にしていること — 記号（Tourné / n = 1 / 13°）、標語、説明の三段 */
+.values{ margin:clamp(22px,3.5vh,38px) 0 0; padding:0; }
+.values li{ list-style:none; padding-block:22px; border-bottom:1px solid var(--hair-f); display:grid; gap:6px 28px; }
+@media (min-width:720px){ .values li{ grid-template-columns:150px 1fr; align-items:baseline; } }
+.values .sym{ font-family:var(--latin); font-size:10px; letter-spacing:.18em; color:var(--on-3); }
+.values .motto{ display:block; font-family:var(--mincho); font-weight:var(--w-display); font-size:clamp(1rem,2.2vw,1.24rem); letter-spacing:.14em; line-height:2; color:var(--on); }
+.values .ex{ display:block; margin-top:4px; font-size:.82rem; line-height:2.3; letter-spacing:.06em; color:var(--on-2); }
+.a-sec > p.vision{ margin-top:26px; max-width:none; font-family:var(--mincho); font-weight:var(--w-display);
+  font-size:clamp(1.02rem,2.6vw,1.5rem); letter-spacing:.14em; line-height:2.2; color:var(--on); }
+.vision span{ display:inline-block; }
+/* メンバー — 写真は素材の大きさがばらつくため、枠の比率（4:5）で揃え、
+   object-fit:cover と上寄せで顔が切れないようにします。 */
+.members{ margin:0 auto; padding:0; display:grid; gap:clamp(48px,8vh,72px) clamp(24px,4vw,48px); }
+@media (min-width:760px){ .members{ grid-template-columns:repeat(3,1fr); } }
+.member{ list-style:none; }
+.member .photo{ position:relative; aspect-ratio:4/5; overflow:hidden; background:#0C0F22; margin:0; }
+.member .photo > img{ display:block; width:100%; height:100%; object-fit:cover; object-position:50% 20%; }
+.member .photo .pl{
+  position:absolute; left:14px; bottom:12px; font-family:var(--latin); font-size:9.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:rgba(226,233,248,.5);
+}
+.member .nm{ margin-top:20px; font-size:clamp(1.06rem,2.2vw,1.3rem); letter-spacing:.2em; line-height:1.8; }
+.member .ro{ display:block; margin-top:2px; font-family:var(--latin); font-size:10px; letter-spacing:.16em; color:var(--on-3); }
+.member .role{ display:block; margin-top:8px; font-family:var(--latin); font-size:10px; letter-spacing:.16em; color:var(--on-2); }
+.member .greet{ margin-top:16px; font-size:.82rem; line-height:2.3; letter-spacing:.06em; color:var(--on-2); }
+/* トップ章五からの入口。一、二行と矢印だけ。 */
+.about-in{ margin-top:clamp(56px,10vh,110px); text-align:center; }
+.about-in p{ font-size:.84rem; line-height:2.4; letter-spacing:.08em; color:var(--on-2); }
+.about-in a{ display:inline-block; margin-top:14px; font-size:.84rem; letter-spacing:.14em; color:var(--on);
+  border-bottom:1px solid var(--hair); padding-bottom:2px; transition:border-color .7s var(--ease); }
+.about-in a:hover{ border-bottom-color:var(--on-3); }
+header nav a.hide-m[aria-current="page"]{ color:var(--on); }
+
 /* 取引の流れ — numbered rows, scannable, no cards */
 .flow{ counter-reset:step; margin-top:clamp(26px,4vh,44px); }
 .flow li{ list-style:none; counter-increment:step; display:grid; gap:4px 20px; padding-block:18px; border-bottom:1px solid var(--hair-f); }
@@ -898,6 +946,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     <a class="hide-m" href="#ch-beans">豆</a>
     <a class="hide-m" href="#ch-journal">読みもの</a>
     <a class="hide-m" href="#ch-roast">焙煎所</a>
+      <a class="hide-m" href="#/about" data-route="#/about">私たちについて</a>
     <a class="b2b-btn" href="#/wholesale" data-route="#/wholesale" id="b2b-header">法人向けはこちら</a>
     <!-- 決済は Square オンラインビジネス。このサイトに買い物かごはありません。 -->
     <a class="store-min ext" id="store-header"
@@ -1244,7 +1293,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           <div class="hd">
             <p class="kicker">焙煎日誌 — 最新</p>
             <h3 id="piece-oct-h">十月の火のこと</h3>
-            <p class="by">2026.10.02 ／ 焙煎士 高岩 慧 ／ 読了 約6分</p>
+            <p class="by">2026.10.02 ／ 焙煎士 髙岩 慧 ／ 読了 約6分</p>
           </div>
 
           <div class="prose">
@@ -1394,13 +1443,19 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
       <!-- ページ中で縦組みを使うのは、ここ一箇所だけです。 -->
       <div class="tategaki">
-        <div class="sig-v">焙煎士　高岩 慧</div>
+        <div class="sig-v">焙煎士　髙岩 慧</div>
         <p class="vert" id="vert-letter">週に一度しか火を入れないのは、<span class="mk">待てる量</span>しか焼かないと決めたからです。急いで焼いた豆は、急いで飲まれてしまう。</p>
         <h3 class="vert title">火の量</h3>
       </div>
 
       <div class="goutte" aria-hidden="true"></div>
       <p class="label" style="text-align:center;margin-top:20px">2 min 30 s</p>
+
+      <!-- 「私たちについて」への入口 -->
+      <div class="about-in">
+        <p>豆を選び、焼き、届けるまでを、三人で担っています。</p>
+        <a href="#/about" data-route="#/about">私たちについて <span aria-hidden="true">→</span></a>
+      </div>
     </div>
   </section>
 
@@ -1662,7 +1717,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         <section class="w-sec">
           <h3 id="w-sup-h">抽出サポートと研修</h3>
           <p>豆をお納めするだけでは、同じ味はお店に届きません。導入時と、その後も必要に応じて、抽出の設計をご一緒します。いずれも豆のお取引がある期間は無償です。</p>
-          <p>焙煎と品質管理を担当するのは <strong>高岩 慧</strong>（Head Roaster &amp; QC）です。焙煎プロファイルの設計、ロット替わりの調整、抽出レシピの構築まで、一人が通して見ます。</p>
+          <p>焙煎と品質管理を担当するのは <strong>髙岩 慧</strong>（Head Roaster &amp; QC）です。焙煎プロファイルの設計、ロット替わりの調整、抽出レシピの構築まで、一人が通して見ます。</p>
           <ul class="cases">
             <li><span class="who">導入時レシピ設計</span><span class="how">実際の器具・水・グラインダーで抽出し、粉量・湯温・時間を書面に落とします。</span></li>
             <li><span class="who">スタッフ研修</span><span class="how">スタッフによる提供品質のズレが起こらないように私たちの方で工夫をさせていただきます。またお客様への魅力的な伝え方もお伝えできればと思います。</span></li>
@@ -1713,6 +1768,91 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
   <div class="turn" data-to="dark" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
 </main>
 
+<!-- ══════════════════════════════════════════════════════════════════
+     VIEW 3 — #/about  私たちについて（本番では /about）
+     会社概要は置きません。物語と写真だけで、飲食店さまの信頼に応えます。
+     本文は能力資料の文言をそのまま使っています。
+     ══════════════════════════════════════════════════════════════════ -->
+<main id="main-about" data-view="about" tabindex="-1" hidden>
+
+  <section class="chapter" id="a-hero" data-ground="dark" aria-labelledby="a-h1">
+    <div class="ch-body wrap">
+      <div class="axis">
+        <p class="kicker">Our Story</p>
+        <h1 id="a-h1">私たちについて</h1>
+        <p class="lede">Tokyoを拠点とする、スペシャリティコーヒーの卸を主軸とした Coffee Roasteryです。プロダクトのクオリティを追求するお客様に向けて、ご希望に沿ったオーダーメイドの焙煎と伴走型のカスタマーサクセスを強みに、一杯の体験までを設計します。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="turn" data-to="light" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+
+  <section class="chapter" id="a-story" data-ground="light" aria-label="名前の由来と、大切にしていること">
+    <div class="ch-body wrap">
+      <div class="axis">
+
+        <section class="a-sec" aria-labelledby="a-name-h">
+          <h2 id="a-name-h">名前の由来</h2>
+          <p>フランス料理の厨房でシェフが叫ぶ「Soigné！」。意味は「仕上げろ！」。激しい檄（げき）と、完璧に整えられた優雅な一皿。クオリティに妥協を許さない — それが名前の由来であり、私たちのコンセプトです。</p>
+        </section>
+
+        <section class="a-sec" aria-labelledby="a-val-h">
+          <h2 id="a-val-h">大切にしていること</h2>
+          <ul class="values">
+            <li><span class="sym">Tourné</span><div><span class="motto">手間を惜しむな</span><span class="ex">「面取り」の意。大きな影響はなくても、した方が確実に良い。小さな私たちは手間を惜しまない。</span></div></li>
+            <li><span class="sym">n = 1</span><div><span class="motto">全ては1人のために</span><span class="ex">全体最適は目指さない。お客様一人ひとりが創りたい世界のために、あなただけのフルオーダーメイドを。</span></div></li>
+            <li><span class="sym">13°</span><div><span class="motto">好奇心と共にあれ</span><span class="ex">やりたい、気になる、全てやれ。思わず前のめりになった身体の角度。そうなったら、全てやる。</span></div></li>
+          </ul>
+        </section>
+
+        <section class="a-sec" aria-labelledby="a-vis-h">
+          <h2 id="a-vis-h">目指していること</h2>
+          <p class="vision"><span>食のプロフェッショナルに選ばれる、</span><span>空間と食体験を完成させるための</span><span>コーヒーを。</span></p>
+        </section>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="turn" data-to="dark" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
+
+  <section class="chapter" id="a-members" data-ground="dark" aria-labelledby="a-mem-h">
+    <div class="ch-body wrap">
+      <div class="sec-head axis">
+        <p class="kicker">Members</p>
+        <h2 id="a-mem-h">メンバー</h2>
+      </div>
+      <!-- 写真：トーンは揃っており、縦横比はおおむね同じ前提。枠は 4:5 で統一。 -->
+      <ul class="members axis">
+        <li class="member">
+          <!-- 本番：.ph を <img src="…" alt="山﨑 聖彦" width="800" height="1000" loading="lazy" decoding="async"> に置き換え -->
+          <figure class="photo"><div class="ph"><div class="ph-field"></div><span class="pl">PHOTO · 4:5 · 仮</span></div></figure>
+          <h3 class="nm">山﨑 聖彦</h3>
+          <span class="ro">Yamazaki Masahiko</span>
+          <span class="role">CEO / 代表</span>
+          <p class="greet"><span class="todo">仮の一言です。ここに本人のあいさつが入ります。100文字前後を目安に、多くとも200文字で差し替えてください。</span></p>
+        </li>
+        <li class="member">
+          <!-- 本番：.ph を <img src="…" alt="石田 善大" width="800" height="1000" loading="lazy" decoding="async"> に置き換え -->
+          <figure class="photo"><div class="ph"><div class="ph-field"></div><span class="pl">PHOTO · 4:5 · 仮</span></div></figure>
+          <h3 class="nm">石田 善大</h3>
+          <span class="ro">Ishida Yoshihiro</span>
+          <span class="role">Super Sales / 営業</span>
+          <p class="greet"><span class="todo">仮の一言です。ここに本人のあいさつが入ります。100文字前後を目安に、多くとも200文字で差し替えてください。</span></p>
+        </li>
+        <li class="member">
+          <!-- 本番：.ph を <img src="…" alt="髙岩 慧" width="800" height="1000" loading="lazy" decoding="async"> に置き換え -->
+          <figure class="photo"><div class="ph"><div class="ph-field"></div><span class="pl">PHOTO · 4:5 · 仮</span></div></figure>
+          <h3 class="nm">髙岩 慧</h3>
+          <span class="ro">Takaiwa Kei</span>
+          <span class="role">Head Roaster＆QC / 焙煎士</span>
+          <p class="greet"><span class="todo">仮の一言です。ここに本人のあいさつが入ります。100文字前後を目安に、多くとも200文字で差し替えてください。</span></p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+
 <!-- ══ FOOTER ══ 勝色。両方の view で共有します。幕が下りるところ。 ══ -->
 <footer id="site-footer" class="wrap" data-ground="dark">
   <div class="ch-body f-grid">
@@ -1726,6 +1866,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       <li><a href="#ch-journal">読みもの</a></li>
       <li><a href="#ch-roast">焙煎について</a></li>
       <li><a href="#ch-buy">買う場所について</a></li>
+      <li><a href="#/about" data-route="#/about">私たちについて</a></li>
     </ul>
     <ul>
       <li><a href="#/wholesale" data-route="#/wholesale">法人向け卸販売</a></li>
@@ -1948,26 +2089,29 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
      ========================================================= */
   var views = {
     home: document.getElementById("main-home"),
-    wholesale: document.getElementById("main-wholesale")
+    wholesale: document.getElementById("main-wholesale"),
+    about: document.getElementById("main-about")
   };
-  var ROUTE = { "#/":"home", "#/wholesale":"wholesale" };
+  var ROUTE = { "#/":"home", "#/wholesale":"wholesale", "#/about":"about" };
   var TITLE = {
     home: "Soigné — 明暗 / 勝色と白の章",
-    wholesale: "法人向け卸販売 — Soigné Coffee Roastery"
+    wholesale: "法人向け卸販売 — Soigné Coffee Roastery",
+    about: "私たちについて — Soigné Coffee Roastery"
   };
-  var ANNOUNCE = { home:"トップページに戻りました。", wholesale:"法人向け卸販売のページに移動しました。" };
+  var ANNOUNCE = { home:"トップページに戻りました。", wholesale:"法人向け卸販売のページに移動しました。", about:"私たちについてのページに移動しました。" };
   /* 直リンクで法人向けページに着いた読者に、トップの開幕演出は要りません。
      最初の経路をここで確定し、7c の開幕タイムラインを分岐させます。 */
   var INITIAL = null;
   var live = document.getElementById("route-live");
   var current = "home";
-  var savedScroll = { home:0, wholesale:0 };
+  var savedScroll = { home:0, wholesale:0, about:0 };
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
   function routeOf(hash){
     if (!hash || hash === "#") return "home";
     if (ROUTE[hash]) return ROUTE[hash];
     if (hash === "#/wholesale/" ) return "wholesale";
+    if (hash === "#/about/" ) return "about";
     return null;            /* not a route — an in-page anchor */
   }
 
@@ -1986,11 +2130,9 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
     document.title = TITLE[name];
     [].forEach.call(document.querySelectorAll('[data-route]'), function(a){
-      var isB2B = a.getAttribute("data-route") === "#/wholesale";
-      if (a.classList.contains("b2b-btn")){
-        if (isB2B && name === "wholesale") a.setAttribute("aria-current","page");
-        else a.removeAttribute("aria-current");
-      }
+      var r = a.getAttribute("data-route");
+      if (r !== "#/" && routeOf(r) === name) a.setAttribute("aria-current","page");
+      else a.removeAttribute("aria-current");
     });
 
     /* 地色を先頭の章に戻し、ヘッダの色を合わせてから描画します */
@@ -2301,7 +2443,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     /* 節の定位 — 長く、沈む方向へ。滑らせません。 */
     var revealSel = ".sec-head, .bean, .shelf, .j-row, .piece .hd, .piece .prose, .piece .end, " +
                     ".hands > div, .tategaki, .facts, #ch-buy .act, #ch-buy .fine, " +
-                    ".w-keys, .w-sec, .results li, #site-footer .f-grid > *";
+                    ".w-keys, .w-sec, .results li, .about-in, .a-sec, .member, #site-footer .f-grid > *";
     gsap.utils.toArray(revealSel).forEach(function(el){
       gsap.fromTo(el, { opacity:0, y:14 },
         { opacity:1, y:0, duration:1.8, ease:"power2.out",
