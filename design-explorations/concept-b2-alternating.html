@@ -284,6 +284,45 @@ header nav a:hover, header nav button:hover{ color:var(--on); }
 @media (max-width:900px){ header nav a.hide-m{ display:none; } }
 @media (max-width:560px){ header .mark{ font-size:17px; } header nav{ gap:12px; } }
 
+/* メニュー — 900px以下では、豆／読みもの／焙煎所／私たちについて を
+   三本線のボタンの中に畳みます。法人向けの導線はヘッダに残します。
+   480px以下では、オンラインストアもメニューの中へ移します。 */
+.menu-btn{ display:none; }
+header nav .menu-btn{
+  position:relative; width:30px; height:30px; flex:none; color:var(--on);
+}
+.menu-btn .bars, .menu-btn .bars::before, .menu-btn .bars::after{
+  position:absolute; left:6px; width:18px; height:1px; background:currentColor;
+  transition:transform .5s var(--ease), opacity .3s var(--ease);
+}
+.menu-btn .bars{ top:50%; }
+.menu-btn .bars::before, .menu-btn .bars::after{ content:""; left:0; }
+.menu-btn .bars::before{ top:-6px; }
+.menu-btn .bars::after{ top:6px; }
+.menu-btn[aria-expanded="true"] .bars{ background:transparent; }
+.menu-btn[aria-expanded="true"] .bars::before{ transform:translateY(6px) rotate(45deg); background:var(--on); }
+.menu-btn[aria-expanded="true"] .bars::after{ transform:translateY(-6px) rotate(-45deg); background:var(--on); }
+.site-menu{
+  position:absolute; top:100%; left:0; right:0;
+  padding:4px var(--gutter) 22px; border-bottom:1px solid var(--hair-f);
+}
+html[data-ground="dark"] .site-menu{ background:rgba(24,27,57,.98); }
+html[data-ground="light"] .site-menu{ background:rgba(248,249,250,.98); }
+.site-menu ul{ list-style:none; margin:0; padding:0; }
+.site-menu li{ border-bottom:1px solid var(--hair-f); }
+.site-menu a{
+  display:block; padding:16px 0; font-size:.86rem; letter-spacing:.16em; color:var(--on-2);
+  transition:color .6s var(--ease);
+}
+.site-menu a:hover, .site-menu a[aria-current="page"]{ color:var(--on); }
+.site-menu .m-store{ display:none; }
+@media (max-width:900px){ header nav .menu-btn{ display:block; } }
+@media (min-width:901px){ .site-menu{ display:none !important; } }
+@media (max-width:480px){
+  header nav .store-min{ display:none; }
+  .site-menu .m-store{ display:list-item; }
+}
+
 /* 法人向けはこちら — a bordered route button, in the header AND the footer.
    Header because a purchasing manager arrives from a search result and
    must not have to scroll a consumer page to find the trade route.
@@ -416,6 +455,10 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
   letter-spacing:.12em; text-indent:.12em;
 }
 #wordmark .ch{ display:inline-block; will-change:transform,opacity; }
+/* g の下端（ディセンダ）が、行の箱（line-height 1.04）からはみ出していました。
+   filter（開幕の blur）が掛かった要素は、Safari では箱の外が描かれません。
+   一文字ずつの箱を下に広げ、その分だけ読みと横罫を下げます。 */
+#wordmark .ch{ padding-bottom:.22em; }
 /* 読み。ワードマークに従属する小さな一行で、competing させません。 */
 #wordmark-ruby{
   margin-top:10px; text-align:center;
@@ -952,7 +995,18 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     <a class="store-min ext" id="store-header"
        href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=header&amp;utm_campaign=always_on&amp;utm_content=header_store"
        target="_blank" rel="noopener noreferrer">オンラインストア<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+    <button class="menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="site-menu" aria-label="メニューを開く"><span class="bars" aria-hidden="true"></span></button>
   </nav>
+  <!-- 900px以下で使うメニュー。中身はヘッダの文字リンクと同じです。 -->
+  <div class="site-menu" id="site-menu" hidden>
+    <ul>
+      <li><a href="#ch-beans">豆</a></li>
+      <li><a href="#ch-journal">読みもの</a></li>
+      <li><a href="#ch-roast">焙煎所</a></li>
+      <li><a href="#/about" data-route="#/about">私たちについて</a></li>
+      <li class="m-store"><a class="ext" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=header&amp;utm_campaign=always_on&amp;utm_content=menu_store" target="_blank" rel="noopener noreferrer">オンラインストア<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a></li>
+    </ul>
+  </div>
 </header>
 
 <p id="route-live" class="vh" role="status" aria-live="polite"></p>
@@ -2079,6 +2133,34 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
            var v = document.getElementById("v-room");
            if (v){ v.muted = on; if (!on) v.volume = 0.32; }
          状態は意図的に保存しません。毎回、無音で始まります。 */
+    });
+  }
+
+  /* =========================================================
+     4m. メニュー（900px以下）。開閉、Esc、外側のクリック、
+         リンクを選んだとき、幅が広がったときに閉じます。
+     ========================================================= */
+  var menuBtn = document.getElementById("menu-btn");
+  var menu = document.getElementById("site-menu");
+  function setMenu(open, refocus){
+    if (!menuBtn || !menu) return;
+    menu.hidden = !open;
+    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    menuBtn.setAttribute("aria-label", open ? "メニューを閉じる" : "メニューを開く");
+    if (open){ var first = menu.querySelector("a"); if (first) first.focus(); }
+    else if (refocus) menuBtn.focus();
+  }
+  if (menuBtn && menu){
+    menuBtn.addEventListener("click", function(){ setMenu(menu.hidden); });
+    menu.addEventListener("click", function(e){ if (e.target.closest("a")) setMenu(false); });
+    document.addEventListener("keydown", function(e){
+      if (e.key === "Escape" && !menu.hidden) setMenu(false, true);
+    });
+    document.addEventListener("click", function(e){
+      if (!menu.hidden && !e.target.closest("header")) setMenu(false);
+    });
+    window.matchMedia("(min-width:901px)").addEventListener("change", function(m){
+      if (m.matches) setMenu(false);
     });
   }
 
