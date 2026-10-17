@@ -610,7 +610,7 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 /* ============================================================
    章四 · 読みもの — 白 / 読む。このページで一番よく使う場所です。
    ============================================================ */
-.j-index{ margin-top:clamp(10px,2vh,24px); }
+.j-index{ margin-top:clamp(70px,13vh,160px); }
 .j-row{
   display:grid; gap:6px 24px; padding-block:clamp(20px,3.2vh,32px);
   border-top:1px solid var(--hair-f); align-items:baseline;
@@ -623,7 +623,7 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .j-row .ex{ grid-column:1/-1; font-size:.78rem; line-height:2.4; letter-spacing:.06em; color:var(--on-2); max-width:52em; }
 @media (min-width:760px){ .j-row .ex{ grid-column:2/3; } }
 
-.piece{ margin-top:clamp(70px,13vh,160px); }
+.piece{ margin-top:clamp(10px,2vh,24px); }
 .piece .hd{ border-top:1px solid var(--hair); padding-top:clamp(26px,4vh,44px); }
 .piece h3{ margin-top:14px; font-size:clamp(1.3rem,3.2vw,2rem); letter-spacing:.14em; line-height:2; }
 .piece .by{ margin-top:18px; font-family:var(--latin); font-size:10.5px; letter-spacing:.16em; color:var(--on-3); }
@@ -1303,45 +1303,6 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       </div>
 
       <div class="axis">
-        <div class="j-index">
-          <article class="j-row">
-            <p class="date">2026.10.02</p>
-            <h3 class="t"><a href="#piece-oct">十月の火のこと</a></h3>
-            <p class="cat">焙煎日誌</p>
-            <p class="ex">室温が十一度下がると、同じ設定でも豆は別の日を過ごします。今月の調整の記録。</p>
-          </article>
-          <article class="j-row">
-            <p class="date">2026.09.18</p>
-            <h3 class="t"><a href="#ch-journal">コンガ村の水洗工程を見に行った</a></h3>
-            <p class="cat">生産者</p>
-            <p class="ex">発酵槽の水を替える時間を、誰がどう決めているのか。現地で聞いてきました。</p>
-          </article>
-          <article class="j-row">
-            <p class="date">2026.09.04</p>
-            <h3 class="t"><a href="#ch-journal">十年使っている手網のこと</a></h3>
-            <p class="cat">道具</p>
-            <p class="ex">サンプルローストは今も手網です。買い替えない理由を、正直に書きます。</p>
-          </article>
-          <article class="j-row">
-            <p class="date">2026.08.21</p>
-            <h3 class="t"><a href="#ch-journal">湯温を二度下げると何が起きるか</a></h3>
-            <p class="cat">淹れ方</p>
-            <p class="ex">九十四度と九十二度を、同じ豆・同じ挽き目で二十杯ずつ比べた記録です。</p>
-          </article>
-          <article class="j-row">
-            <p class="date">2026.08.07</p>
-            <h3 class="t"><a href="#ch-journal">水曜を定休にした理由</a></h3>
-            <p class="cat">店のこと</p>
-            <p class="ex">開けている日を減らしたら、焙煎の精度が上がりました。その話を。</p>
-          </article>
-          <article class="j-row">
-            <p class="date">2026.07.24</p>
-            <h3 class="t"><a href="#ch-journal">夏のあいだ、中浅煎りを棚から外していた</a></h3>
-            <p class="cat">焙煎日誌</p>
-            <p class="ex">冷たい水で淹れる人が増える季節に、何を置いておくべきかという問い。</p>
-          </article>
-        </div>
-
         <!-- 最新の一本を、全文で。索引だけの「読みもの」は読まれません。 -->
         <article class="piece" id="piece-oct" aria-labelledby="piece-oct-h">
           <div class="hd">
@@ -1397,11 +1358,63 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           </details>
         </article>
 
+        <!-- 過去の記事。最新の一本の下に置きます。 -->
+        <div class="j-index">
+          <article class="j-row">
+            <p class="date">2026.10.02</p>
+            <h3 class="t"><a href="#piece-oct">十月の火のこと</a></h3>
+            <p class="cat">焙煎日誌</p>
+            <p class="ex">室温が十一度下がると、同じ設定でも豆は別の日を過ごします。今月の調整の記録。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.09.18</p>
+            <h3 class="t"><a href="#ch-journal">コンガ村の水洗工程を見に行った</a></h3>
+            <p class="cat">生産者</p>
+            <p class="ex">発酵槽の水を替える時間を、誰がどう決めているのか。現地で聞いてきました。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.09.04</p>
+            <h3 class="t"><a href="#ch-journal">十年使っている手網のこと</a></h3>
+            <p class="cat">道具</p>
+            <p class="ex">サンプルローストは今も手網です。買い替えない理由を、正直に書きます。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.08.21</p>
+            <h3 class="t"><a href="#ch-journal">湯温を二度下げると何が起きるか</a></h3>
+            <p class="cat">淹れ方</p>
+            <p class="ex">九十四度と九十二度を、同じ豆・同じ挽き目で二十杯ずつ比べた記録です。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.08.07</p>
+            <h3 class="t"><a href="#ch-journal">水曜を定休にした理由</a></h3>
+            <p class="cat">店のこと</p>
+            <p class="ex">開けている日を減らしたら、焙煎の精度が上がりました。その話を。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.07.24</p>
+            <h3 class="t"><a href="#ch-journal">夏のあいだ、中浅煎りを棚から外していた</a></h3>
+            <p class="cat">焙煎日誌</p>
+            <p class="ex">冷たい水で淹れる人が増える季節に、何を置いておくべきかという問い。</p>
+          </article>
+        </div>
+
         <p class="j-more label">過去の記事は月別に一覧できます（本番では /journal/ 以下に静的生成）</p>
+
+      <!-- 「私たちについて」への入口 -->
+      <div class="about-in">
+        <p>豆を選び、焼き、届けるまでを、三人で担っています。</p>
+        <a href="#/about" data-route="#/about">私たちについて <span aria-hidden="true">→</span></a>
+      </div>
       </div>
     </div>
   </section>
 
+  <!-- ══ 章五 · 手（抽出）— リリース優先のため一時的に非表示 ══════════════
+       <template> の中身は描画されず、スクリプトからも見えません。
+       戻すときは <template id="stash-ch-hands"> と </template> の二行を消し、
+       章五の小見出しの番号を元に戻してください（下の「章五 · 購う」→「章六 · 購う」）。
+       中の転換帯（白→勝色、勝色→白）ごと保管しています。 ══ -->
+  <template id="stash-ch-hands">
   <!-- ─── 転換 : 白 → 勝色 ─── -->
   <div class="turn" data-to="dark" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
 
@@ -1505,22 +1518,19 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       <div class="goutte" aria-hidden="true"></div>
       <p class="label" style="text-align:center;margin-top:20px">2 min 30 s</p>
 
-      <!-- 「私たちについて」への入口 -->
-      <div class="about-in">
-        <p>豆を選び、焼き、届けるまでを、三人で担っています。</p>
-        <a href="#/about" data-route="#/about">私たちについて <span aria-hidden="true">→</span></a>
-      </div>
     </div>
   </section>
 
   <!-- ─── 転換 : 勝色 → 白 ─── -->
   <div class="turn" data-to="light" aria-hidden="true"><div class="horizon"><i></i><b></b></div></div>
 
-  <!-- ═══ 章六 · 購う ═══ 白 = 読む。ここに買い物かごはありません。 ══ -->
+  </template>
+
+  <!-- ═══ 章五（抽出を保管中。戻すと章六） · 購う ═══ 白 = 読む。ここに買い物かごはありません。 ══ -->
   <section class="chapter" id="ch-buy" data-ground="light" aria-labelledby="buy-h2">
     <div class="ch-body wrap">
       <div class="sec-head axis">
-        <p class="kicker">章六 · 購う</p>
+        <p class="kicker">章五 · 購う</p>
         <h2 id="buy-h2">ご購入場所について</h2>
         <p class="sub">ご購入は Square オンラインビジネスの当店ストアで承っています。このページは豆を紹介する場所で、決済は行いません。</p>
       </div>
