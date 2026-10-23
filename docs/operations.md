@@ -187,6 +187,20 @@ Soigné Tokyo Coffee Roastery のサイトを、Claude Code との作業で更�
 - [ ] ページの説明文（検索結果に出る文）と、SNS 共有時の画像・見出し（OGP）を用意する。
 - [ ] 抽出の章を戻す場合は、保管中のコードに残っている開発用の説明文（「B2-03 · 注ぐ手 …」「B2-04 · 量る手 …」）を削除する。
 
+### SEO（本番化の作業で行うこと）
+
+- [ ] ページを本当の URL（`/`、`/wholesale`、`/about`）に分け、ページごとにタブ名・説明文（meta description）・見出しを持たせる。`#/…` の切り替えのままでは、法人向けページと私たちについてが、検索結果に単独で出ない。
+- [ ] 説明文（全角80〜120字程度）の文案を用意し、確認を得る。
+- [ ] 構造化データ（店名・読み・所在地・Instagram・ロゴ、記事の日付と著者）を入れる。「Soigne」（アクセントなし）でも見つかるようにする。
+- [ ] 読みものの記事ごとのページ（`/journal/〇〇`）を作る。
+- [ ] SNS 共有用の画像・見出し（OGP、1200×630px）を設定する。
+- [ ] sitemap.xml と robots.txt を置く。Google Search Console への登録（お客様の作業）。
+
+### SEO（公開前にお客様の判断が必要なこと）
+
+- [ ] 独自ドメインを使うか。使う予定があるなら、新サイトの公開と同時の切り替えを推奨（後から移ると、検索評価の移し直しがもう一度必要になる）。
+- 開幕の演出（約1〜3秒）は、表示速度の評価に影響し得るが、現状維持と決定済み（2026-10-23）。
+
 ### セキュリティ（本番化の作業で行うこと）
 
 - [ ] Vercel の設定（`vercel.json`）で、セキュリティ用の応答ヘッダーを付ける：Content-Security-Policy（読み込み元を自サイトと Google Fonts に限定）、X-Content-Type-Options: nosniff、Referrer-Policy: strict-origin-when-cross-origin、frame-ancestors 'none'（他サイトへの埋め込み防止）、Permissions-Policy。
