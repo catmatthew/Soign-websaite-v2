@@ -47,14 +47,14 @@ Soigné Tokyo Coffee Roastery のサイトを、Claude Code との作業で更�
 
 方針：現在の URL（`https://soigne-web.vercel.app/`）を、新サイトでも使う。旧サイトのソースコードは保存する。
 
-### 状況（2026-10-23）
+### 状況（2026-10-23 公開済み）
 
 | 項目 | 状態 |
 |---|---|
 | 旧サイトの保存 | 済。`soigne-web` のブランチ `claude/legacy-site-archive`（コミット `4aa65b7`）。公開用ブランチでは `legacy/` フォルダに移動し、`.vercelignore` で公開対象から外している |
 | 新サイトの公開用ブランチ | `soigne-web` の `claude/new-site-release`（コミット `51259ba`）。Vercel のプレビューは作成済み |
 | プレビュー | https://soigne-web-git-claude-new-site-bd2572-0gehhhbn32-5096s-projects.vercel.app （Vercel にログインした状態で閲覧） |
-| 本番への反映 | 未。`claude/new-site-release` を `main` に統合すると、本番（`soigne-web.vercel.app`）が新サイトに切り替わる |
+| 本番への反映 | 済（2026-10-23）。プルリクエスト https://github.com/catmatthew/soigne-web/pull/1 を `main` に統合（統合コミット `ae2fce3`）。Vercel の本番デプロイ成功 |
 
 ### 制約
 
