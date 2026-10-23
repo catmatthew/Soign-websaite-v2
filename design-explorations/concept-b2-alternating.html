@@ -2368,10 +2368,42 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
      ========================================================= */
   var veil = document.getElementById("veil");
   var groundTriggers = [];
+  var groundTurns = [];          /* { st: 転換帯の ScrollTrigger, to: "light"|"dark" } */
+  var settleCall = null;
+
+  /* 地色の収束。転換帯ごとのスクラブは、スクロールが連続している間は正しく
+     動きますが、End キー・再読み込み・記事への直リンクのように、複数の転換帯を
+     一度に飛び越えると、各帯が同じ地色の層を別々の向きへ動かそうとして、
+     最後に描いた帯が勝ってしまい、白い地に白い文字が残ることがありました。
+     スクロールが止まって、スクラブの追いつきを待ったあとに、いまの位置から
+     あるべき地色を一度だけ決め直します。途中の転換帯があれば何もしません。 */
+  function settleGround(){
+    if (!window.gsap || !groundTurns.length) return;
+    var last = null;
+    for (var i = 0; i < groundTurns.length; i++){
+      if (groundTurns[i].st.progress > 0) last = groundTurns[i];
+    }
+    var light;
+    if (!last) light = false;
+    else if (last.st.progress < 1) return;
+    else light = (last.to === "light");
+    gsap.set("#ground-b", { opacity: light ? 1 : 0 });
+    gsap.set("#grain-m",  { opacity: light ? .055 : 0 });
+    gsap.set("#grain-s",  { opacity: light ? 0 : .085 });
+    gsap.set("#lite-w",   { opacity: light ? 1 : 0 });
+    gsap.set("#lite-c",   { opacity: light ? 0 : 1 });
+    setHeaderGround(light ? "light" : "dark");
+  }
+  function scheduleSettle(){
+    if (settleCall) settleCall.kill();
+    settleCall = gsap.delayedCall(1.4, settleGround);
+  }
+  if (window.ScrollTrigger) ScrollTrigger.addEventListener("scrollEnd", scheduleSettle);
 
   function killGround(){
     groundTriggers.forEach(function(t){ if (t && t.kill) t.kill(true); });
     groundTriggers = [];
+    groundTurns = [];
     if (window.gsap) gsap.set(".chapter > .ch-body, #site-footer > .ch-body", { clearProps:"opacity,filter" });
   }
 
@@ -2412,6 +2444,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       if (lz) tl.fromTo(lz, { opacity:0 }, { opacity:.9, duration:.24, ease:"none" }, .38)
                 .to(lz, { opacity:0, duration:.2, ease:"none" }, .74);
       groundTriggers.push(tl.scrollTrigger);
+      groundTurns.push({ st: tl.scrollTrigger, to: to });
 
       /* 次章の立ち上がりは、転換帯ではなく「次章そのもの」に連動させます。
          転換帯の終端（bottom 36%）に紐づけていたときは、次章が画面の大半を
@@ -2439,7 +2472,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     if (!window.gsap || !window.ScrollTrigger) return;
     killGround();
     buildGround(views[current]);
-    requestAnimationFrame(function(){ sizeCanvas(); ScrollTrigger.refresh(); });
+    requestAnimationFrame(function(){ sizeCanvas(); ScrollTrigger.refresh(); scheduleSettle(); });
   }
 
   /* ---- 7a. GSAPが来なかった場合 : 読める完成形で止まります ---- */
