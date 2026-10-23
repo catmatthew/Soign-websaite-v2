@@ -615,7 +615,7 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
   display:grid; gap:6px 24px; padding-block:clamp(20px,3.2vh,32px);
   border-top:1px solid var(--hair-f); align-items:baseline;
 }
-.j-row:last-of-type{ border-bottom:1px solid var(--hair-f); }
+
 @media (min-width:760px){ .j-row{ grid-template-columns:110px 1fr auto; } }
 .j-row .date{ font-family:var(--latin); font-size:10.5px; letter-spacing:.14em; color:var(--on-3); }
 .j-row .t{ font-family:var(--mincho); font-weight:var(--w-display); font-size:clamp(.96rem,1.9vw,1.14rem); letter-spacing:.1em; line-height:1.95; }
@@ -656,6 +656,21 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .fold[open] > summary .chev, .fold-end .chev{ transform:rotate(-135deg) translate(-2px,-2px); }
 .piece .end{ margin-top:clamp(36px,6vh,68px); padding-top:26px; border-top:1px solid var(--hair-f); display:flex; flex-wrap:wrap; gap:18px 30px; align-items:baseline; justify-content:space-between; }
 .j-more{ margin-top:clamp(40px,7vh,80px); }
+
+/* 過去の記事 — 行を押すと、その場で全文が開きます。最新の一本だけが、常に上に出ています。 */
+.j-head{ margin-top:clamp(70px,13vh,160px); }
+.j-head + .j-index{ margin-top:14px; }
+.j-past{ scroll-margin-top:96px; border-bottom:1px solid var(--hair-f); }
+.j-past > summary.j-row{ list-style:none; cursor:pointer; border-bottom:0; }
+.j-past > summary::-webkit-details-marker{ display:none; }
+.j-past > summary .t{ transition:color .5s var(--ease); }
+.j-past > summary:hover .t{ color:var(--on-2); }
+.j-past > summary .cat{ display:inline-flex; align-items:center; gap:12px; justify-self:start; }
+@media (min-width:760px){ .j-past > summary .cat{ justify-self:end; } }
+.j-past[open] > summary .chev{ transform:rotate(-135deg) translate(-2px,-2px); }
+.j-past > .prose{ margin-top:clamp(6px,1.5vh,16px); }
+.j-past > .prose .by-line{ text-indent:0; font-family:var(--latin); font-size:10.5px; letter-spacing:.16em; color:var(--on-3); margin-bottom:2.2em; }
+.j-past > .fold-end{ margin-bottom:clamp(24px,4vh,40px); }
 
 /* ============================================================
    章五 · 手 — 勝色 / 観る。縦組みはページ中ここ一箇所のみ。
@@ -1349,21 +1364,20 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           </details>
         </article>
 
-        <!-- 二本目の記事。最新の一本と同じ作りで、これも折り畳みます。 -->
-        <article class="piece" id="piece-scaj" aria-labelledby="piece-scaj-h">
-          <div class="hd">
-            <p class="kicker">店のこと</p>
-            <h3 id="piece-scaj-h">SCAJ2026を終えて。</h3>
-            <p class="by">2026.10.18 ／ 山﨑 聖彦（Soigné 代表） ／ 読了 約3分</p>
-          </div>
-
-          <div class="prose">
-            <p class="lead">先日、アジア最大級のスペシャルティコーヒーイベント「SCAJ2026」へ、ヘッドロースターの髙岩と一緒に足を運んできました。会場いっぱいに広がる熱気の中で触れたコーヒーシーンの最先端と、たくさんの方々との出会い。そこから見えてきた、Soignéのこれからの歩みについて少しお話ししたいと思います。</p>
-          </div>
-
-          <details class="fold" id="piece-scaj-fold">
-            <summary><span class="t-open">続きを読む</span><span class="t-close">たたむ</span><i class="chev" aria-hidden="true"></i></summary>
+        <!-- 過去の記事。行を押すと、その場で全文が開きます。 -->
+        <p class="label j-head">過去の記事</p>
+        <div class="j-index">
+          <details class="j-past" id="piece-scaj">
+            <summary class="j-row">
+              <p class="date">2026.10.18</p>
+              <h3 class="t">SCAJ2026を終えて。</h3>
+              <p class="cat">店のこと<i class="chev" aria-hidden="true"></i></p>
+              <p class="ex">SCAJ2026での、カッピングと出会い。そこから見えてきた、これからの歩みを。</p>
+            </summary>
             <div class="prose">
+            <p class="by-line">2026.10.18 ／ 山﨑 聖彦（Soigné 代表） ／ 読了 約3分</p>
+
+            <p>先日、アジア最大級のスペシャルティコーヒーイベント「SCAJ2026」へ、ヘッドロースターの髙岩と一緒に足を運んできました。会場いっぱいに広がる熱気の中で触れたコーヒーシーンの最先端と、たくさんの方々との出会い。そこから見えてきた、Soignéのこれからの歩みについて少しお話ししたいと思います。</p>
 
             <h4>産地の今を知るカッピングと、Coffee Villageの熱気</h4>
             <p>会場で私たちがまず向かったのは、各生産国のカッピングです。髙岩と並んでスプーンを手にし、いくつものカップを行き来しながら、今年の豆の仕上がりや精製方法のトレンドを一つひとつ味わって確かめていきました。「この産地の個性はこんな風に表現されているね」「こう焙煎したらもっと面白くなりそう」と、現場で感覚をすり合わせる時間は、私たちにとって何より大切なひとときです。</p>
@@ -1380,28 +1394,9 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
             <p>今回得た学びや、国内外の新しいつながりを力に変えて、もっともっとお客様のために動き、皆様に喜んでいただける一杯をお届けしていきます。これからのSoignéも、どうぞ楽しみにお待ちください。</p>
             </div>
-
             <button type="button" class="fold-end">たたむ<i class="chev" aria-hidden="true"></i></button>
           </details>
-        </article>
-
-        <!-- 過去の記事。最新の一本の下に置きます。 -->
-        <div class="j-index">
-          <article class="j-row">
-            <p class="date">2026.10.23</p>
-            <h3 class="t"><a href="#piece-site">Webサイト刷新のお知らせ</a></h3>
-            <p class="cat">店のこと</p>
-            <p class="ex">ホームページを全面的にリニューアルしました。変えた点と、その理由をお伝えします。</p>
-          </article>
-          <article class="j-row">
-            <p class="date">2026.10.18</p>
-            <h3 class="t"><a href="#piece-scaj">SCAJ2026を終えて。</a></h3>
-            <p class="cat">店のこと</p>
-            <p class="ex">SCAJ2026での、カッピングと出会い。そこから見えてきた、これからの歩みを。</p>
-          </article>
         </div>
-
-        <p class="j-more label">過去の記事は月別に一覧できます（本番では /journal/ 以下に静的生成）</p>
 
       <!-- 「私たちについて」への入口 -->
       <div class="about-in">
@@ -2268,7 +2263,8 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     if (ownerName !== current){ setView(ownerName, { anchor:id }); }
     else {
       /* 記事への見出しリンクは、折り畳みを開いてから、その記事の頭へ運びます */
-      var fold = el.classList.contains("piece") ? el.querySelector("details.fold") : null;
+      var fold = el.classList.contains("piece") ? el.querySelector("details.fold")
+               : (el.classList.contains("j-past") ? el : null);
       if (fold) fold.open = true;
       el.scrollIntoView({ block:"start" });
     }
@@ -2281,8 +2277,8 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
          高さが変わったあとに章の転換などの位置を測り直すことと、
          読み終えて閉じたとき、記事の頭へ戻すことだけです。
      ========================================================= */
-  [].forEach.call(document.querySelectorAll("details.fold"), function(d){
-    var piece = d.closest(".piece");
+  [].forEach.call(document.querySelectorAll("details.fold, details.j-past"), function(d){
+    var piece = d.closest(".piece, .j-past");
     d.addEventListener("toggle", function(){
       if (window.ScrollTrigger) ScrollTrigger.refresh();
       if (!d.open && piece && piece.getBoundingClientRect().top < 0) piece.scrollIntoView({ block:"start" });
