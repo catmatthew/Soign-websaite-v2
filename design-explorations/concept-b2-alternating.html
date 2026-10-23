@@ -791,6 +791,13 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .a-sec > p.vision{ margin-top:26px; max-width:none; font-family:var(--mincho); font-weight:var(--w-display);
   font-size:clamp(1.02rem,2.6vw,1.5rem); letter-spacing:.14em; line-height:2.2; color:var(--on); }
 .vision span{ display:inline-block; }
+/* 目指していること — 一文の下に、三段の補足。大切にしていること（記号つきの一覧）と
+   形が重ならないよう、記号の列は持たず、見出しと本文を縦に重ねます。 */
+.aim{ margin-top:clamp(36px,6vh,64px); }
+.aim-i{ padding-block:clamp(22px,3.6vh,34px); border-top:1px solid var(--hair-f); }
+.aim-i:last-child{ border-bottom:1px solid var(--hair-f); }
+.aim-i h3{ font-size:clamp(1rem,2.2vw,1.2rem); letter-spacing:.14em; line-height:2; color:var(--on); }
+.aim-i p{ margin-top:8px; font-size:.84rem; line-height:2.4; letter-spacing:.06em; color:var(--on-2); max-width:42em; }
 /* メンバー — 写真は素材の大きさがばらつくため、枠の比率（4:5）で揃え、
    object-fit:cover と上寄せで顔が切れないようにします。 */
 .members{ margin:0 auto; padding:0; display:grid; gap:clamp(48px,8vh,72px) clamp(24px,4vw,48px); }
@@ -1869,6 +1876,20 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         <section class="a-sec" aria-labelledby="a-vis-h">
           <h2 id="a-vis-h">目指していること</h2>
           <p class="vision"><span>食のプロフェッショナルに選ばれる、</span><span>空間と食体験を完成させるための</span><span>コーヒーを。</span></p>
+          <div class="aim">
+            <div class="aim-i">
+              <h3>お店の一杯から、好奇心が始まる。</h3>
+              <p>お店で出会った一杯が、お客様の「この豆はどこから来たのだろう」という興味の入口になる。私たちは、その一杯が「もっと知りたい」につながるよう、豆と抽出を設計し、お店とともに、その先の面白さまでご案内します。</p>
+            </div>
+            <div class="aim-i">
+              <h3>好奇心が広がれば、産地にも。</h3>
+              <p>コーヒーを知りたい人が増えれば、つくり手を支える市場も育ちます。その循環が、長く続くことを願っています。</p>
+            </div>
+            <div class="aim-i">
+              <h3>そして、コーヒーはもっと美味しくなる。</h3>
+              <p>飲み手とつくり手の距離が縮まるほど、コーヒーはさらに美味しくなる。私たちは、そんな世界を目指します。</p>
+            </div>
+          </div>
         </section>
 
       </div>
@@ -2568,7 +2589,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     /* 節の定位 — 長く、沈む方向へ。滑らせません。 */
     var revealSel = ".sec-head, .bean, .shelf, .j-row, .piece .hd, .piece .prose, .piece .end, " +
                     ".hands > div, .tategaki, .facts, #ch-buy .act, #ch-buy .fine, " +
-                    ".w-keys, .w-sec, .results li, .about-in, .a-sec, .member, #site-footer .f-grid > *";
+                    ".w-keys, .w-sec, .results li, .about-in, .a-sec, .aim-i, .member, #site-footer .f-grid > *";
     gsap.utils.toArray(revealSel).forEach(function(el){
       gsap.fromTo(el, { opacity:0, y:14 },
         { opacity:1, y:0, duration:1.8, ease:"power2.out",
