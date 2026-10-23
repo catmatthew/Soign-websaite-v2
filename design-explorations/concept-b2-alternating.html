@@ -638,6 +638,7 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .prose blockquote p{ text-indent:0; }
 /* 折り畳み — 最新の記事は冒頭だけ見せ、矢印で全文を開く */
 .piece{ scroll-margin-top:96px; }
+.piece + .piece{ margin-top:clamp(70px,13vh,160px); }
 .fold{ max-width:38em; }
 .fold > summary, .fold-end{
   list-style:none; cursor:pointer; display:inline-flex; align-items:center; gap:12px;
@@ -1307,7 +1308,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         <article class="piece" id="piece-site" aria-labelledby="piece-site-h">
           <div class="hd">
             <p class="kicker">店のこと — 最新</p>
-            <h3 id="piece-site-h">「私たちが何者で、何ができるのか」をまっすぐに届けるために。Webサイト刷新のお知らせ</h3>
+            <h3 id="piece-site-h">Webサイト刷新のお知らせ</h3>
             <p class="by">2026.10.23 ／ 代表 山﨑 聖彦 ／ 読了 約3分</p>
           </div>
 
@@ -1348,13 +1349,55 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           </details>
         </article>
 
+        <!-- 二本目の記事。最新の一本と同じ作りで、これも折り畳みます。 -->
+        <article class="piece" id="piece-scaj" aria-labelledby="piece-scaj-h">
+          <div class="hd">
+            <p class="kicker">店のこと</p>
+            <h3 id="piece-scaj-h">SCAJ2026を終えて。カッピングの現場と対話から見据える、これからのSoigné</h3>
+            <p class="by">2026.10.16 ／ 山﨑 聖彦（Soigné 代表） ／ 読了 約3分</p>
+          </div>
+
+          <div class="prose">
+            <p class="lead">先日、アジア最大級のスペシャルティコーヒーイベント「SCAJ2026」へ、ヘッドロースターの髙岩と一緒に足を運んできました。会場いっぱいに広がる熱気の中で触れたコーヒーシーンの最先端と、たくさんの方々との出会い。そこから見えてきた、Soignéのこれからの歩みについて少しお話ししたいと思います。</p>
+          </div>
+
+          <details class="fold" id="piece-scaj-fold">
+            <summary><span class="t-open">続きを読む</span><span class="t-close">たたむ</span><i class="chev" aria-hidden="true"></i></summary>
+            <div class="prose">
+
+            <h4>産地の今を知るカッピングと、Coffee Villageの熱気</h4>
+            <p>会場で私たちがまず向かったのは、各生産国のカッピングです。髙岩と並んでスプーンを手にし、いくつものカップを行き来しながら、今年の豆の仕上がりや精製方法のトレンドを一つひとつ味わって確かめていきました。「この産地の個性はこんな風に表現されているね」「こう焙煎したらもっと面白くなりそう」と、現場で感覚をすり合わせる時間は、私たちにとって何より大切なひとときです。</p>
+
+            <p>また、たくさんのショップが集まる「Coffee Village」での個性豊かなラインナップも、大きな刺激になりました。各ショップがどんなアプローチで自分たちらしさを表現しているのかを見られたのはもちろんですが、会場を訪れた飲み手の皆さんがどんな一杯に驚き、どんな味わいを求めているのか、リアルな反応やご感想をすぐそばで聞けたことは、これからのコーヒー作りにおいて大きな収穫でした。</p>
+
+            <h4>国境を越えた新しいつながりと、来季に向けた収穫</h4>
+            <p>今回のイベントでは、日頃から私たちのコーヒー作りを支えてくださっている取引先の皆様へ直接ご挨拶し、感謝をお伝えすることができました。お話をしながら試飲を重ねる中で、「来年も絶対に確保したい」と思える素晴らしい生豆との出会いもありました。</p>
+
+            <p>さらに今回、大きな一歩となったのが、国内だけでなく海外のインポーターさんとも直接つながりを持てたことです。これによって、今後Soignéのラインナップとして皆様にお届けできるコーヒーの幅が、これまで以上にぐっと広がりそうです。また、出展企業の皆様だけでなく、会場のあちこちでたくさんのロースターやコーヒー屋さんとゆっくりお話しし、新しいご縁を結ぶことができました。こうした会話をきっかけに、今はまだ詳しくお話しできないのですが、新しい取り組みも少しずつ動き始めています。</p>
+
+            <h4>足を止めず、お客様の先にある一杯のために</h4>
+            <p>コーヒーの世界は、毎日目まぐるしく進化を続けています。だからこそ、私たちは今あるものに満足することなく、常に前へ進む挑戦の気持ちを持ち続けたいと思っています。</p>
+
+            <p>今回得た学びや、国内外の新しいつながりを力に変えて、もっともっとお客様のために動き、皆様に喜んでいただける一杯をお届けしていきます。これからのSoignéも、どうぞ楽しみにお待ちください。</p>
+            </div>
+
+            <button type="button" class="fold-end">たたむ<i class="chev" aria-hidden="true"></i></button>
+          </details>
+        </article>
+
         <!-- 過去の記事。最新の一本の下に置きます。 -->
         <div class="j-index">
           <article class="j-row">
             <p class="date">2026.10.23</p>
-            <h3 class="t"><a href="#piece-site">「私たちが何者で、何ができるのか」をまっすぐに届けるために。Webサイト刷新のお知らせ</a></h3>
+            <h3 class="t"><a href="#piece-site">Webサイト刷新のお知らせ</a></h3>
             <p class="cat">店のこと</p>
             <p class="ex">ホームページを全面的にリニューアルしました。変えた点と、その理由をお伝えします。</p>
+          </article>
+          <article class="j-row">
+            <p class="date">2026.10.16</p>
+            <h3 class="t"><a href="#piece-scaj">SCAJ2026を終えて。カッピングの現場と対話から見据える、これからのSoigné</a></h3>
+            <p class="cat">店のこと</p>
+            <p class="ex">SCAJ2026での、カッピングと出会い。そこから見えてきた、これからの歩みを。</p>
           </article>
           <article class="j-row">
             <p class="date">2026.10.02</p>
@@ -2259,7 +2302,12 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     var owner = el.closest('[data-view]');
     var ownerName = owner ? owner.getAttribute("data-view") : current;
     if (ownerName !== current){ setView(ownerName, { anchor:id }); }
-    else { el.scrollIntoView({ block:"start" }); }
+    else {
+      /* 記事への見出しリンクは、折り畳みを開いてから、その記事の頭へ運びます */
+      var fold = el.classList.contains("piece") ? el.querySelector("details.fold") : null;
+      if (fold) fold.open = true;
+      el.scrollIntoView({ block:"start" });
+    }
   }
 
   window.addEventListener("hashchange", function(){ readHash(false); });
