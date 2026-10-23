@@ -207,6 +207,39 @@ a{ color:inherit; text-decoration:none; }
 }
 
 /* ============================================================
+   序 · 一杯から — 勝色のまま、ヒーローの余韻の中で読む三つの段。
+   中央に一本の細い線が落ち、段と段をつなぎます。線の先には、
+   一滴のような小さな点。好奇心が産地へ届き、一杯へ還ってくる流れを、
+   上から下へ読む一本の線として置いています。
+   ============================================================ */
+#ch-prologue{ padding-block:clamp(40px,8vh,110px) clamp(110px,20vh,220px); }
+.pro{ max-width:34em; margin-inline:auto; text-align:center; word-break:auto-phrase; }
+.pro-q{
+  font-size:clamp(1.3rem,3.6vw,2.2rem); letter-spacing:.16em; line-height:1.9; color:var(--on);
+}
+.pro-q .br{ display:inline-block; }
+.pro p{ font-size:clamp(.84rem,1.5vw,.94rem); line-height:2.5; letter-spacing:.08em; color:var(--on-2); }
+.pro-lead{ margin-top:clamp(22px,4vh,40px); }
+.pro-mv h3{
+  font-size:clamp(1.02rem,2.4vw,1.3rem); letter-spacing:.18em; line-height:2; color:var(--on);
+}
+.pro-mv p{ margin-top:12px; }
+.pro-mv .fin{
+  margin-top:clamp(18px,3vh,28px); font-family:var(--mincho); font-weight:var(--w-display);
+  font-size:clamp(1rem,2.2vw,1.2rem); letter-spacing:.16em; line-height:2; color:var(--on);
+}
+.pro-mv .fin + p{ margin-top:6px; }
+/* 段と段をつなぐ一本の線と、その先の一滴 */
+.pro-drop{
+  position:relative; width:1px; height:clamp(56px,11vh,110px); margin:clamp(30px,5vh,52px) auto;
+  background:linear-gradient(var(--hair), var(--on-3)); transform-origin:top;
+}
+.pro-drop::after{
+  content:""; position:absolute; left:50%; bottom:-3px; width:5px; height:5px; margin-left:-2.5px;
+  border-radius:50%; background:var(--accent);
+}
+
+/* ============================================================
    CHAPTERS AND TURNS
    A .chapter declares its ground and nothing else. A .turn is an
    empty band between two chapters — it is where the lights go
@@ -1132,6 +1165,31 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
         </div>
       </div>
       <p id="hero-cap">B2-01 · Roastery room · 16:9 · 14 s seamless · no cuts · silent · AV1 1.5 MB / H.264 2.8 MB</p>
+    </div>
+  </section>
+
+  <!-- ═══ 序 · 一杯から ═══ 勝色のまま。ヒーローの余韻の中で読む三つの段。
+       文言はご提供のとおり。最後の一文だけ、明朝で一行に立てています。 ══ -->
+  <section class="chapter" id="ch-prologue" data-ground="dark" aria-labelledby="pro-q">
+    <div class="ch-body wrap">
+      <div class="pro">
+        <div class="pro-mv">
+          <h2 class="pro-q" id="pro-q">「なぜこんなにも<span class="br">美味しいのだろう。」</span></h2>
+          <p class="pro-lead">出会った美しい一杯が、コーヒーの奥ゆかしい世界への興味の入口になる。私たちは、その一歩先の面白さまでご案内します。</p>
+        </div>
+        <div class="pro-drop" aria-hidden="true"></div>
+        <div class="pro-mv">
+          <h3>好奇心が広がると、産地にも届く。</h3>
+          <p>コーヒーを知りたい人が増えれば、つくり手を支える市場が育ちます。その循環が、長く続くことを願っています。</p>
+        </div>
+        <div class="pro-drop" aria-hidden="true"></div>
+        <div class="pro-mv">
+          <h3>だから、もっと美味しくなる。</h3>
+          <p>飲み手とつくり手の距離が縮まるほど、コーヒーは、さらに美味しくなる。</p>
+          <p class="fin">もっともっと美味しく仕上がったコーヒーを。</p>
+          <p>私たちは、そんな世界を目指します。</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2572,11 +2630,16 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     /* 節の定位 — 長く、沈む方向へ。滑らせません。 */
     var revealSel = ".sec-head, .bean, .shelf, .j-row, .piece .hd, .piece .prose, .piece .end, " +
                     ".hands > div, .tategaki, .facts, #ch-buy .act, #ch-buy .fine, " +
-                    ".w-keys, .w-sec, .results li, .about-in, .a-sec, .aim-i, .member, #site-footer .f-grid > *";
+                    ".w-keys, .w-sec, .results li, .about-in, .a-sec, .aim-i, .member, .pro-mv, #site-footer .f-grid > *";
     gsap.utils.toArray(revealSel).forEach(function(el){
       gsap.fromTo(el, { opacity:0, y:14 },
         { opacity:1, y:0, duration:1.8, ease:"power2.out",
           scrollTrigger:{ trigger:el, start:"top 90%" } });
+    });
+    /* 序：段と段をつなぐ線は、読む速さに合わせて上から下へ落ちていきます */
+    gsap.utils.toArray(".pro-drop").forEach(function(d){
+      gsap.fromTo(d, { scaleY:0 }, { scaleY:1, ease:"none",
+        scrollTrigger:{ trigger:d, start:"top 88%", end:"bottom 62%", scrub:.6 } });
     });
     gsap.utils.toArray(".rule-c").forEach(function(r){
       if (r.id === "hero-rule") return;
