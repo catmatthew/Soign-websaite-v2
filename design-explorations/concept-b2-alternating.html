@@ -2478,6 +2478,11 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     groundTriggers.forEach(function(t){ if (t && t.kill) t.kill(true); });
     groundTriggers = [];
     groundTurns = [];
+    /* 取り消した転換帯が、地色を前のページの値に戻してしまうため、先頭の章（勝色）の状態に揃え直します */
+    if (window.gsap && !STILL){
+      gsap.set("#ground-b", { opacity:0 }); gsap.set("#grain-m", { opacity:0 }); gsap.set("#grain-s", { opacity:.085 });
+      gsap.set("#lite-w", { opacity:0 });   gsap.set("#lite-c", { opacity:1 });
+    }
     if (window.gsap) gsap.set(".chapter > .ch-body, #site-footer > .ch-body", { clearProps:"opacity,filter" });
   }
 
@@ -2507,14 +2512,21 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
       /* scrub は true（スクロール位置にそのまま追従）。以前は 0.9 秒の遅れを付けていたため、
          スマホで素早く戻ると、地色と本文の不透明度が追いつかず、章が見えない時間ができていた。 */
-      var st = { trigger:turn, start:"top 70%", end:"bottom 36%", scrub:true, invalidateOnRefresh:true };
+      /* clamp()：ページの先頭の章が短いとき（私たちについてなど）、開いた時点で既に
+         転換が始まってしまわないよう、始点をページの先頭より前にしません。 */
+      var st = { trigger:turn, start:"clamp(top 70%)", end:"bottom 36%", scrub:true, invalidateOnRefresh:true };
       var tl = gsap.timeline({ scrollTrigger:st });
       if (prevBody) tl.to(prevBody, { opacity:0, filter:"blur(2px)", duration:.30, ease:"none" }, 0);
-      tl.to("#ground-b", { opacity:L,            duration:.44, ease:"none" }, .28)
-        .to("#grain-m",  { opacity:L ? .055 : 0, duration:.44, ease:"none" }, .28)
-        .to("#grain-s",  { opacity:L ? 0 : .085, duration:.44, ease:"none" }, .28)
-        .to("#lite-w",   { opacity:L,            duration:.44, ease:"none" }, .28)
-        .to("#lite-c",   { opacity:L ? 0 : 1,    duration:.44, ease:"none" }, .28);
+      /* 地色の層は、始点も明示します（fromTo）。.to() は「最初に描いた時点の値」を始点に
+         記録するため、ページを切り替えた直後など、前の地色が残っている瞬間に記録されると、
+         その値（白など）のまま固定されていました。immediateRender:false で、まだ通っていない
+         転換帯が、作った瞬間に地色を上書きすることも防ぎます。 */
+      var F = 1 - L, ir = { immediateRender:false };
+      tl.fromTo("#ground-b", { opacity:F },               Object.assign({ opacity:L,            duration:.44, ease:"none" }, ir), .28)
+        .fromTo("#grain-m",  { opacity:F ? .055 : 0 },    Object.assign({ opacity:L ? .055 : 0, duration:.44, ease:"none" }, ir), .28)
+        .fromTo("#grain-s",  { opacity:F ? 0 : .085 },    Object.assign({ opacity:L ? 0 : .085, duration:.44, ease:"none" }, ir), .28)
+        .fromTo("#lite-w",   { opacity:F },               Object.assign({ opacity:L,            duration:.44, ease:"none" }, ir), .28)
+        .fromTo("#lite-c",   { opacity:F ? 0 : 1 },       Object.assign({ opacity:L ? 0 : 1,    duration:.44, ease:"none" }, ir), .28);
       if (hz) tl.fromTo(hz, { scaleX:0 }, { scaleX:1, duration:.52, ease:"none" }, .16)
                 .to(hz, { opacity:0, duration:.24, ease:"none" }, .78);
       if (lz) tl.fromTo(lz, { opacity:0 }, { opacity:.9, duration:.24, ease:"none" }, .38)
