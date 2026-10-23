@@ -187,6 +187,17 @@ Soigné Tokyo Coffee Roastery のサイトを、Claude Code との作業で更�
 - [ ] ページの説明文（検索結果に出る文）と、SNS 共有時の画像・見出し（OGP）を用意する。
 - [ ] 抽出の章を戻す場合は、保管中のコードに残っている開発用の説明文（「B2-03 · 注ぐ手 …」「B2-04 · 量る手 …」）を削除する。
 
+### セキュリティ（本番化の作業で行うこと）
+
+- [ ] Vercel の設定（`vercel.json`）で、セキュリティ用の応答ヘッダーを付ける：Content-Security-Policy（読み込み元を自サイトと Google Fonts に限定）、X-Content-Type-Options: nosniff、Referrer-Policy: strict-origin-when-cross-origin、frame-ancestors 'none'（他サイトへの埋め込み防止）、Permissions-Policy。
+- [ ] Square のアクセストークンは、Vercel の環境変数に置き、サーバー側の処理からのみ使う。権限は読み取りのみ。リポジトリ・HTML・ブラウザ側には絶対に置かない。
+- [ ] GSAP（`design-explorations/vendor/gsap/`）を更新するときは、npm の公式配布物から取り直す。
+
+### セキュリティ（お客様の判断が必要なこと）
+
+- [ ] 開発用リポジトリ `Soign-websaite-v2` は「公開（public）」設定。運用メモ、問い合わせフォームの設計、Square の商品ID、試作の文章などが、誰でも読める状態。非公開（private）への変更を推奨（GitHub のリポジトリの Settings → General → Danger Zone → Change visibility）。公開サイトの運用には影響しない。
+- [ ] `.claude/skills/` に、外部の作者によるスキル（指示書）が多数含まれている。Claude のセッションが読み込む指示書のため、出所を確認できないものは削除を検討。
+
 ### 技術上の注意
 
 - 複数の章を一度に飛び越えたとき（End キー、再読み込み、記事への直接リンクなど）、地色は約1.4秒後に正しい色へ戻る。その間は、前の地色のまま見える。
