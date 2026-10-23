@@ -2505,7 +2505,9 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
       var lz = turn.querySelector(".horizon b");
       var L = (to === "light") ? 1 : 0;
 
-      var st = { trigger:turn, start:"top 70%", end:"bottom 36%", scrub:.9, invalidateOnRefresh:true };
+      /* scrub は true（スクロール位置にそのまま追従）。以前は 0.9 秒の遅れを付けていたため、
+         スマホで素早く戻ると、地色と本文の不透明度が追いつかず、章が見えない時間ができていた。 */
+      var st = { trigger:turn, start:"top 70%", end:"bottom 36%", scrub:true, invalidateOnRefresh:true };
       var tl = gsap.timeline({ scrollTrigger:st });
       if (prevBody) tl.to(prevBody, { opacity:0, filter:"blur(2px)", duration:.30, ease:"none" }, 0);
       tl.to("#ground-b", { opacity:L,            duration:.44, ease:"none" }, .28)
@@ -2530,7 +2532,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
           { opacity:0, filter:"blur(2px)" },
           { opacity:1, filter:"blur(0px)", ease:"none",
             scrollTrigger:{ trigger:next, start:"top 96%", end:"top 55%",
-                            scrub:.45, invalidateOnRefresh:true } });
+                            scrub:true, invalidateOnRefresh:true } });
         groundTriggers.push(nt.scrollTrigger);
       }
 
