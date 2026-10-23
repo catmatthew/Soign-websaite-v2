@@ -45,19 +45,32 @@ Soigné Tokyo Coffee Roastery のサイトを、Claude Code との作業で更�
 
 ## 2. 公開（URL の引き継ぎ）について
 
-方針：現在の URL（`soigne-web.vercel.app`）を、新サイトでも使います。旧サイトのソースコードは保存します。
+方針：現在の URL（`https://soigne-web.vercel.app/`）を、新サイトでも使う。旧サイトのソースコードは保存する。
 
-予定している手順（未実施）：
+### 状況（2026-10-23）
 
-1. `soigne-web` の現在の状態に、保存用のタグとブランチを作る（公開サイトへの影響なし）。
-2. 新サイトを、別ブランチで反映し、Vercel の確認用 URL で表示を確認する。
-3. 公開日に、本番のブランチへ統合する。問題があれば、保存用のタグへ戻す。
+| 項目 | 状態 |
+|---|---|
+| 旧サイトの保存 | 済。`soigne-web` のブランチ `claude/legacy-site-archive`（コミット `4aa65b7`）。公開用ブランチでは `legacy/` フォルダに移動し、`.vercelignore` で公開対象から外している |
+| 新サイトの公開用ブランチ | `soigne-web` の `claude/new-site-release`（コミット `51259ba`）。Vercel のプレビューは作成済み |
+| プレビュー | https://soigne-web-git-claude-new-site-bd2572-0gehhhbn32-5096s-projects.vercel.app （Vercel にログインした状態で閲覧） |
+| 本番への反映 | 未。`claude/new-site-release` を `main` に統合すると、本番（`soigne-web.vercel.app`）が新サイトに切り替わる |
 
-公開前に決めること：
+### 制約
 
-- 新サイトを `soigne-web` へ移すか、Vercel の接続先を `Soign-websaite-v2` へ切り替えるか（前者を推奨）。
-- Vercel の「本番として扱うブランチ」（Vercel 管理画面の Settings → Git で確認）。
-- `soigne-web` への書き込み権限を、Claude のセッションに付けるか（現在は読み取りのみ）。
+- Claude のセッションから `soigne-web` へ書き込めるのは、`claude/` で始まるブランチのみ。`main` への直接の反映と、タグの作成はできない。
+- そのため、本番への反映は、プルリクエストを作って統合する（Claude に依頼する、またはお客様が GitHub の画面で行う）。
+- 切り戻す場合は、`main` を `claude/legacy-site-archive` の状態に戻すプルリクエストを作って統合する。
+
+### 新サイトの構成（`soigne-web`）
+
+`index.html`（本体）、`media/`（写真・動画・アイコン）、`vendor/gsap/`（GSAP）、`vercel.json`（セキュリティ・キャッシュのヘッダー）、`robots.txt`、`sitemap.xml`、`favicon.ico`、`legacy/`（旧サイト、非公開）、`README.md`。
+
+### 公開後の更新の流れ
+
+1. `Soign-websaite-v2` の `design-explorations/concept-b2-alternating.html` を変更し、確認する（従来どおり）。
+2. 変更したファイルを、`soigne-web` の `claude/` で始まるブランチに反映する（HTML は `index.html` として、写真などは `media/` へ）。
+3. Vercel のプレビューで確認し、プルリクエストで `main` に統合する。
 
 ---
 
