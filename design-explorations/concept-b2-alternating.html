@@ -253,6 +253,12 @@ a{ color:inherit; text-decoration:none; }
    ============================================================ */
 .chapter{ position:relative; padding-block:clamp(96px,16vh,190px) clamp(110px,22vh,240px); }
 .chapter > .ch-body{ position:relative; will-change:opacity,filter; }
+/* 焙煎の章は、スクロールの間、中身（#roast-stage）を画面に固定（pin）します。
+   filter や will-change:filter が付いた要素の中では、position:fixed の基準が画面ではなく
+   その要素になるため、固定した瞬間に、中身が章の左端の分だけ右へずれていました
+   （画面が広いほど大きく：1440px で 120px、1920px で 360px、2560px で 680px）。
+   この章だけ、filter を使わない指定にします。 */
+#ch-roast > .ch-body{ will-change:opacity; filter:none !important; }
 
 .turn{
   position:relative; height:clamp(320px,62vh,620px);
@@ -621,7 +627,9 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
    ============================================================ */
 #roast-stage{ position:relative; text-align:center; }
 #roast-stage .statement{ font-size:clamp(1.5rem,4.4vw,2.8rem); letter-spacing:.3em; text-indent:.3em; line-height:2; }
-#roast-slot{ margin:clamp(40px,7vh,88px) auto 0; width:min(100%,880px); }
+/* 映像は、画面の高さに収まる大きさまで（上のヘッダ＋下の表示を引いた残りの16:9）。 */
+#roast-slot{ margin:clamp(16px,3vh,40px) auto 0; width:min(100%,880px,calc((100svh - 64px - 250px) * 16 / 9)); }
+#roast-pin{ padding-bottom:4px; }
 #roast-slot .frame{ aspect-ratio:16/9; border-color:var(--hair); }
 #roastCanvas{ position:absolute; inset:0; width:100%; height:100%; display:block; }
 #v-roast{ position:absolute; inset:0; z-index:1; width:100%; height:100%; display:block; object-fit:cover; background:#0C0F22; }
@@ -643,7 +651,7 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .echelle .ticks span{ transition:color 1s var(--ease); }
 .echelle .ticks span.on{ color:var(--on); }
 #roast-stage .body{
-  margin:clamp(34px,6vh,72px) auto 0; max-width:36em; text-align:left;
+  margin:clamp(28px,5vh,56px) auto clamp(36px,7vh,80px); max-width:36em; text-align:left;
   font-size:.85rem; line-height:2.7; letter-spacing:.09em; color:var(--on-2);
 }
 
@@ -1299,6 +1307,8 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
         <h3 class="statement">火を、待つ。</h3>
 
+        <p class="body">焙煎進行を温度データとして可視化し、数え切れないほど検証した焙煎士の香り感覚を信じて。季節／気候／湿度、その日の条件からベストな火力を品質に落とし込む。この姿勢が食にこだわるお客様に選ばれる理由です。この区間だけは、読む速さをあなたに預けます。スクロールが、火の進み方です。</p>
+
         <!-- ─────────────────────────────────────────────────────────
              MEDIA SLOT B2-02 · roast-scrub · 16:9 · スクラブ区間
              A12の推奨方式をそのまま引き継ぎます：<video> の currentTime
@@ -1333,33 +1343,36 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
              …with NO autoplay, NO loop, and
              v.currentTime = progress * v.duration inside onUpdate.
              ───────────────────────────────────────────────────────── -->
-        <figure class="slot" id="roast-slot" data-media="roast-scrub-18min">
-          <div class="frame">
-            <!-- 実写：焙煎した豆が動く接写（7秒、音なし、ループ）。H.264 1280×720、約3.0MB。
-                 画面に入っている間だけ再生し、動きを減らす設定の方には最初の一コマ（poster）だけを見せます。
-                 動画がある間は、下の canvas の仮の絵は描きません（スクロールに連動する数値の表示はそのまま）。 -->
-            <video id="v-roast" muted loop playsinline webkit-playsinline preload="metadata"
-                   poster="media/video/roast-poster.jpg"
-                   disablepictureinpicture disableremoteplayback aria-hidden="true" tabindex="-1">
-              <source src="media/video/roast-1280.mp4" type="video/mp4">
-            </video>
-            <canvas id="roastCanvas" aria-hidden="true"></canvas>
-            <div id="seqbar" aria-hidden="true"><span id="seqfill"></span></div>
+        <!-- ピンで固定するのは、映像・時間／温度の表示・段階の目盛りだけです。見出しと説明文は、通常どおりスクロールで通り過ぎます。
+             （以前は章の中身ぜんぶを固定しており、中身が画面より高いため、上下が切れていました） -->
+        <div id="roast-pin">
+          <figure class="slot" id="roast-slot" data-media="roast-scrub-18min">
+            <div class="frame">
+              <!-- 実写：焙煎した豆が動く接写（7秒、音なし、ループ）。H.264 1280×720、約3.0MB。
+                   画面に入っている間だけ再生し、動きを減らす設定の方には最初の一コマ（poster）だけを見せます。
+                   動画がある間は、下の canvas の仮の絵は描きません（スクロールに連動する数値の表示はそのまま）。 -->
+              <video id="v-roast" muted loop playsinline webkit-playsinline preload="metadata"
+                     poster="media/video/roast-poster.jpg"
+                     disablepictureinpicture disableremoteplayback aria-hidden="true" tabindex="-1">
+                <source src="media/video/roast-1280.mp4" type="video/mp4">
+              </video>
+              <canvas id="roastCanvas" aria-hidden="true"></canvas>
+              <div id="seqbar" aria-hidden="true"><span id="seqfill"></span></div>
+            </div>
+          </figure>
+
+
+          <div class="readout">
+            <span class="rd"><span class="k">時間</span><span class="v" id="rTime">00:00</span></span>
+            <span class="rd"><span class="k">ドラム</span><span class="v" id="rTemp">22°C</span></span>
+            <span class="rd"><span class="k">段階</span><span class="v" id="rStage">生豆</span></span>
           </div>
-        </figure>
 
-        <p class="body">焙煎進行を温度データとして可視化し、数え切れないほど検証した焙煎士の香り感覚を信じて。季節／気候／湿度、その日の条件からベストな火力を品質に落とし込む。この姿勢が食にこだわるお客様に選ばれる理由です。この区間だけは、読む速さをあなたに預けます。スクロールが、火の進み方です。</p>
-
-        <div class="readout">
-          <span class="rd"><span class="k">時間</span><span class="v" id="rTime">00:00</span></span>
-          <span class="rd"><span class="k">ドラム</span><span class="v" id="rTemp">22°C</span></span>
-          <span class="rd"><span class="k">段階</span><span class="v" id="rStage">生豆</span></span>
-        </div>
-
-        <div class="echelle" id="echelle">
-          <div class="track"><span class="fill"></span><span class="seed"></span></div>
-          <div class="ticks"><span data-k="0">生豆</span><span data-k="1">乾燥</span><span data-k="2">一ハゼ</span><span data-k="3">焙煎止め</span></div>
-          <p class="echelle-note">焙煎こそが、私たちの核です。</p>
+          <div class="echelle" id="echelle">
+            <div class="track"><span class="fill"></span><span class="seed"></span></div>
+            <div class="ticks"><span data-k="0">生豆</span><span data-k="1">乾燥</span><span data-k="2">一ハゼ</span><span data-k="3">焙煎止め</span></div>
+            <p class="echelle-note">焙煎こそが、私たちの核です。</p>
+          </div>
         </div>
       </div>
     </div>
@@ -2682,10 +2695,10 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
   /* ---- 7d. 焙煎スクラブ : 余地のある画面ではピン留め ---------- */
   mm.add("(prefers-reduced-motion: no-preference) and (min-width: 900px) and (min-height: 720px)", function(){
     ScrollTrigger.create(Object.assign({
-      trigger:"#roast-stage", start:"center center", end:"+=200%",
-      pin:"#roast-stage", pinSpacing:true, scrub:1, invalidateOnRefresh:true
+      trigger:"#roast-pin", start:"center center+=32", end:"+=200%",
+      pin:"#roast-pin", pinSpacing:true, scrub:1, invalidateOnRefresh:true
     }, roastCommon));
-    gsap.timeline({ scrollTrigger:{ trigger:"#roast-stage", start:"center center", end:"+=200%", scrub:1 }})
+    gsap.timeline({ scrollTrigger:{ trigger:"#roast-pin", start:"center center+=32", end:"+=200%", scrub:1 }})
       .fromTo("#roast-stage .statement", { letterSpacing:"0.30em" }, { letterSpacing:"0.38em", duration:1, ease:"none" }, 0);
     return function(){};
   });
