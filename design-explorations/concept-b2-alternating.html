@@ -253,12 +253,6 @@ a{ color:inherit; text-decoration:none; }
    ============================================================ */
 .chapter{ position:relative; padding-block:clamp(96px,16vh,190px) clamp(110px,22vh,240px); }
 .chapter > .ch-body{ position:relative; will-change:opacity,filter; }
-/* 焙煎の章は、スクロールの間、中身（#roast-stage）を画面に固定（pin）します。
-   filter や will-change:filter が付いた要素の中では、position:fixed の基準が画面ではなく
-   その要素になるため、固定した瞬間に、中身が章の左端の分だけ右へずれていました
-   （画面が広いほど大きく：1440px で 120px、1920px で 360px、2560px で 680px）。
-   この章だけ、filter を使わない指定にします。 */
-#ch-roast > .ch-body{ will-change:opacity; filter:none !important; }
 
 .turn{
   position:relative; height:clamp(320px,62vh,620px);
@@ -627,7 +621,8 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
    ============================================================ */
 #roast-stage{ position:relative; text-align:center; }
 #roast-stage .statement{ font-size:clamp(1.5rem,4.4vw,2.8rem); letter-spacing:.3em; text-indent:.3em; line-height:2; }
-/* 映像は、画面の高さに収まる大きさまで（上のヘッダ＋下の表示を引いた残りの16:9）。 */
+/* 映像は、画面の高さに収まる大きさまで（上のヘッダ＋下の表示を引いた残りの16:9）。
+   時間・温度の表示と目盛りまで、同時に画面に収まるようにします。 */
 #roast-slot{ margin:clamp(16px,3vh,40px) auto 0; width:min(100%,880px,calc((100svh - 64px - 250px) * 16 / 9)); }
 #roast-pin{ padding-bottom:4px; }
 #roast-slot .frame{ aspect-ratio:16/9; border-color:var(--hair); }
@@ -2692,22 +2687,21 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     return function(){ window.removeEventListener("pointermove", onPointer); };
   });
 
-  /* ---- 7d. 焙煎スクラブ : 余地のある画面ではピン留め ---------- */
-  mm.add("(prefers-reduced-motion: no-preference) and (min-width: 900px) and (min-height: 720px)", function(){
+  /* ---- 7d. 焙煎スクラブ : 映像は固定しません ------------------
+     以前は、画面の広い PC では章の中身を画面に固定（pin）し、固定している間（画面の高さの
+     2倍ぶん）のスクロールで時間・温度を進めていました。次の章へ移るまでのスクロールが
+     長すぎるため、固定をやめ、全画面幅で、映像・表示・目盛りが画面を通り過ぎる間に進める
+     方式（これまでのスマホと同じ）に統一しました。 */
+  mm.add("(prefers-reduced-motion: no-preference)", function(){
     ScrollTrigger.create(Object.assign({
-      trigger:"#roast-pin", start:"center center+=32", end:"+=200%",
-      pin:"#roast-pin", pinSpacing:true, scrub:1, invalidateOnRefresh:true
+      trigger:"#roast-pin", start:"top 80%",
+      /* 終点：映像・表示・目盛りの全体が画面に収まった位置（ヘッダの下、画面の下端の少し上）。
+         時間が 18:00 に着いたときに、全部が見えている状態にします。 */
+      end:function(){ return "top " + Math.round(Math.max(72, innerHeight - document.getElementById("roast-pin").offsetHeight - 24)) + "px"; },
+      scrub:1, invalidateOnRefresh:true
     }, roastCommon));
-    gsap.timeline({ scrollTrigger:{ trigger:"#roast-pin", start:"center center+=32", end:"+=200%", scrub:1 }})
-      .fromTo("#roast-stage .statement", { letterSpacing:"0.30em" }, { letterSpacing:"0.38em", duration:1, ease:"none" }, 0);
-    return function(){};
-  });
-
-  /* 狭い・低い画面ではピンを外し、同じスクラブを版面の通過に繋ぎます */
-  mm.add("(prefers-reduced-motion: no-preference) and (max-width: 899px), (prefers-reduced-motion: no-preference) and (max-height: 719px)", function(){
-    ScrollTrigger.create(Object.assign({
-      trigger:"#roast-slot", start:"top 84%", end:"bottom 22%", scrub:1, invalidateOnRefresh:true
-    }, roastCommon));
+    gsap.fromTo("#roast-stage .statement", { letterSpacing:"0.30em" }, { letterSpacing:"0.38em", ease:"none",
+      scrollTrigger:{ trigger:"#roast-stage .statement", start:"top 90%", end:"bottom 30%", scrub:1 } });
     return function(){};
   });
 
