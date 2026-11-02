@@ -1066,6 +1066,7 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
   <!-- 900px以下で使うメニュー。中身はヘッダの文字リンクと同じです。 -->
   <div class="site-menu" id="site-menu" hidden>
     <ul>
+      <li><a href="#/" data-route="#/" class="m-top">トップ</a></li>
       <li><a href="#ch-beans">豆</a></li>
       <li><a href="#ch-journal">読みもの</a></li>
       <li><a href="#ch-roast">焙煎</a></li>
@@ -2239,7 +2240,17 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
   }
   if (menuBtn && menu){
     menuBtn.addEventListener("click", function(){ setMenu(menu.hidden); });
-    menu.addEventListener("click", function(e){ if (e.target.closest("a")) setMenu(false); });
+    menu.addEventListener("click", function(e){
+      var a = e.target.closest("a");
+      if (!a) return;
+      setMenu(false);
+      /* 「トップ」は、常にトップの先頭へ。既にトップを表示しているときは URL が変わらないため自分で戻し、
+         他のページからのときは、前回のスクロール位置の復元をやめて先頭から表示します。 */
+      if (a.classList.contains("m-top")){
+        if (current === "home"){ e.preventDefault(); window.scrollTo(0, 0); }
+        else { savedScroll.home = 0; }
+      }
+    });
     document.addEventListener("keydown", function(e){
       if (e.key === "Escape" && !menu.hidden) setMenu(false, true);
     });
@@ -2298,6 +2309,14 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
     current = name;
 
     document.title = TITLE[name];
+    /* ヘッダーとフッターのボタン：法人向けページを表示している間だけ「個人向けはこちら」に変え、
+       トップへ戻るボタンにします。それ以外のページでは「法人向けはこちら」。 */
+    [].forEach.call(document.querySelectorAll("#b2b-header, #b2b-footer"), function(btn){
+      var toHome = (name === "wholesale");
+      btn.textContent = toHome ? "個人向けはこちら" : "法人向けはこちら";
+      btn.setAttribute("href", toHome ? "#/" : "#/wholesale");
+      btn.setAttribute("data-route", toHome ? "#/" : "#/wholesale");
+    });
     [].forEach.call(document.querySelectorAll('[data-route]'), function(a){
       var r = a.getAttribute("data-route");
       if (r !== "#/" && routeOf(r) === name) a.setAttribute("aria-current","page");
