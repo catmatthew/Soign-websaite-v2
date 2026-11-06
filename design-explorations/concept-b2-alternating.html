@@ -699,6 +699,12 @@ a.ext:hover .arw{ transform:translate(.14em,-.22em); }
 .fold[open] > summary .chev, .fold-end .chev{ transform:rotate(-135deg) translate(-2px,-2px); }
 .piece .end{ margin-top:clamp(36px,6vh,68px); padding-top:26px; border-top:1px solid var(--hair-f); display:flex; flex-wrap:wrap; gap:18px 30px; align-items:baseline; justify-content:space-between; }
 .j-more{ margin-top:clamp(40px,7vh,80px); }
+/* 記事内の箇条書き（豆の記録など） */
+.prose ul.spec{ margin:1.1em 0 0; padding:0; list-style:none; }
+.prose ul.spec li{ position:relative; padding:.35em 0 .35em 1.2em; border-bottom:1px solid var(--hair-f); line-height:1.9; }
+.prose ul.spec li::before{ content:""; position:absolute; left:.2em; top:1.15em; width:4px; height:4px; border-radius:50%; background:var(--on-3); }
+.prose ul.spec + p{ margin-top:1.7em; }
+.prose h4.first{ margin-top:0; }
 
 /* 過去の記事 — 行を押すと、その場で全文が開きます。最新の一本だけが、常に上に出ています。 */
 .j-head{ margin-top:clamp(70px,13vh,160px); }
@@ -1390,23 +1396,73 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
       <div class="axis">
         <!-- 最新の一本を、全文で。索引だけの「読みもの」は読まれません。 -->
-        <article class="piece" id="piece-site" aria-labelledby="piece-site-h">
+        <article class="piece" id="piece-panama" aria-labelledby="piece-panama-h">
           <div class="hd">
-            <p class="kicker">店のこと — 最新</p>
-            <h3 id="piece-site-h">Webサイト刷新のお知らせ</h3>
-            <p class="by">2026.10.23 ／ 代表 山﨑 聖彦 ／ 読了 約3分</p>
+            <p class="kicker">生産者 — 最新</p>
+            <h3 id="piece-panama-h">霧の谷から届いた、毎日飲めるパナマ！🇵🇦</h3>
+            <p class="by">2026.11.03 ／ 焙煎士 髙岩 慧 ／ 読了 約4分</p>
           </div>
 
           <div class="prose">
-            <p class="lead">このたび、Soigné Tokyo Coffee Roastery（ソワイエトウキョウコーヒーロースタリー）のホームページを全面的にリニューアルいたしました。これまで運用していたサイトは最低限の情報掲載にとどまっており、初めて訪れた方に対して「Soignéがどのような企業で、具体的に何ができるのか」が十分に伝わりにくいという課題がありました。</p>
+            <h4 class="first">霧の谷にある、若い農園のひと手間</h4>
+            <p class="lead">パナマは、世界のコーヒー輸出量の1パーセントにも満たない小さな生産国です。それでも広く名前が知られているのは、量より質にこだわりを持っているからだと感じています。そのパナマ西部にあるボケテ地区は、国内でも歴史があり、高価で取引される豆を数多く出している産地です。</p>
           </div>
 
           <!-- 最新の記事は、冒頭の段落だけを見せて折り畳みます。長い全文がページの長さを
                決めてしまわないようにするためです。<details> なので、キーボードでも開き、
                JSが無くても開閉できます（JSは、高さが変わったあとの位置の測り直しだけ）。 -->
-          <details class="fold" id="piece-site-fold">
+          <details class="fold" id="piece-panama-fold">
             <summary><span class="t-open">続きを読む</span><span class="t-close">たたむ</span><i class="chev" aria-hidden="true"></i></summary>
             <div class="prose">
+
+            <p>カリブ海と太平洋に挟まれたこの地域は、バルー火山の東側に位置しています。南北から吹く風が独特の気候をつくり出し、谷には「バハレケ」と呼ばれる冷たい霧が流れ込みます。火山のミネラルを多く含んだ特徴的な土と、果樹がつくる木陰、そして過酷なほどの寒暖差のなかで、コーヒーの実はゆっくりと育ちます。こうした冷涼な環境で育つパナマ・ボケテのコーヒーは、糖度が高く複雑な香味になり、きれいに透き通った酸や紅茶のような後味が出やすいと言われています。</p>
+
+            <p>今回お豆を届けてくれた「バホモノ農園」のソニア・アモルソさんは、伝統ある優良農園がいくつも存在するこの土地で、新しくコーヒー栽培に取り組んでいます。木々はまだ植えて4〜6年目の若い農園で、豊かな自然環境のもと日々試行錯誤を重ねています。収穫した実を水洗いし、天日乾燥のあとに機械乾燥も行い、最後に60日ほど豆を寝かせてから送り出しています。この寝かせるひと手間によってコーヒーの甘みが増すとも言われており、酸味と甘さの釣り合いがとれた味わいが生まれます。</p>
+
+            <h4>焼き菓子の甘さに寄り添う、中浅煎り</h4>
+            <p>この豆を焼くにあたり、Soignéとして表現したい味わいを出すために選んだのは「ハイロースト（酸味と甘みのバランスがよい中浅煎り）」です。焼いて飲んでみると、さわやかで晴れやかな朝を思わせるレモンのような柑橘類の印象と、きび砂糖のようなやわらかい甘さが特徴的でした。そして最後は、紅茶のように静かに引いていきます。華やかさはありますが、きらびやかすぎない上品な味わいで、飲み疲れないすっきりとした飲み口に仕上がっています。</p>
+
+            <p>お店でお出ししている五段階の味わい指標では、甘さが「4」、苦さが「3」、酸味と果実感が「2」というバランスです。すっきりとしたクリーンさがあるので、合わせる食事や場面を選びません。とくに、口の中でじんわりと広がるやわらかな甘さは、香ばしくローストされた焼き菓子の甘さとよく合います。飲食店やホテルで食後の焼き菓子やデザートに添える一杯としても、ご自宅でトーストと合わせる朝の一杯としても、どんな時でも口角を少し上げてくれるようなコーヒーになってくれるはずです。</p>
+
+            <h4>お豆の記録</h4>
+            <p>今回の豆の基本データは以下の通りです。</p>
+            <ul class="spec">
+              <li>農園名：バホモノ農園</li>
+              <li>産地：パナマ／ボケテ地区 アルトキエル（標高 1,350〜1,650m）</li>
+              <li>生産者：ソニア・アモルソさん</li>
+              <li>精製：ウォッシュ（果肉を除いて水洗いしたあと、乾燥）</li>
+              <li>品種：カツアイ、カツーラ（どちらも中南米で広く栽培されているアラビカ種）</li>
+              <li>規格：SHB（ストリクトリー・ハード・ビーン。標高の高い場所で育った豆の等級）</li>
+              <li>焙煎度：ハイロースト（中浅煎り）</li>
+              <li>味わいの印象：レモン、きび砂糖、紅茶</li>
+            </ul>
+
+            <p>トーストにも、焼き菓子にも、何もない朝にも馴染む一杯です。遠く離れた霧の谷の風景や、若い農園の手仕事を少しだけ思い浮かべながら、いつもの日常のなかで楽しんでいただけたら嬉しいです。</p>
+            </div>
+
+            <div class="end">
+              <p class="label">この記事で触れた豆</p>
+              <a class="store-min ext" href="https://soign-coffee-roastery.square.site/?utm_source=soigne_lp&amp;utm_medium=journal&amp;utm_campaign=always_on&amp;utm_content=post_202611_panama" target="_blank" rel="noopener noreferrer">パナマ ボケテ ウォッシュト<span class="arw" aria-hidden="true">↗</span><span class="vh">（外部サイト・新しいタブで開きます）</span></a>
+            </div>
+
+            <button type="button" class="fold-end">たたむ<i class="chev" aria-hidden="true"></i></button>
+          </details>
+        </article>
+
+        <!-- 過去の記事。行を押すと、その場で全文が開きます。 -->
+        <p class="label j-head">過去の記事</p>
+        <div class="j-index">
+          <details class="j-past" id="piece-site">
+            <summary class="j-row">
+              <p class="date">2026.10.23</p>
+              <h3 class="t">Webサイト刷新のお知らせ</h3>
+              <p class="cat">店のこと<i class="chev" aria-hidden="true"></i></p>
+              <p class="ex">ホームページを全面的にリニューアルしました。変えた点と、その理由をお伝えします。</p>
+            </summary>
+            <div class="prose">
+            <p class="by-line">2026.10.23 ／ 代表 山﨑 聖彦 ／ 読了 約3分</p>
+
+            <p>このたび、Soigné Tokyo Coffee Roastery（ソワイエトウキョウコーヒーロースタリー）のホームページを全面的にリニューアルいたしました。これまで運用していたサイトは最低限の情報掲載にとどまっており、初めて訪れた方に対して「Soignéがどのような企業で、具体的に何ができるのか」が十分に伝わりにくいという課題がありました。</p>
 
             <p>私たちが大切にしている思いや焙煎へのこだわり、そして日々お付き合いする皆様にとっての使いやすさを根本から見直すべく、新しいサイトを一から作り直しました。</p>
 
@@ -1429,14 +1485,8 @@ body.tab-hidden *, body.tab-hidden *::before, body.tab-hidden *::after{ animatio
 
             <p>新しくなったホームページを、ぜひ日々の豆選びやお店づくりの道具としてご活用ください。</p>
             </div>
-
             <button type="button" class="fold-end">たたむ<i class="chev" aria-hidden="true"></i></button>
           </details>
-        </article>
-
-        <!-- 過去の記事。行を押すと、その場で全文が開きます。 -->
-        <p class="label j-head">過去の記事</p>
-        <div class="j-index">
           <details class="j-past" id="piece-scaj">
             <summary class="j-row">
               <p class="date">2026.10.18</p>
